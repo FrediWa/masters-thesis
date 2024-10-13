@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{lipsum, float}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{titlesec}
+\usepackage{comfortaa}
+\usepackage{tocloft}
+
+\newfloat{floatbox}{tb}{abox}[section]
+
+% ToC 
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+\begin{document}
+
+% Font stuff
+
+\titleformat{\section}{\fontfamily{comfortaa}\selectfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\fontfamily{comfortaa}\selectfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\fontfamily{comfortaa}\selectfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\renewcommand{\cftsecfont}{\fontfamily{comfortaa}\selectfont}
+
+\renewcommand{\cftsubsecfont}{\fontfamily{comfortaa}\selectfont}
+\renewcommand{\cftsubsubsecfont}{\fontfamily{comfortaa}\selectfont}
+\renewcommand{\contentsname}{\fontfamily{comfortaa}\selectfont Table of Contents}
+
+\input{chapters/abstract}
+
+% ToC
+\tableofcontents    
+
+% Introduction
+\input{chapters/introduction} 
+
+\input{chapters/background} 
+% Body
+
+% Conclusions
+
+
+Example citation \cite{DUHAMEL1990259}.
+
+% References
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
