@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  13 OCT 2024 20:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  14 OCT 2024 14:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -277,33 +277,41 @@ LaTeX Font Info:    Font shape `OT1/comfortaa/m/n' will be
 (Font)              scaled to size 12.0pt on input line 4.
 LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
 (Font)              scaled to size 12.0pt on input line 4.
-LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
-(Font)              scaled to size 10.0pt on input line 7.
-)
-(build/report.bbl [1
 
-{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) [2] (build/
-report.aux) ) 
+[1
+
+{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
+(Font)              scaled to size 10.0pt on input line 14.
+)
+(./chapters/comparing_implementations.tex) (build/report.bbl) [2]
+(build/report.aux) ) 
 Here is how much of TeX's memory you used:
- 3174 strings out of 480806
- 48452 string characters out of 5905128
- 485909 words of memory out of 6000000
- 20499 multiletter control sequences out of 15000+600000
+ 3180 strings out of 480806
+ 48689 string characters out of 5905128
+ 486909 words of memory out of 6000000
+ 20502 multiletter control sequences out of 15000+600000
  416049 words of font info for 45 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,4n,67p,223b,168s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.
-enc}</usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Reg
-ular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on build/report.pdf (2 pages, 96102 bytes).
+ 60i,5n,67p,413b,168s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_
+64c3ob.enc}</usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfort
+aa-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfor
+taa-Regular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmti10.pfb>
+Output written on build/report.pdf (2 pages, 144963 bytes).
 PDF statistics:
- 40 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
+ 64 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

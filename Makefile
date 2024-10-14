@@ -1,4 +1,5 @@
 report:
+	rm report.pdf
 	pdflatex -output-directory=build report.tex
 	bibtex build/report
 	pdflatex -output-directory=build report.tex

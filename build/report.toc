@@ -9,3 +9,4 @@
 \contentsline {subsubsection}{\numberline {2.3.2}Algorithmic Complexity}{2}{}%
 \contentsline {subsection}{\numberline {2.4}Signal processing applications}{2}{}%
 \contentsline {subsection}{\numberline {2.5}Use in Digital audio processing}{2}{}%
+\contentsline {section}{\numberline {3}Comparing FFT implementations}{2}{}%
