@@ -21,12 +21,11 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
-\bibitem{DUHAMEL1990259}
+\bibitem{SimonXu2015}
 \BIBentryALTinterwordspacing
-P.~Duhamel and M.~Vetterli, ``Fast fourier transforms: A tutorial review and a
-  state of the art,'' \emph{Signal Processing}, vol.~19, no.~4, pp. 259--299,
-  1990. [Online]. Available:
-  \url{https://www.sciencedirect.com/science/article/pii/016516849090158U}
+S.~Xu, ``Discrete fourier transform - simple step by step,'' Youtube, accessed:
+  2024-10-14. [Online]. Available:
+  \url{\url{https://www.youtube.com/watch?v=mkGsMWi_j4Q}}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}

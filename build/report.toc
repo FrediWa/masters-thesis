@@ -1,12 +1,16 @@
 \contentsline {section}{\numberline {1}Introduction}{1}{}%
-\contentsline {section}{\numberline {2}Introduction}{1}{}%
-\contentsline {subsection}{\numberline {2.1}Fourier series and transform}{1}{}%
+\contentsline {section}{\numberline {2}Background}{1}{}%
+\contentsline {subsection}{\numberline {2.1}Fourier analysis introduction}{1}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}Fourier Series}{2}{}%
+\contentsline {subsubsection}{\numberline {2.1.2}Fourier Transform}{2}{}%
 \contentsline {subsection}{\numberline {2.2}Discrete fourier transform}{2}{}%
-\contentsline {subsubsection}{\numberline {2.2.1}Definition}{2}{}%
-\contentsline {subsubsection}{\numberline {2.2.2}DFT matrix}{2}{}%
-\contentsline {subsection}{\numberline {2.3}Fast fourier transform}{2}{}%
-\contentsline {subsubsection}{\numberline {2.3.1}FFT matrix}{2}{}%
-\contentsline {subsubsection}{\numberline {2.3.2}Algorithmic Complexity}{2}{}%
-\contentsline {subsection}{\numberline {2.4}Signal processing applications}{2}{}%
-\contentsline {subsection}{\numberline {2.5}Use in Digital audio processing}{2}{}%
-\contentsline {section}{\numberline {3}Comparing FFT implementations}{2}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}DFT matrix}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Fast fourier transform}{3}{}%
+\contentsline {subsection}{\numberline {2.4}Matrix representations}{3}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}DFT matrix}{3}{}%
+\contentsline {subsubsection}{\numberline {2.4.2}FFT matrix}{3}{}%
+\contentsline {subsection}{\numberline {2.5}Computing the DFT and FFT}{3}{}%
+\contentsline {subsection}{\numberline {2.6}Algorithmic Complexity}{3}{}%
+\contentsline {subsection}{\numberline {2.7}Signal processing applications}{3}{}%
+\contentsline {subsection}{\numberline {2.8}Use in Digital audio processing}{3}{}%
+\contentsline {section}{\numberline {3}Comparing FFT implementations}{3}{}%

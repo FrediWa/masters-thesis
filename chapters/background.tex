@@ -1,27 +1,27 @@
-\section{Introduction}
-This paper bla bla bla
 
-\subsection{Fourier series and transform}
+\subsection{Fourier analysis introduction}
 In the beginning of the 1800s, Joseph Fourier was working on a physics problem called the heat equation, a certain partial differential equation. He had the idea of expressing the original function as a sum of sine and cosine functions as these would integrate and differentiate easily, making the differential equation easier to solve. He eventually developed and introduced the idea of Fourier series, a way of expressing a function as a sum of trigonometric functions. 
-
+\subsubsection{Fourier Series}
 If a function has a period of $2\pi$, the Fourier series takes the form $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$. Using this representation and a the properties of a few integrals of trigonometric functions, one can derive formulae for $a_0$, $a_n$ and $b_n$.
 
-As an example, the following $$\pi -2sin(x) -sin(2x) -\frac{2}{3}sin(3x) -\frac{1}{2}sin(4x) ... $$ series is a sort of sawtooth wave.
+As an example, the following $$\pi -2sin(x) -sin(2x) -\frac{2}{3}sin(3x) -\frac{1}{2}sin(4x) ... $$ series is a sort of sawtooth wave. As a sawtooth wave is essentially just $f(x) = x$ over some interval, it's very easy to compute the coefficients using the derived formulae. The same goes for the square and triangle waves.
+ 
+\subsubsection{Fourier Transform}
+The Fourier Transform takes a function in time-domain (a signal as a function of time, like a song) and outputs a function in frequence-domain, a kind of description for which kinds of sinusoids make up the original signal \cite{SimonXu2015}. Unlike the fourier series which works on periodic functions, the transform can be used to find the coefficients for non-periodic functions.
 
-The Fourier Transform, abbreviated as FT, was developed after Fourier's big idea. It takes a function in time-domain (a signal as a function of time, like a song) and outputs a function in frequence-domain, a kind of description for which kinds of sinusoids make up the original signal. 
-
-Even though the the FT is an incredibly powerful function, it's formula is compact. 
-$$\hat{f}(\zeta) = \int_{-\infty}^{\infty} f(t)e^{i2\pi-\zeta t} dt$$
-The variable \zeta is used here to emphasize that the output is complex.
+Even though the the FT is an incredibly powerful function, its formula is compact. 
+$$\hat{f}(\zeta) = \int_{-\infty}^{\infty} f(t)e^{-i2\pi\zeta t} dt$$
+The variable $\zeta$ is used here to emphasize that the output is complex.
 \subsection{Discrete fourier transform}
-% What is it plainly
-\subsubsection{Definition}
-% Math formula
+The Discrete Fourier transform (abbreviated as DFT), as the name implies, is the Fourier transform for discrete signals. Instead of integrating over the entire function domain, we sum the samples from the signal starting from the start of the signal at $t=0$ to some $t=N$. The DFT for a signal $x$ with $N$ points is 
+$$X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi kn}{N}}$$
 \subsubsection{DFT matrix}
 
+\subsection{Matrix representation for the DFT computations}
 \subsection{Fast fourier transform}
-\subsubsection{FFT matrix}
-\subsubsection{Algorithmic Complexity}
+A fast fourier transform is any algorithm that speeds up the computation of the DFT.
+\subsection{Computing the DFT and FFT}
+\subsection{Algorithmic Complexity}
 
 \subsection{Signal processing applications}
 
