@@ -1,1 +1,2 @@
-**14 Oct**: Explain the Fourier transform and the motivation behind the fourier series. Explain time-domain and frequency-domain and establish a definition for the DFT, FFT, introduce the DFT and FFT matrices. 
+**14 Oct**: Explain the Fourier transform and the motivation behind the fourier series. Explain time-domain and frequency-domain and establish a definition for the DFT, FFT
+**15 Oct**: Introduce the DFT matrix and the idea of FFT. Start looking into signal processing  applications.

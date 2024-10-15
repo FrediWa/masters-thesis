@@ -28,4 +28,8 @@ S.~Xu, ``Discrete fourier transform - simple step by step,'' Youtube, accessed:
   \url{\url{https://www.youtube.com/watch?v=mkGsMWi_j4Q}}
 \BIBentrySTDinterwordspacing
 
+\bibitem{Randhawa2018}
+S.~Randhawa, ``Analysing \& implementing cooley tukey fast fourier transform
+  algorithm,'' 09 2018.
+
 \end{thebibliography}

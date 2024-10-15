@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  14 OCT 2024 23:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  15 OCT 2024 16:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -305,17 +305,17 @@ LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
 (Font)              scaled to size 10.0pt on input line 4.
  [1
 
-{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
-(./chapters/comparing_implementations.tex) (build/report.bbl [2]) [3]
+{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2])
+(./chapters/comparing_implementations.tex) (build/report.bbl) [3]
 (build/report.aux) ) 
 Here is how much of TeX's memory you used:
- 3763 strings out of 480806
- 55117 string characters out of 5905128
- 487909 words of memory out of 6000000
- 21063 multiletter control sequences out of 15000+600000
+ 3764 strings out of 480806
+ 55131 string characters out of 5905128
+ 494909 words of memory out of 6000000
+ 21064 multiletter control sequences out of 15000+600000
  416948 words of font info for 50 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,5n,67p,513b,300s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,9n,67p,513b,300s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_
 64c3ob.enc}</usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfort
 aa-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfor
@@ -331,7 +331,7 @@ ype1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmsy7.pfb>
-Output written on build/report.pdf (3 pages, 160757 bytes).
+Output written on build/report.pdf (3 pages, 165607 bytes).
 PDF statistics:
  71 PDF objects out of 1000 (max. 8388607)
  51 compressed objects within 1 object stream
