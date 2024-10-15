@@ -1,6 +1,6 @@
 report:
 	rm -rf build/*
-	rm report.pdf
+	rm -f report.pdf
 	pdflatex -output-directory=build report.tex
 	bibtex build/report
 	pdflatex -output-directory=build report.tex

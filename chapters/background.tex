@@ -1,21 +1,35 @@
-
+% Fourier Analysis Introduction
 \subsection{Fourier analysis introduction}
 In the beginning of the 1800s, Joseph Fourier was working on a physics problem called the heat equation, a certain partial differential equation. He had the idea of expressing the original function as a sum of sine and cosine functions as these would integrate and differentiate easily, making the differential equation easier to solve. He eventually developed and introduced the idea of Fourier series, a way of expressing a function as a sum of trigonometric functions. 
-\subsubsection{Fourier Series}
+% Fourier Series
+\subsubsection{Fourier Series} 
 If a function has a period of $2\pi$, the Fourier series takes the form $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$. Using this representation and a the properties of a few integrals of trigonometric functions, one can derive formulae for $a_0$, $a_n$ and $b_n$.
 
 As an example, the following series $$\pi -2sin(x) -sin(2x) -\frac{2}{3}sin(3x) -\frac{1}{2}sin(4x) ... $$ is a sort of sawtooth wave. As a sawtooth wave is essentially just $f(x) = x$ over some interval, it's very easy to compute the coefficients using the derived formulae. The same goes for the square and triangle waves.
  
-\subsubsection{Fourier Transform}
-The Fourier Transform takes a function in time-domain (a signal as a function of time, like a song) and outputs a function in frequence-domain, a kind of description for which kinds of sinusoids make up the original signal \cite{SimonXu2015}. Unlike the fourier series which works on periodic functions, the transform can be used to find the coefficients for non-periodic functions.
+% Fourier Transform
+\subsubsection{Fourier Transform} 
+The Fourier Transform takes a function in time-domain (a signal as a function of time, like a sound) and outputs a function in frequency-domain, a kind of description for which kinds of sinusoids make up the original signal \cite{SimonXu2015}. Figure \ref{fig:transform} shows a signal and what it would look like in the frequency domain. If one added up the frequencies at the spikes in the frequency-domain (using the inverse of the Fourier transform), one would get back a very similar looking function to the original signal but without the noise. Unlike the fourier series which works on periodic functions, the transform can be used to find the coefficients for non-periodic functions.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/transform.png}
+    \caption{Some signal in the time-domain (displayed on the left) with added noise. Computing the transform with a discrete version of the Fourier transform reveals the main frequencies that make up the original signal in the time-domain (displayed on the right)\label{fig:transform}}
+\end{figure}
 
 Even though the the FT is an incredibly powerful function, its formula is compact. 
 $$\hat{f}(\zeta) = \int_{-\infty}^{\infty} f(t)e^{-i2\pi\zeta t} dt$$
 The variable $\zeta$ is used here to emphasize that the output is complex.
-\subsection{Discrete fourier transform}
+
+% Is the CFT a purely theoretical framework? Even using software that can compute analytically, we need to express the signal in some way. How?
+
+% DFT
+\subsection{Discrete fourier transform} 
 The Discrete Fourier transform (abbreviated as DFT), as the name implies, is the Fourier transform for discrete signals. Instead of integrating over the entire function domain, we sum the samples from the signal starting from the start of the signal at $t=0$ to some $t=N$. The DFT for a signal $x$ with $N$ points is 
 $$X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi kn}{N}}$$
-\subsection{Matrix representation for the DFT computations}
+
+% Matrix
+\subsection{Matrix representation for the DFT computations} 
 The DFT can be represented and computed by a matrix-vector multiplication. 
 $$
 % DFT coefficients
@@ -49,12 +63,27 @@ $$
 $$
 where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principle fifth root of unity $e^{2\pi i/5} $. 
 % but why a matrix when the summation formula is both practical and more compact..?
+
+% FFT
 \subsection{Fast fourier transform}
 The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$ amount of numbers are summed. A fast fourier transform is any method that speeds up the computation of the DFT. One of the more widely used algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$ \cite{Randhawa2018}.
-\subsection{Computing the DFT and FFT}
-\subsection{Algorithmic Complexity}
 
+% Computing
+\subsection{Computing the DFT and FFT}
+\subsubsection{Example DFT using the formula}
+Even thought it's tedious, the formula is easy to use both in manual computations and when writing software for it. Given a discrete input signal $x = [-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.55407458, \cdots , -0.55613981, -0.55769558]$ which has a 100 elements, the DFT values can be computed with the formula $$X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi kn}{N}}$$. Starting with $k=0$ $X_0 \approx -0.3215+0i$ a number with both the real and imaginary components close to 0, which indicates very little impact on the original signal. At $k=5$ however, $X_k \approx 0.07725-24.5836i$ with a relatively large imaginary component. Repeating the same summation up to $k=100-1 = 99$ the other values of $X_k$ with relatively large imaginary componets are at $k=12$ and $k=25$. 
+
+To get the frequency-magnitude plot, the magnitudes for each $X_k$ are needed. The magnitude is the argument (lenght of the vector representation) of the DFT values which can be computed with the Pythagorean theorem $c = \sqrt{a^2 + b^2}$ 
+\subsubsection{Fast Fourier Transform}
+\subsubsection{DFT using the formula}
+
+% Inverse transform
+\subsection{Inverse Transforms}
+Figure \ref{fig:transform} showed a signal in the time-domain and the in the frequency-domain. 
+
+% Signal processing
 \subsection{Signal processing applications}
 
 \subsection{Use in Digital audio processing}
+
 
