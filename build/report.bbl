@@ -32,4 +32,9 @@ S.~Xu, ``Discrete fourier transform - simple step by step,'' Youtube, accessed:
 S.~Randhawa, ``Analysing \& implementing cooley tukey fast fourier transform
   algorithm,'' 09 2018.
 
+\bibitem{HeidemanEtAl1984}
+M.~T. Heideman, D.~H. Johnson, and C.~S. Burrus, ``Gauss and the history of the
+  fast fourier transform,'' \emph{IEEE ASSP Magazine}, vol.~1, no.~4, pp.
+  14--21, 1984.
+
 \end{thebibliography}

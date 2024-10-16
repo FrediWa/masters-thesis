@@ -1,16 +1,16 @@
 \contentsline {section}{\numberline {1}Introduction}{1}{}%
-\contentsline {section}{\numberline {2}Background}{1}{}%
-\contentsline {subsection}{\numberline {2.1}Fourier analysis introduction}{1}{}%
-\contentsline {subsubsection}{\numberline {2.1.1}Fourier Series}{2}{}%
-\contentsline {subsubsection}{\numberline {2.1.2}Fourier Transform}{2}{}%
-\contentsline {subsection}{\numberline {2.2}Discrete fourier transform}{3}{}%
-\contentsline {subsection}{\numberline {2.3}Matrix representation for the DFT computations}{3}{}%
-\contentsline {subsection}{\numberline {2.4}Fast fourier transform}{3}{}%
+\contentsline {section}{\numberline {2}Introductory Fourier analysis}{1}{}%
+\contentsline {subsubsection}{\numberline {2.0.1}Fourier Series}{2}{}%
+\contentsline {subsubsection}{\numberline {2.0.2}Fourier Transform}{2}{}%
+\contentsline {subsection}{\numberline {2.1}Discrete fourier transform}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Matrix representation for the DFT computations}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Fast fourier transform}{3}{}%
+\contentsline {subsection}{\numberline {2.4}Inverse Transforms}{3}{}%
 \contentsline {subsection}{\numberline {2.5}Computing the DFT and FFT}{3}{}%
 \contentsline {subsubsection}{\numberline {2.5.1}Example DFT using the formula}{3}{}%
-\contentsline {subsubsection}{\numberline {2.5.2}Fast Fourier Transform}{4}{}%
-\contentsline {subsubsection}{\numberline {2.5.3}DFT using the formula}{4}{}%
-\contentsline {subsection}{\numberline {2.6}Inverse Transforms}{4}{}%
-\contentsline {subsection}{\numberline {2.7}Signal processing applications}{4}{}%
-\contentsline {subsection}{\numberline {2.8}Use in Digital audio processing}{4}{}%
-\contentsline {section}{\numberline {3}Comparing FFT implementations}{4}{}%
+\contentsline {subsubsection}{\numberline {2.5.2}Computing DFT with a programming language}{4}{}%
+\contentsline {subsubsection}{\numberline {2.5.3}Computing the inverse}{5}{}%
+\contentsline {subsection}{\numberline {2.6}Signal processing applications}{5}{}%
+\contentsline {section}{\numberline {3}Fourier transform in Audio Processing}{5}{}%
+\contentsline {subsection}{\numberline {3.1}Use in Digital audio processing}{5}{}%
+\contentsline {section}{\numberline {4}Comparing FFT implementations}{5}{}%
