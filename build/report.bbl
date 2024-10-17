@@ -21,6 +21,10 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{Bounchaleun2019}
+A.~Bounchaleun, ``An elementary introduction to fast fourier transform
+  algorithms,'' 2019.
+
 \bibitem{SimonXu2015}
 \BIBentryALTinterwordspacing
 S.~Xu, ``Discrete fourier transform - simple step by step,'' Youtube, accessed:

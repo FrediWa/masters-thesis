@@ -4,14 +4,15 @@
 \contentsline {subsubsection}{\numberline {2.0.2}Fourier Transform}{2}{}%
 \contentsline {subsection}{\numberline {2.1}Discrete fourier transform}{3}{}%
 \contentsline {subsubsection}{\numberline {2.1.1}Matrix representation for the DFT computations}{3}{}%
-\contentsline {subsection}{\numberline {2.2}Fast fourier transform}{3}{}%
-\contentsline {subsection}{\numberline {2.3}Inverse Transforms}{3}{}%
-\contentsline {subsection}{\numberline {2.4}Computing the DFT and FFT}{3}{}%
-\contentsline {subsubsection}{\numberline {2.4.1}Example DFT using the formula}{3}{}%
-\contentsline {subsubsection}{\numberline {2.4.2}Computing DFT with a programming language}{4}{}%
-\contentsline {subsubsection}{\numberline {2.4.3}Computing the inverse}{5}{}%
-\contentsline {subsection}{\numberline {2.5}Signal processing applications}{5}{}%
-\contentsline {subsubsection}{\numberline {2.5.1}Image processing}{5}{}%
-\contentsline {section}{\numberline {3}Fourier transform in Audio Processing}{5}{}%
-\contentsline {subsection}{\numberline {3.1}Use in Digital audio processing}{5}{}%
-\contentsline {section}{\numberline {4}Comparing FFT implementations}{5}{}%
+\contentsline {subsection}{\numberline {2.2}Inverse Transforms}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Computations}{4}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Example DFT using the formula}{4}{}%
+\contentsline {subsubsection}{\numberline {2.3.2}Computing DFT with a programming language}{4}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Computing the inverse}{5}{}%
+\contentsline {subsection}{\numberline {2.4}Fast fourier transform}{5}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}FFT Implementations}{6}{}%
+\contentsline {subsection}{\numberline {2.5}Signal processing applications}{6}{}%
+\contentsline {subsubsection}{\numberline {2.5.1}Image processing}{6}{}%
+\contentsline {section}{\numberline {3}Fourier transform in Audio Processing}{6}{}%
+\contentsline {subsection}{\numberline {3.1}Use in Digital audio processing}{6}{}%
+\contentsline {section}{\numberline {4}Comparing FFT implementations}{6}{}%
