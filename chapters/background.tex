@@ -115,8 +115,35 @@ The signal that we are turning back to the time-domain is filtered very naively 
 
 % FFT
 \subsection{Fast fourier transform}
-The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$ amount of numbers are summed. A fast fourier transform is any method that speeds up the computation of the DFT. One of the more widely used algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}.
-\subsubsection{FFT Implementations}
+The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$ amount of numbers are summed. A fast fourier transform (abbreviated as FFT) is any method that speeds up the computation of the DFT. This means that even if there is one Fourier transform and basically one DFT, there are multiple FFT algorithms. One could argue, however, that very few users of the FFT cares about the underlying algorithm, they just expect the functionality of the DFT, but faster. 
+
+Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}.
+
+\subsubsection{Brief history of the FFT}
+The history of the FFT is long and cloudy with multiple scientists working on a similar problem between 1800-2000. 
+% The modern FFT (what's that?) is based on the work of Gauss, almost which was developed almost a century before Cooley-Tukey. Gauss and CT use the same algorithm but the equivalence is not obvious due to Gauss' obscure and outdated notation.
+
+% Some would like to credit Gauss with the FFT even though it would be impractical. Some have and there have been uses of the terms "Discrete Gauss transform (DGT)" and " Gauss-Fourier transform (GFT)".
+
+% In the 1800s, an FFT which was NOT based on Gauss was widely used
+
+% Clairaut published a cosine-only "DFT" in 1754, 50 years BEFORE Fourier's Fourier series??? Lagrange came with a sine-only DFT-like formula in 1762
+
+% Yates used? FFT for a convolution
+
+% CT > Good > Thomas, Yates
+% Rudnick > Danielson-Lanczos > Runge 
+% Gauss > Lagrange, Euler
+% Smith > Darwin > Thompson > Runge
+% Smith > Everett > Darwin & Smith > Kelvin > Everett > Darwin
+% What is the link between Thomas, Yates and the "rest"?
+% What's the link between Gauss and Runge
+% Where does Carlini fit into the picture?
+
+\subsubsection{How the Cooley-Tukey FFT work}
+\subsubsection{Other FFT algorithms}
+\subsubsections{Notable FFT implementations}
+\textbf{Fastest Fourier Transform in the west}, more known by it's acronym FFTW, is a ...
 % FFTW
 % SciPy
 % FFT-JS: https://www.npmjs.com/package/fft-js
