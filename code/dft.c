@@ -2,9 +2,8 @@
 #include<math.h>
 
 #define PI 3.14159265
-#define N 100
 
-double signal[N] = {-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.55407458,
+double signal[100] = {-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.55407458,
         0.46687195,  0.07696683, -0.13428404,  0.2125712 ,  0.56682695,
         0.35255289, -0.07344963, -0.19440193, -0.39828423, -0.76045664,
        -0.93904834, -0.64378784, -0.10538606, -0.0191478 , -0.0770602 ,
@@ -24,12 +23,22 @@ double signal[N] = {-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.55407
         0.9818192 ,  0.78087388,  0.38900172,  0.1761942 ,  0.04442821,
        -0.29729617, -0.49258935, -0.17076793, -0.06084692, -0.16322715,
        -0.46860467, -0.45899852, -0.44382644, -0.55613981, -0.55769558};
-
-int main()
+void DFT(double* signal, double* real_components, double* img_components, int N)
 {
-    double real_components[N] = {0};
-    double img_components[N] = {0};
+    for(int k = 0; k < N; k++)
+    {
+        for(int n = 0; n < N; n++)
+        {
+            real_components[k] += signal[n] * cos(-2*PI*k*n/N);
+            img_components[k]  += signal[n] * sin(-2*PI*k*n/N);
+        }
+        int complex_separator = img_components[k] < 0 ? '\0' : '+';
+        printf("%d) %f%c%fi\n", k, real_components[k], complex_separator, img_components[k]);
+    }
+}
 
+void IDFT(double* signal, double* real_components, double* img_components, int N)
+{
     for(int k = 0; k < N; k++)
     {
         for(int n = 0; n < N; n++)
@@ -40,5 +49,16 @@ int main()
         int complex_separator = img_components[k] < 0 ? '\0' : '+';
         printf("%d) %f%c%fi\n", k, real_components[k], complex_separator, img_components[k]);
     }
+}
+
+int main()
+{
+    const int N = 100;
+    double real_components[N] = {0};
+    double img_components[N] = {0};
+
+    DFT(signal, real_components, img_components, N);
+
+
     
 }
