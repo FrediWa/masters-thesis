@@ -11,13 +11,14 @@
 \contentsline {subsubsection}{\numberline {2.5.2}Computing DFT with a programming language}{5}{}%
 \contentsline {subsubsection}{\numberline {2.5.3}Computing the inverse}{6}{}%
 \contentsline {subsection}{\numberline {2.6}Fast fourier transform}{6}{}%
-\contentsline {subsubsection}{\numberline {2.6.1}Brief history of the FFT}{7}{}%
-\contentsline {subsubsection}{\numberline {2.6.2}How the Cooley-Tukey FFT work}{7}{}%
-\contentsline {subsubsection}{\numberline {2.6.3}Other FFT algorithms}{7}{}%
-\contentsline {subsubsection}{\numberline {2.6.4}Notable FFT implementations}{7}{}%
-\contentsline {section}{\numberline {3}Signal processing applications}{7}{}%
-\contentsline {subsection}{\numberline {3.1}Use in Digital audio processing}{7}{}%
-\contentsline {subsection}{\numberline {3.2}Signal processing applications}{7}{}%
+\contentsline {subsubsection}{\numberline {2.6.1}Time complexity}{7}{}%
+\contentsline {subsubsection}{\numberline {2.6.2}Brief history of the FFT}{7}{}%
+\contentsline {subsubsection}{\numberline {2.6.3}How the Cooley-Tukey FFT work}{7}{}%
+\contentsline {subsubsection}{\numberline {2.6.4}Other FFT algorithms}{7}{}%
+\contentsline {subsubsection}{\numberline {2.6.5}Notable FFT implementations}{7}{}%
+\contentsline {section}{\numberline {3}Signal processing applications}{8}{}%
+\contentsline {subsection}{\numberline {3.1}Use in Digital audio processing}{8}{}%
+\contentsline {subsection}{\numberline {3.2}Signal processing applications}{8}{}%
 \contentsline {subsubsection}{\numberline {3.2.1}Image processing}{8}{}%
 \contentsline {section}{\numberline {4}Fourier transform in Audio Processing}{8}{}%
 \contentsline {subsection}{\numberline {4.1}Use in Digital audio processing}{8}{}%
