@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  28 OCT 2024 22:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  28 OCT 2024 22:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -339,7 +339,7 @@ File: ./images/transformIdea.png Graphic file (type png)
 Package pdftex.def Info: ./images/transformIdea.png  used on input line 38.
 (pdftex.def)             Requested size: 345.0pt x 142.12218pt.
  [3 <./images/transform.png>] [4 <./images/transformIdea.png>]
-Overfull \hbox (64.44519pt too wide) in paragraph at lines 99--99
+Overfull \hbox (64.44519pt too wide) in paragraph at lines 97--97
 \OT1/cmr/m/n/10 [\OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cm
 r/m/n/10 01298834\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr
 /m/n/10 62287525\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/
@@ -353,31 +353,32 @@ T1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 55769558]$
 <./images/pyDFT.png, id=38, 768.8725pt x 121.45375pt>
 File: ./images/pyDFT.png Graphic file (type png)
 <use ./images/pyDFT.png>
-Package pdftex.def Info: ./images/pyDFT.png  used on input line 110.
+Package pdftex.def Info: ./images/pyDFT.png  used on input line 108.
 (pdftex.def)             Requested size: 345.0pt x 54.498pt.
-<./images/cDFT.png, id=39, 733.74126pt x 234.8775pt>
+[5 <./images/pyDFT.png>]
+<./images/cDFT.png, id=43, 733.74126pt x 234.8775pt>
 File: ./images/cDFT.png Graphic file (type png)
 <use ./images/cDFT.png>
-Package pdftex.def Info: ./images/cDFT.png  used on input line 118.
+Package pdftex.def Info: ./images/cDFT.png  used on input line 116.
 (pdftex.def)             Requested size: 345.0pt x 110.43903pt.
-[5]
-<./images/IDFT.png, id=43, 1090.0725pt x 148.555pt>
+<./images/IDFT.png, id=44, 1090.0725pt x 148.555pt>
 File: ./images/IDFT.png Graphic file (type png)
 <use ./images/IDFT.png>
-Package pdftex.def Info: ./images/IDFT.png  used on input line 128.
+Package pdftex.def Info: ./images/IDFT.png  used on input line 126.
 (pdftex.def)             Requested size: 345.0pt x 47.01494pt.
-<./images/filtered_signal.png, id=44, 1380.15625pt x 388.45125pt>
+<./images/filtered_signal.png, id=45, 1380.15625pt x 388.45125pt>
 File: ./images/filtered_signal.png Graphic file (type png)
 <use ./images/filtered_signal.png>
-Package pdftex.def Info: ./images/filtered_signal.png  used on input line 136.
+Package pdftex.def Info: ./images/filtered_signal.png  used on input line 134.
 (pdftex.def)             Requested size: 345.0pt x 97.10071pt.
- [6 <./images/pyDFT.png> <./images/cDFT.png> <./images/IDFT.png>] [7 <./images/
-filtered_signal.png>]) (./chapters/applications.tex [8] [9])
+ [6 <./images/cDFT.png> <./images/IDFT.png>] [7 <./images/filtered_signal.png>]
+ [8]) (./chapters/applications.tex [9])
 Overfull \hbox (6.14497pt too wide) in paragraph at lines 51--51
 |[] \OT1/comfortaa/b/n/14.4 Us-ing short time Fourier trans-form for pitch
  []
 
-(./chapters/pitch_detection.tex) (build/report.bbl) [10] (build/report.aux) ) 
+(./chapters/pitch_detection.tex) (build/report.bbl [10]) [11] (build/report.aux
+) ) 
 Here is how much of TeX's memory you used:
  5099 strings out of 480806
  80790 string characters out of 5905128
@@ -386,30 +387,29 @@ Here is how much of TeX's memory you used:
  420442 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  69i,9n,117p,1136b,414s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/
-usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share
-/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Regular.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/symbols/msbm10.pfb>
-Output written on build/report.pdf (10 pages, 605380 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/
+share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Regular.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on build/report.pdf (11 pages, 606014 bytes).
 PDF statistics:
- 127 PDF objects out of 1000 (max. 8388607)
- 83 compressed objects within 1 object stream
+ 130 PDF objects out of 1000 (max. 8388607)
+ 85 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

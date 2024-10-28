@@ -91,8 +91,6 @@ $$ f(t) = \frac{1}{\pi}\int_{-\infty}^{\infty} \hat{f}(\zeta)e^{i2\pi\zeta t} d\
 the discrete inverse transform (which should be called DIFT instead of IDFT) is 
 $$ x_n = \frac{1}{N}\sum_{k=0}^{N-1} X(k)e^{\frac{i2\pi kn}{N}}$$.
 
-This can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. 
-
 % Computing
 \subsection{Computations}
 \subsubsection{Example DFT using the formula}
@@ -146,7 +144,6 @@ Time complexity refers to the asymptotic performance of an algorithm. Even thoug
 
 Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic. An improvement from $O(n^2)$ to $O(nlogn)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees around a 12800x speedup.
 
-
 This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but in essentially, the FFT is considered by some  to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
 
 \subsubsection{Brief history of the FFT}
@@ -178,6 +175,8 @@ It was later discovered that Cooley-Tukey works almost exactly as the algorithm 
 \subsubsection{FFT Algorithm}
 As previously mentioned, FFT is simply put any algorithm that computes the DFT fast. One of the easier to understand but still demonstrates the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split in two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array. On the way back, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity to perform multiple operations at once.
 
+\subsubsection{Inverse FFT}
+The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same _raw_fft method to compute both FFT and IFFT. %does this need source?
 \subsubsection{Notable FFT implementations}
 \textbf{Fastest Fourier Transform in the west}, more known by it's acronym FFTW, is a ...
 % FFTW

@@ -14,7 +14,8 @@
 \contentsline {subsubsection}{\numberline {2.6.1}Time complexity}{7}{}%
 \contentsline {subsubsection}{\numberline {2.6.2}Brief history of the FFT}{8}{}%
 \contentsline {subsubsection}{\numberline {2.6.3}FFT Algorithm}{8}{}%
-\contentsline {subsubsection}{\numberline {2.6.4}Notable FFT implementations}{8}{}%
+\contentsline {subsubsection}{\numberline {2.6.4}Inverse FFT}{8}{}%
+\contentsline {subsubsection}{\numberline {2.6.5}Notable FFT implementations}{9}{}%
 \contentsline {section}{\numberline {3}Fourier transform applications}{9}{}%
 \contentsline {subsection}{\numberline {3.1}Wireless communication}{9}{}%
 \contentsline {subsection}{\numberline {3.2}Spectroscopy}{9}{}%
