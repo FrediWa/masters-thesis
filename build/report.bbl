@@ -45,4 +45,15 @@ M.~T. Heideman, D.~H. Johnson, and C.~S. Burrus, ``Gauss and the history of the
 J.~W. Cooley, ``The re-discovery of the fast fourier transform algorithm,''
   1987, [Accessed 23-10-2024].
 
+\bibitem{Reducible2020}
+\BIBentryALTinterwordspacing
+Reducible, ``The fast fourier transform (fft): Most ingenious algorithm ever?''
+  2020, accessed: 2024-10-28. [Online]. Available:
+  \url{https://www.youtube.com/watch?v=h7apO7q16V0}
+\BIBentrySTDinterwordspacing
+
+\bibitem{Emerencia2007}
+A.~Emerencia, ``Multiplying huge integers using fourier transforms,'' 2007,
+  [Accessed 28-10-2024].
+
 \end{thebibliography}

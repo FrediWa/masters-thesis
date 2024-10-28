@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  23 OCT 2024 13:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  28 OCT 2024 22:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -246,20 +246,20 @@ Package caption Info: float package is loaded.
 (build/report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -288,7 +288,7 @@ Package caption Info: End \AtBeginDocument code.
 
 (./chapters/abstract.tex)
 LaTeX Font Info:    Trying to load font information for OT1+comfortaa on input 
-line 35.
+line 37.
 
 (/usr/share/texlive/texmf-dist/tex/latex/comfortaa/OT1comfortaa.fd
 File: OT1comfortaa.fd 2019/06/24 Font definitions for OT1/comfortaa.
@@ -296,9 +296,9 @@ File: OT1comfortaa.fd 2019/06/24 Font definitions for OT1/comfortaa.
 LaTeX Font Info:    Font shape `OT1/comfortaa/bx/n' in size <14.4> not availabl
 e
 (Font)              Font shape `OT1/comfortaa/b/n' tried instead on input line 
-35.
+37.
 LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
-(Font)              scaled to size 14.4pt on input line 35.
+(Font)              scaled to size 14.4pt on input line 37.
 
 (build/report.toc
 LaTeX Font Info:    Font shape `OT1/comfortaa/m/n' will be
@@ -316,7 +316,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout3 = `report.toc'.
 
 LaTeX Font Info:    Font shape `OT1/comfortaa/m/n' will be
-(Font)              scaled to size 14.4pt on input line 38.
+(Font)              scaled to size 14.4pt on input line 40.
 
 (./chapters/introduction.tex) (./chapters/background.tex [1
 
@@ -330,16 +330,16 @@ File: ./images/transform.png Graphic file (type png)
 <use ./images/transform.png>
 Package pdftex.def Info: ./images/transform.png  used on input line 15.
 (pdftex.def)             Requested size: 345.0pt x 97.45953pt.
+ [2]
 LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
 (Font)              scaled to size 10.0pt on input line 24.
- [2]
 <./images/transformIdea.png, id=23, 859.65166pt x 354.123pt>
 File: ./images/transformIdea.png Graphic file (type png)
 <use ./images/transformIdea.png>
 Package pdftex.def Info: ./images/transformIdea.png  used on input line 38.
 (pdftex.def)             Requested size: 345.0pt x 142.12218pt.
  [3 <./images/transform.png>] [4 <./images/transformIdea.png>]
-Overfull \hbox (64.44519pt too wide) in paragraph at lines 96--96
+Overfull \hbox (64.44519pt too wide) in paragraph at lines 99--99
 \OT1/cmr/m/n/10 [\OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cm
 r/m/n/10 01298834\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr
 /m/n/10 62287525\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/
@@ -353,60 +353,63 @@ T1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 55769558]$
 <./images/pyDFT.png, id=38, 768.8725pt x 121.45375pt>
 File: ./images/pyDFT.png Graphic file (type png)
 <use ./images/pyDFT.png>
-Package pdftex.def Info: ./images/pyDFT.png  used on input line 107.
+Package pdftex.def Info: ./images/pyDFT.png  used on input line 110.
 (pdftex.def)             Requested size: 345.0pt x 54.498pt.
-[5 <./images/pyDFT.png>]
-<./images/cDFT.png, id=43, 733.74126pt x 234.8775pt>
+<./images/cDFT.png, id=39, 733.74126pt x 234.8775pt>
 File: ./images/cDFT.png Graphic file (type png)
 <use ./images/cDFT.png>
-Package pdftex.def Info: ./images/cDFT.png  used on input line 115.
+Package pdftex.def Info: ./images/cDFT.png  used on input line 118.
 (pdftex.def)             Requested size: 345.0pt x 110.43903pt.
-<./images/IDFT.png, id=44, 1090.0725pt x 148.555pt>
+[5]
+<./images/IDFT.png, id=43, 1090.0725pt x 148.555pt>
 File: ./images/IDFT.png Graphic file (type png)
 <use ./images/IDFT.png>
-Package pdftex.def Info: ./images/IDFT.png  used on input line 125.
+Package pdftex.def Info: ./images/IDFT.png  used on input line 128.
 (pdftex.def)             Requested size: 345.0pt x 47.01494pt.
-<./images/filtered_signal.png, id=45, 1380.15625pt x 388.45125pt>
+<./images/filtered_signal.png, id=44, 1380.15625pt x 388.45125pt>
 File: ./images/filtered_signal.png Graphic file (type png)
 <use ./images/filtered_signal.png>
-Package pdftex.def Info: ./images/filtered_signal.png  used on input line 133.
+Package pdftex.def Info: ./images/filtered_signal.png  used on input line 136.
 (pdftex.def)             Requested size: 345.0pt x 97.10071pt.
- [6 <./images/cDFT.png> <./images/IDFT.png>])
-(./chapters/signal_processing.tex [7 <./images/filtered_signal.png>])
-(./chapters/audio_processing.tex) (./chapters/comparing_implementations.tex)
-(build/report.bbl) [8] (build/report.aux) ) 
+ [6 <./images/pyDFT.png> <./images/cDFT.png> <./images/IDFT.png>] [7 <./images/
+filtered_signal.png>]) (./chapters/applications.tex [8] [9])
+Overfull \hbox (6.14497pt too wide) in paragraph at lines 51--51
+|[] \OT1/comfortaa/b/n/14.4 Us-ing short time Fourier trans-form for pitch
+ []
+
+(./chapters/pitch_detection.tex) (build/report.bbl) [10] (build/report.aux) ) 
 Here is how much of TeX's memory you used:
- 5103 strings out of 480806
- 81033 string characters out of 5905128
+ 5099 strings out of 480806
+ 80790 string characters out of 5905128
  492909 words of memory out of 6000000
- 22375 multiletter control sequences out of 15000+600000
+ 22374 multiletter control sequences out of 15000+600000
  420442 words of font info for 63 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 69i,9n,117p,992b,414s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts
-/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share/texlive/texmf-dist/fonts/type1/aa
-johan/comfortaa/Comfortaa-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/a
-ajohan/comfortaa/Comfortaa-Regular.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-i5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-i9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm1
-0.pfb>
-Output written on build/report.pdf (8 pages, 598848 bytes).
+ 69i,9n,117p,1136b,414s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/
+usr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share
+/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Regular.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/symbols/msbm10.pfb>
+Output written on build/report.pdf (10 pages, 605380 bytes).
 PDF statistics:
- 121 PDF objects out of 1000 (max. 8388607)
- 79 compressed objects within 1 object stream
+ 127 PDF objects out of 1000 (max. 8388607)
+ 83 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

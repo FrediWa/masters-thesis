@@ -1,0 +1,22 @@
+Fourier series were originally motivated by a physics differential equation and even if it still is of great help for mathematicians solving particular types of differential equations, the true importance comes from the vast applicability of Fourier analysis combined with the significant performance improvement of the FFT. The Fourier transform allows the conversion between time and frequency domain which makes manipulation and analysis of signals practical. 
+
+Signals are everywhere. There are the more obvious ones like music and wireless communications that everyone with a mobile phone utilizes multiple times per day. There are also less obvious ones like images and really any kind of data. This chapter will explore some of the applications of the Fourier transform to emphasize the importance of the idea.
+
+\subsection{Wireless communication}
+
+\subsection{Spectroscopy}
+
+\subsection{Images are signals}
+
+\subsection{Multiplication}
+A more novel example of an application of the FFT is the multiplication of two numbers. As previously mentioned, multiplication is an algorithm that has a time complexity of $O(n^2)$ because each digit needs to be multiplied with every other digit. Using a fast Fourier transform, two numbers can be multiplied in $O(nlogn)$. The general gist of the method is to represent both number as a polynomial, sampling them at a number of points (a number which must be large enough to uniquely define the polynomial), multiplying those points together, finding a new unique polynomial for the new set of points and converting the polynomial back to a number. That resulting number is the product of the two input numbers \cite{Reducible2020}.
+
+Sampling is where the FFT enters the picture. The last step of the multiplication method requires a unique polynomial so $N \geq d+1$ samples are necessary where $d = n-1$, the highest degree in the polynomial or one less than the number of digits in the inputs. For every sample, the entire polynomial is required which means that the sampling part takes $O(n^2)$ computations anyway. The FFT accelerates this by utilizing the symmetry in the roots of unity to take the samples in $O(nlogn)$. This procedure is done for both input numbers, contributing 2nlogn operations or $(nlogn)$ \cite{Reducible2020}.
+
+The next step is a component wise multiplication of the transforms, which takes $O(n)$ operations. The last step involves taking the inverse to get the result. This is done with the inverse FFT, which also runs in $O(nlogn)$ \cite{Reducible2020}.
+
+All in all the multiplication algorithm takes $4N + 3(nlogn)$ operations which is $O(nlogn)$. Even though this seems like a very convoluted process, for large numbers, this turns advantageous at inputs of length around 200 \cite{Emerencia2007}. This means this method is practical in cryptography where it's somewhat common to multiply extremely large integers.
+
+
+
+\subsection{Music and audio processing}
