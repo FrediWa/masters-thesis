@@ -8,3 +8,58 @@ for the DFT and FFT. https://theswissbay.ch/pdf/Gentoomen%20Library/Information%
 - Big ideas in the FFT:
     - Divide and conquer (recursion)
     - Symmetry with nth roots of unity
+
+
+
+FFT(0, 1, 2, 3, 4, 5, 6, 7)
+    n=8
+    E = 0, 2, 4, 6
+    O = 1, 3, 5, 7
+    FFT(0, 2, 4, 6)
+        n=4
+        E = 0, 4
+        O = 2, 6
+        FFT(0, 4)
+            n = 2
+            E = 0
+            O = 4
+            FFT(0)
+                n = 1: return [0]
+            y_even = [0]
+            FFT(4)
+                n = 1: return [4]
+            y_odd = [4]
+            x = 1 // starting twiddle factor
+            loop 0<1:
+                // 0
+                y[0] = y_even[0] +1 * y_odd[0] = 0 + 4
+                y[4] = y_even[0] -1 * y_odd[0] = 0 - 4
+            return y
+        y_even = [4, -4]
+        FFT(2, 6)
+            n = 2
+            E = 2
+            O = 6
+            FFT(2)
+                n = 1: return [0]
+            y_even = [2]
+            FFT(6)
+                n = 1: return [4]
+            y_odd = [6]
+            x = 1 // starting twiddle factor
+            loop 0<1:
+                // 0
+                y[0] = y_even[0] +1 * y_odd[0] = 2 + 6
+                y[4] = y_even[0] -1 * y_odd[0] = 2 - 6
+            return y
+        y_odd = [8, -6]
+        x = 1
+        loop 0 < 2:
+            // 0
+            y[0] = y_even[0] +1 * y_odd[0] = 4 +
+            y[4] = y_even[0] -1 * y_odd[0] = 4 -
+            // 0
+            y[1] = y_even[1] +1 * y_odd[1] = -4 +
+            y[5] = y_even[1] -1 * y_odd[1] = -4 -
+
+

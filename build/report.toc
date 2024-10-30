@@ -14,15 +14,15 @@
 \contentsline {subsubsection}{\numberline {2.6.1}Time complexity}{7}{}%
 \contentsline {subsubsection}{\numberline {2.6.2}Brief history of the FFT}{8}{}%
 \contentsline {subsubsection}{\numberline {2.6.3}FFT Algorithm}{8}{}%
-\contentsline {subsubsection}{\numberline {2.6.4}Inverse FFT}{8}{}%
+\contentsline {subsubsection}{\numberline {2.6.4}Inverse FFT}{9}{}%
 \contentsline {subsubsection}{\numberline {2.6.5}Notable FFT implementations}{9}{}%
 \contentsline {section}{\numberline {3}Fourier transform applications}{9}{}%
-\contentsline {subsection}{\numberline {3.1}Wireless communication}{9}{}%
-\contentsline {subsection}{\numberline {3.2}Spectroscopy}{9}{}%
-\contentsline {subsection}{\numberline {3.3}Images are signals}{9}{}%
-\contentsline {subsection}{\numberline {3.4}Multiplication}{9}{}%
-\contentsline {subsection}{\numberline {3.5}Music and audio processing}{10}{}%
-\contentsline {section}{\numberline {4} Using short time Fourier transform for pitch detection}{10}{}%
-\contentsline {section}{\numberline {5}Implementation}{10}{}%
-\contentsline {section}{\numberline {6}Analysis and discussion}{10}{}%
-\contentsline {section}{\numberline {7}Conclusions}{10}{}%
+\contentsline {subsection}{\numberline {3.1}Wireless communication}{10}{}%
+\contentsline {subsection}{\numberline {3.2}Spectroscopy}{10}{}%
+\contentsline {subsection}{\numberline {3.3}Images are signals}{10}{}%
+\contentsline {subsection}{\numberline {3.4}Multiplication}{10}{}%
+\contentsline {subsection}{\numberline {3.5}Music and audio processing}{11}{}%
+\contentsline {section}{\numberline {4} Using short time Fourier transform for pitch detection}{11}{}%
+\contentsline {section}{\numberline {5}Implementation}{11}{}%
+\contentsline {section}{\numberline {6}Analysis and discussion}{11}{}%
+\contentsline {section}{\numberline {7}Conclusions}{11}{}%
