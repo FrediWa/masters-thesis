@@ -3,7 +3,11 @@ Fourier series were originally motivated by a physics differential equation and 
 Signals are everywhere. There are the more obvious ones like music and wireless communications that everyone with a mobile phone utilizes multiple times per day. There are also less obvious ones like images and really any kind of data. This chapter will explore some of the applications of the Fourier transform to emphasize the importance of the idea.
 
 \subsection{Wireless communication}
+A lot of modern standards for wireless communication rely on Orthogonal Frequency Division Multiplexing (OFMD) \todo{Source?}. In short, it's a way to pack discrete data (consecutive bits for example) compactly into a time-domain signal of orthogonal sinusoids. Orthogonal means that the signals do not mess with eachother and that integrating the product of several sinusoids over the period gives 0. This happens to be case when the angular frequency is an integer. Orthogonality also means that the signals do not interfere and that the Fourier transform can pick out the frequency components \todo{Source?}. 
 
+OFDM uses a modulation scheme to convert data into sinusoid components. Quadrature Phase Shift Keying is one popular method and it transforms the 4 combinations of 1's and 0's into the 4 roots of unity. 00 becomes 1, 01 becomes i, 10 becomes 3-1 and 11 becomes -i. These values are then turned into the time-domain using the IFFT for transmission. \todo{Source?}
+
+Some receiver receives the time-domain signal. An FFT on the receiver's end transform the transmission to frequency-domain for demodulation. The frequencies can then be extracted using the inverse of the modulation scheme. \todo{Source?}
 
 \subsection{Spectroscopy}
 
