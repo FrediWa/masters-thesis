@@ -4,6 +4,7 @@ Signals are everywhere. There are the more obvious ones like music and wireless 
 
 \subsection{Wireless communication}
 
+
 \subsection{Spectroscopy}
 
 \subsection{Images are signals}
@@ -15,7 +16,7 @@ Sampling is where the FFT enters the picture. The last step of the multiplicatio
 
 The next step is a component wise multiplication of the transforms, which takes $O(n)$ operations. The last step involves taking the inverse to get the result. This is done with the inverse FFT, which also runs in $O(nlogn)$ \cite{Reducible2020}.
 
-All in all the multiplication algorithm takes $4N + 3(nlogn)$ operations which is $O(nlogn)$. Even though this seems like a very convoluted process, for large numbers, this turns advantageous at inputs of length around 200 \cite{Emerencia2007}. This means this method is practical in cryptography where it's somewhat common to multiply extremely large integers.
+All in all the multiplication algorithm takes $4N + 3(nlogn)$ operations which is $O(nlogn)$. Even though this seems like a very convoluted process, for large numbers, this turns advantageous at inputs of length around 200 \cite{Emerencia2007}. This means this method is practical in cryptography where it's somewhat common to multiply extremely large integers. \todo{Do I need a source?}
 
 
 

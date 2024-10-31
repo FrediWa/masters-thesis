@@ -80,7 +80,7 @@ $$
 $$
 where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principle fifth root of unity $e^{2\pi i/5} $. 
 
-% but why a matrix when the summation formula is both practical and more compact..? Also, FFT? What's the damn point.
+\todo{but why a matrix when the summation formula is both practical and more compact..? Also, FFT? What's the damn point?}
 
 % Inverse transform
 \subsection{Inverse Transforms}
@@ -173,13 +173,13 @@ It was later discovered that Cooley-Tukey works almost exactly as the algorithm 
 % Where does Carlini fit into the picture?
 
 \subsubsection{FFT Algorithm}
-As previously mentioned, FFT is simply put any algorithm that computes the DFT fast. One of the easier to understand but still demonstrates the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split in two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array. On the way back, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity to perform multiple operations at once. % this could be reworked?
+As previously mentioned, FFT is simply put any algorithm that computes the DFT fast. One of the easier to understand but still demonstrates the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split in two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array. On the way back, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity to perform multiple operations at once. \todo{this could be reworked?}
 
 To derive the Radix-2 FFT, the DFT is split into two sums, one for the even indeces and one for the odd $$X_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}+ \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n+1}$$, where $T$ is the so called twiddle factor $e^{-\frac{2\pi ik}{N}}$. A common twiddle factor is factored out of the odd sum and the even and odd sums are denoted as $E_k$ and $O_k$ respectively. 
 
 $$X_k = E_k + TO_k$$
 
-% The "periodicity of E and O are still very weird to me
+\todo{The "periodicity of E and O are still very weird to me}
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 
 Once the algorithm is derived, turning it into code is as straight forward as the DFT. Figure \ref{fig:FFT-Alg} shows how the process evolves for an input vector of length 8.
@@ -191,7 +191,9 @@ Once the algorithm is derived, turning it into code is as straight forward as th
 \end{figure}
 
 \subsubsection{Inverse FFT}
-The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same \_raw\_fft method to compute both FFT and IFFT. %does this need source? https://github.com/numpy/numpy/blob/main/numpy/fft/_pocketfft.py
+The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same \_raw\_fft method to compute both FFT and IFFT. \todo{does this need source?} 
+
+%https://github.com/numpy/numpy/blob/main/numpy/fft/_pocketfft.py
 \subsubsection{Notable FFT implementations}
 \textbf{Fastest Fourier Transform in the west}, more known by it's acronym FFTW, is a ...
 % FFTW
