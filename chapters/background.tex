@@ -179,6 +179,35 @@ To derive the Radix-2 FFT, the DFT is split into two sums, one for the even inde
 
 $$X_k = E_k + TO_k$$
 
+These functions $E_k$ and $O_k$ are periodic with a period $N/2$ which can be shown by showing that $$e^{\frac{-2\pi in(k+N/2)}{N/2}} = e^{\frac{-2\pi in(k)}{N/2}}$$
+which means that 
+$$E_k = E_{k+\frac{N}{2}}, O_k = O_{k+\frac{N}{2}}$$
+Since this holds true for $E_k$ and $O_k$, the following is also true
+
+\[
+X_k = \left\{\begin{array}{lr}
+    E_k + TO_k, & \text{for } 0 \leq k < N/2\\
+    E_{k-N/2} + TO_{k-N/2}, & \text{for } N/2\leq k< N\\
+    \end{array}\right\}
+\]
+this is saying that the DFT can be computed in two layers, the lower $N/2$ terms and the upper $N/2$ terms.
+When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/2} + T^{N/2}O_{k-N/2}$, which is the same equation as the lower $N/2$ terms, just with an offset of N/2. The the twiddle factor is raised to the power of N/2 because it too was in terms of k. We can thus split $X_k$ into
+
+$$X_k = E_k + TO_k$$  
+$$X_{k+N/2} = E_k + T^{N/2}O_k$$
+
+which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritte using the following property 
+$$e^{\frac{-2\pi i(k+N/2)}{N}} = -e^{\frac{-2\pi i(k)}{N}}$$
+
+$$X_k = E_k + TO_k$$  
+$$X_{k+N/2} = E_k - TO_k$$
+
+One final intuition about this that cite{X} did not mention is that E_k and O_k themselves are DFT's. Let's try to transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm. First we factor out $E_k$ and $O_k$.
+
+
+
+
+
 \todo{The "periodicity of E and O are still very weird to me}
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 
@@ -186,8 +215,8 @@ Once the algorithm is derived, turning it into code is as straight forward as th
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{./images/fft.png}
-    \caption{Hand drawn graph of an FFT. At any stage, evens are colored in blue and odds in orange to illustrate how the values are combined. "Ret" stands for return, to indicate that the current recursion iteration has ended. "C" stands for combine and y is just the partial result. The last vector Y is the output of the FFT.\label{fig:FFT-Alg}}
+    \includegraphics[width=\textwidth]{./images/fft.jpg}
+    \caption{Diagram of an FFT with 8 elements. The process starts with splitting down the input vector to the recursive base case $N=1$. After that the values are combined using the core computations of the Radix-2 FFT. The right-most column in the graph is the output transform of the left-most column.\label{fig:FFT-Alg}}
 \end{figure}
 
 \subsubsection{Inverse FFT}

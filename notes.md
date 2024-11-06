@@ -10,6 +10,10 @@ for the DFT and FFT. https://theswissbay.ch/pdf/Gentoomen%20Library/Information%
     - Symmetry with nth roots of unity
 
 
+"While frequency spectrum describes the amplitude and phase of each frequency band, cepstrum characterizes variations between the frequency bands. Features derived from cepstrum are found to better describe speech than features taken directly from the frequency spectrum."
+https://dsp.stackexchange.com/questions/13/what-is-the-difference-between-a-fourier-transform-and-a-cosine-transform
+
+
 
 FFT(0, 1, 2, 3, 4, 5, 6, 7)
     n=8
