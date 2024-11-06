@@ -191,27 +191,78 @@ X_k = \left\{\begin{array}{lr}
     \end{array}\right\}
 \]
 this is saying that the DFT can be computed in two layers, the lower $N/2$ terms and the upper $N/2$ terms.
-When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/2} + T^{N/2}O_{k-N/2}$, which is the same equation as the lower $N/2$ terms, just with an offset of N/2. The the twiddle factor is raised to the power of N/2 because it too was in terms of k. We can thus split $X_k$ into
+When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/2} + T^{N/2}O_{k-N/2}$, which are the same O and E as the lower $N/2$ terms, just with an offset of N/2. The the twiddle factor is raised to the power of N/2 because it too was in terms of k. We can thus split $X_k$ into \todo{This section could be reworked}
 
 $$X_k = E_k + TO_k$$  
 $$X_{k+N/2} = E_k + T^{N/2}O_k$$
 
-which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritte using the following property 
+which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritten using the following property 
 $$e^{\frac{-2\pi i(k+N/2)}{N}} = -e^{\frac{-2\pi i(k)}{N}}$$
-
+which gives
 $$X_k = E_k + TO_k$$  
 $$X_{k+N/2} = E_k - TO_k$$
 
-One final intuition about this that cite{X} did not mention is that E_k and O_k themselves are DFT's. Let's try to transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm. First we factor out $E_k$ and $O_k$.
+recall that
+$$E_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}$$
+$$O_k = \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n}$$
+and that the DFT is
+$$X_k = \sum^{N}_{n=0} x_nT^{n}$$
+This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm,factor out $E_k$ and $O_k$, express the computations with a loop
 
+\begin{lstlisting}
+do k = 1, N/2
+    T = exp(-2*i * PI * (k-1) / N) 
+    X(k) = E(k) + T * O(k)
+    X(k + N/2) = E(k) - T * O(k)
+end do
+\end{lstlisting}
+Fortran indexes starting at 1, which means the upper loop boundary nicely becomes just $N/2$, but the k in the exponent needs to be adjusted. Before these computations we need to compute the evens and odds.
+\begin{lstlisting}
+    E = r2fft(input(1:N:2))
+    O = r2fft(input(2:N:2))
+\end{lstlisting}
+A recursive algorithm also needs a base case
+\begin{lstlisting}    
+if (N == 1) then
+    X = input
+    return
+end if
+\end{lstlisting}
+With the final programmatic things, a naive Radix-2 FFT could look like the following
+\begin{lstlisting}
+recursive function r2fft(input) result(X)
+    complex, dimension(:) :: input
+    complex, dimension(SIZE(input)) :: X
+    complex, dimension(SIZE(input)/2) :: O, E
+    complex :: T, i
+    integer :: N
+    real :: PI
 
+    PI = 3.14159265358979323
+    i = cmplx(0, 1)
+    N = size(input)
 
+    ! Recursive base case
+    if (N == 1) then
+        X = input
+        return
+    end if
 
+    ! Split
+    E = r2fft(input(1:N:2))
+    O = r2fft(input(2:N:2))
 
-\todo{The "periodicity of E and O are still very weird to me}
+    ! Combination step
+    do k = 1, N/2
+        T = exp(-2*i * PI * (k-1) / N) 
+        X(k) = E(k) + T * O(k)
+        X(k + N/2) = E(k) - T * O(k)
+    end do
+end function r2fft
+\end{lstlisting}
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 
-Once the algorithm is derived, turning it into code is as straight forward as the DFT. Figure \ref{fig:FFT-Alg} shows how the process evolves for an input vector of length 8.
+This algorithm assumes the input is a power of 2 but the implementation does not handle it anywhere. The program still runs, but to no surprise gives an erroneous answer. Figure \ref{fig:FFT-Alg} shows a block diagram of the FFT computations.
 
 \begin{figure}[ht]
     \centering
