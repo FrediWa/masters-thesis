@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  7 NOV 2024 00:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  7 NOV 2024 18:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -265,13 +265,6 @@ File: listings.cfg 2020/03/24 1.8d listings configuration
 ))
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
 
-(/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
-Package: todonotes 2021/04/26 v1.1.4 Todonotes source and documentation.
-Package: todonotes 2018/11/22
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
 (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
@@ -288,6 +281,13 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+Package: todonotes 2021/04/26 v1.1.4 Todonotes source and documentation.
+Package: todonotes 2018/11/22
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
@@ -582,20 +582,20 @@ LaTeX Info: Redefining \addtolength on input line 81.
  (build/report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -626,7 +626,7 @@ Package caption Info: End \AtBeginDocument code.
 
 (./chapters/abstract.tex)
 LaTeX Font Info:    Trying to load font information for OT1+comfortaa on input 
-line 42.
+line 109.
 
 (/usr/share/texlive/texmf-dist/tex/latex/comfortaa/OT1comfortaa.fd
 File: OT1comfortaa.fd 2019/06/24 Font definitions for OT1/comfortaa.
@@ -634,9 +634,9 @@ File: OT1comfortaa.fd 2019/06/24 Font definitions for OT1/comfortaa.
 LaTeX Font Info:    Font shape `OT1/comfortaa/bx/n' in size <14.4> not availabl
 e
 (Font)              Font shape `OT1/comfortaa/b/n' tried instead on input line 
-42.
+109.
 LaTeX Font Info:    Font shape `OT1/comfortaa/b/n' will be
-(Font)              scaled to size 14.4pt on input line 42.
+(Font)              scaled to size 14.4pt on input line 109.
 
 (build/report.toc
 LaTeX Font Info:    Font shape `OT1/comfortaa/m/n' will be
@@ -654,7 +654,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout4 = `report.toc'.
 
 LaTeX Font Info:    Font shape `OT1/comfortaa/m/n' will be
-(Font)              scaled to size 14.4pt on input line 45.
+(Font)              scaled to size 14.4pt on input line 112.
 
 (./chapters/introduction.tex) (./chapters/background.tex [1
 
@@ -688,35 +688,39 @@ n/10 55407458\OML/cmm/m/it/10 ; []  ; \OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 0\OML
 T1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 55769558]$
  []
 
-<./images/pyDFT.png, id=41, 768.8725pt x 121.45375pt>
-File: ./images/pyDFT.png Graphic file (type png)
-<use ./images/pyDFT.png>
-Package pdftex.def Info: ./images/pyDFT.png  used on input line 108.
-(pdftex.def)             Requested size: 345.0pt x 54.498pt.
-[5 <./images/pyDFT.png>]
-<./images/cDFT.png, id=46, 733.74126pt x 234.8775pt>
-File: ./images/cDFT.png Graphic file (type png)
-<use ./images/cDFT.png>
-Package pdftex.def Info: ./images/cDFT.png  used on input line 116.
-(pdftex.def)             Requested size: 345.0pt x 110.43903pt.
-<./images/IDFT.png, id=47, 1090.0725pt x 148.555pt>
-File: ./images/IDFT.png Graphic file (type png)
-<use ./images/IDFT.png>
-Package pdftex.def Info: ./images/IDFT.png  used on input line 126.
-(pdftex.def)             Requested size: 345.0pt x 47.01494pt.
-<./images/filtered_signal.png, id=48, 1380.15625pt x 388.45125pt>
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(build/../snippets/dft.py)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+)
+(build/../snippets/dft.c) [5] (build/../snippets/idft.py)
+<./images/filtered_signal.png, id=45, 1380.15625pt x 388.45125pt>
 File: ./images/filtered_signal.png Graphic file (type png)
 <use ./images/filtered_signal.png>
-Package pdftex.def Info: ./images/filtered_signal.png  used on input line 134.
+Package pdftex.def Info: ./images/filtered_signal.png  used on input line 123.
 (pdftex.def)             Requested size: 345.0pt x 97.10071pt.
- [6 <./images/cDFT.png> <./images/IDFT.png>] [7 <./images/filtered_signal.png>]
- [8] [9] [10]
-<./images/fft.jpg, id=70, 444.02689pt x 166.51009pt>
+ [6 <./images/filtered_signal.png>] [7] [8] [9]
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+(build/../snippets/fft.f90)
+<./images/fft.jpg, id=62, 444.02689pt x 166.51009pt>
 File: ./images/fft.jpg Graphic file (type jpg)
 <use ./images/fft.jpg>
-Package pdftex.def Info: ./images/fft.jpg  used on input line 269.
+Package pdftex.def Info: ./images/fft.jpg  used on input line 262.
 (pdftex.def)             Requested size: 345.0pt x 129.3819pt.
-) (./chapters/applications.tex [11 <./images/fft.jpg>]
+) [10] (./chapters/applications.tex
 Overfull \hbox (219.63953pt too wide) in paragraph at lines 6--6
 [][][]\OT1/cmr/m/n/10 https://warse.org/IJWCNT/static/pdf/file/ijwcnt04332014.p
 df[]  
@@ -734,50 +738,48 @@ Overfull \hbox (4.66747pt too wide) in paragraph at lines 6--7
 ion Mul-ti-plex-ing (OFMD)
  []
 
-
-LaTeX Warning: Marginpar on page 12 moved.
-
-[12])
-Overfull \hbox (6.14497pt too wide) in paragraph at lines 56--56
+[11 <./images/fft.jpg>] [12])
+Overfull \hbox (6.14497pt too wide) in paragraph at lines 123--123
 |[] \OT1/comfortaa/b/n/14.4 Us-ing short time Fourier trans-form for pitch
  []
 
-(./chapters/pitch_detection.tex) (build/report.bbl [13]) [14] (build/report.aux
-) ) 
+(./chapters/pitch_detection.tex) (build/report.bbl) [13] (build/report.aux) ) 
 Here is how much of TeX's memory you used:
- 17603 strings out of 480806
- 335663 string characters out of 5905128
- 713959 words of memory out of 6000000
- 34635 multiletter control sequences out of 15000+600000
- 420777 words of font info for 64 fonts, out of 8000000 for 9000
+ 18210 strings out of 480806
+ 342936 string characters out of 5905128
+ 1058821 words of memory out of 6000000
+ 35213 multiletter control sequences out of 15000+600000
+ 421412 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 99i,10n,117p,1136b,1521s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/u
-sr/share/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share/
-texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Regular.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/cm-super/sfrm1000.pfb>
-Output written on build/report.pdf (14 pages, 698490 bytes).
+ 99i,10n,150p,1136b,1704s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/
+usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/sh
+are/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share/texli
+ve/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Bold.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/aajohan/comfortaa/Comfortaa-Regular.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/
+sfrm1000.pfb>
+Output written on build/report.pdf (13 pages, 659898 bytes).
 PDF statistics:
- 154 PDF objects out of 1000 (max. 8388607)
- 102 compressed objects within 2 object streams
+ 149 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 48 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 33 words of extra memory for PDF output out of 10000 (max. 10000000)
 

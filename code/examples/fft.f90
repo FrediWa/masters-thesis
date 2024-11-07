@@ -10,7 +10,7 @@ program fft
     end do
 
 contains
-
+    !---snippet-start
     recursive function r2fft(input) result(X)
         complex, dimension(:) :: input
         complex, dimension(SIZE(input)) :: X
@@ -34,16 +34,13 @@ contains
         O = r2fft(input(2:N:2))
 
         ! Combination step
-        do k = 1, N/2
-            T = exp(-2*i * PI * (k-1) / N) 
-            X(k) = E(k) + T * O(k)
-            X(k + N/2) = E(k) - T * O(k)
+        do k = 0, N/2-1
+            T = exp(-2*i * PI * k / N) 
+            X(k+1) = E(k+1) + T * O(k+1)
+            X(k + N/2+1) = E(k+1) - T * O(k+1)
         end do
         
-
-
-    
     end function r2fft
-
+    !---snippet-end
 end program fft
 

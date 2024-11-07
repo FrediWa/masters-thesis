@@ -23,15 +23,18 @@ double signal[100] = {-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.554
         0.9818192 ,  0.78087388,  0.38900172,  0.1761942 ,  0.04442821,
        -0.29729617, -0.49258935, -0.17076793, -0.06084692, -0.16322715,
        -0.46860467, -0.45899852, -0.44382644, -0.55613981, -0.55769558};
+
 void DFT(double* signal, double* real_components, double* img_components, int N)
 {
     for(int k = 0; k < N; k++)
     {
+        //---snippet-start
         for(int n = 0; n < N; n++)
         {
             real_components[k] += signal[n] * cos(-2*PI*k*n/N);
             img_components[k]  += signal[n] * sin(-2*PI*k*n/N);
         }
+        //---snippet-end
         int complex_separator = img_components[k] < 0 ? '\0' : '+';
         printf("%d) %f%c%fi\n", k, real_components[k], complex_separator, img_components[k]);
     }

@@ -7,6 +7,7 @@ PI = 3.141592653
 """
 An FFT that prints what it does along the way. 
 """
+#---snippet-start
 def printfft(samples, depth): 
     print(f"{'   ' * depth}fft({samples})")
     N = len(samples) 
@@ -26,10 +27,9 @@ def printfft(samples, depth):
         print(f"{'   ' * depth}{Ey[k]} + {Oy[k]} * {twiddle} = {y[k]}")
         y[k + N//2] = Ey[k] - Oy[k] * twiddle
         print(f"{'   ' * depth}{Ey[k]} - {Oy[k]} * {twiddle} = {y[k + N//2]}")
-
     print(f"{'   ' * depth}y = {y}")
     return y
-
+    #---snippet-end
 
 """
 Typical Radix-2 FFT

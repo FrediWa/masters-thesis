@@ -101,31 +101,20 @@ To get the frequency-magnitude plot, the magnitudes for each $X_k$ are needed. T
 % Nyquist thing here
 
 \subsubsection{Computing DFT with a programming language}
-With the built-in complex data types and extensive mathematical and scientific computing libraries, implementing the DFT in Python is trivial. Leveraging Python's cmath library, the computations can be copied directly and 2 for-loops handles the summation and $X_k$ indexing as shown in figure \ref{fig:pyDFT}.
+With the built-in complex data types and extensive mathematical and scientific computing libraries, implementing the DFT in Python is trivial. Leveraging Python's cmath library, the computations can be copied directly and 2 for-loops handles the summation and $X_k$ indexing as shown below.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{./images/pyDFT.png}
-    \caption{Implementing the DFT in Python is trivial and can almost be directly copied from the formula by utilizing Python's cmath library for complex exponentiation \label{fig:pyDFT}}
-\end{figure}
+\lstinputlisting[style=python]{../snippets/dft.py}
 
-For a more primitive language like C, without complex exponentiation, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implmentation (without using a struct for complex numbers) is shown in figure \ref{fig:cDFT}. 
+For a more primitive language like C, without complex exponentiation, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implmentation (without using a struct for complex numbers) is shown below. 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{./images/cDFT.png}
-    \caption{Implementing the DFT in C is still relatively easy due to Euler's formula. \label{fig:cDFT}}
-\end{figure}
+\lstinputlisting[style=c]{../snippets/dft.c}
 
 These examples are purely illustrative, there's no reason to implement the DFT because an FFT does the same transformation, just with less computations, and the difference just grows with the sample size.
 \subsubsection{Computing the inverse}
-Writing the inverse discrete Fourier transform in Python is as straightforward as the DFT due to the cmath library, but an additional normalization is added as shown in figure \ref{fig:IDFT}. 
+Writing the inverse discrete Fourier transform in Python is as straightforward as the DFT due to the cmath library, but an additional normalization is added as shown below 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{./images/IDFT.png}
-    \caption{Implementing the IDFT in Python is as easy as the DFT. After the summation, each term is then scaled down by the signal length. \label{fig:IDFT}}
-\end{figure}
+
+\lstinputlisting[style=python]{../snippets/idft.py}
 
 The signal that we are turning back to the time-domain is filtered very naively for demonstration purposes. The filter turns unimportant frequencies (components with a magnitude less than 2) to 0. Figure \ref{fig:DFT-IDFT} shows both the original signal and filtered signal in both time and frequency-domain.
 
@@ -207,59 +196,63 @@ $$E_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}$$
 $$O_k = \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n}$$
 and that the DFT is
 $$X_k = \sum^{N}_{n=0} x_nT^{n}$$
-This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm,factor out $E_k$ and $O_k$, express the computations with a loop
+This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm, express the computations with a loop
 
 \begin{lstlisting}
-do k = 1, N/2
-    T = exp(-2*i * PI * (k-1) / N) 
-    X(k) = E(k) + T * O(k)
-    X(k + N/2) = E(k) - T * O(k)
+do k = 0, N/2-1
+    T = exp(-2*i * PI * k / N) 
+    X(k+1) = E(k+1) + T * O(k+1)
+    X(k+1 + N/2) = E(k+1) - T * O(k+1)
 end do
 \end{lstlisting}
-Fortran indexes starting at 1, which means the upper loop boundary nicely becomes just $N/2$, but the k in the exponent needs to be adjusted. Before these computations we need to compute the evens and odds.
+In Fortran, arrays are indexed starting from 1, this means that every array access needs an offset of 1. Before these computations we need to compute the evens and odds.
 \begin{lstlisting}
     E = r2fft(input(1:N:2))
     O = r2fft(input(2:N:2))
 \end{lstlisting}
-A recursive algorithm also needs a base case
+Any recursive algorithm also needs a base case.
 \begin{lstlisting}    
 if (N == 1) then
     X = input
     return
 end if
 \end{lstlisting}
-With the final programmatic things, a naive Radix-2 FFT could look like the following
-\begin{lstlisting}
-recursive function r2fft(input) result(X)
-    complex, dimension(:) :: input
-    complex, dimension(SIZE(input)) :: X
-    complex, dimension(SIZE(input)/2) :: O, E
-    complex :: T, i
-    integer :: N
-    real :: PI
+Adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
+% \begin{lstlisting}[style=fortran]
+% recursive function r2fft(input) result(X)
+%     complex, dimension(:) :: input
+%     complex, dimension(SIZE(input)) :: X
+%     complex, dimension(SIZE(input)/2) :: O, E
+%     complex :: T, i
+%     integer :: N
+%     real :: PI
 
-    PI = 3.14159265358979323
-    i = cmplx(0, 1)
-    N = size(input)
+%     PI = 3.14159265358979323
+%     i = cmplx(0, 1)
+%     N = size(input)
 
-    ! Recursive base case
-    if (N == 1) then
-        X = input
-        return
-    end if
+%     ! Recursive base case
+%     if (N == 1) then
+%         X = input
+%         return
+%     end if
 
-    ! Split
-    E = r2fft(input(1:N:2))
-    O = r2fft(input(2:N:2))
+%     ! Split
+%     E = r2fft(input(1:N:2))
+%     O = r2fft(input(2:N:2))
 
-    ! Combination step
-    do k = 1, N/2
-        T = exp(-2*i * PI * (k-1) / N) 
-        X(k) = E(k) + T * O(k)
-        X(k + N/2) = E(k) - T * O(k)
-    end do
-end function r2fft
-\end{lstlisting}
+%     ! Combination step
+%     do k = 0, N/2-1
+%         T = exp(-2*i * PI * k / N) 
+%         X(k+1) = E(k+1) + T * O(k+1)
+%         X(k+1 + N/2) = E(k+1) - T * O(k+1)
+%     end do
+% end function r2fft
+% \end{lstlisting}
+
+% Try lstinput
+\lstinputlisting[style=fortran]{../snippets/fft.f90}
+
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 
 This algorithm assumes the input is a power of 2 but the implementation does not handle it anywhere. The program still runs, but to no surprise gives an erroneous answer. Figure \ref{fig:FFT-Alg} shows a block diagram of the FFT computations.
