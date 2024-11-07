@@ -9,14 +9,18 @@
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:transform}{{1}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}The big idea}{3}{}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{"average" is flaky}{3}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid1}{29934874}{24016953}
+\pgfsyspdfmark {pgfid4}{34243870}{24029241}
+\pgfsyspdfmark {pgfid5}{36357406}{23805327}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Discrete fourier transform}{3}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The graphs of $sin(2x)sin(2x)$ and $sin(2x)sin(3x)$ on the $0$ to $2\pi $ interval. Matching $n$ and $m$ results in $sin^2(2x)$ which is always positive, resulting in a positive definite integral where as a mismatch causes equal positive and negative area, canceling out to 0.\relax }}{4}{}\protected@file@percent }
 \newlabel{fig:transformIdea}{{2}{4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Matrix representation for the DFT computations}{4}{}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{but why a matrix when the summation formula is both practical and more compact..? Also, FFT? What's the damn point?}{4}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid1}{8799518}{19412829}
-\pgfsyspdfmark {pgfid4}{34243870}{19425117}
-\pgfsyspdfmark {pgfid5}{36357406}{19201203}
+\pgfsyspdfmark {pgfid6}{8799518}{20010450}
+\pgfsyspdfmark {pgfid9}{34243870}{20022738}
+\pgfsyspdfmark {pgfid10}{36357406}{19798824}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Inverse Transforms}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Computations}{5}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.5.1}Example DFT using the formula}{5}{}\protected@file@percent }
@@ -32,50 +36,74 @@
 \citation{HeidemanEtAl1984}
 \citation{Cooley1987}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.6.1}Time complexity}{7}{}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{Does this need source?}{7}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid11}{18450024}{29653129}
+\pgfsyspdfmark {pgfid14}{34243870}{29665417}
+\pgfsyspdfmark {pgfid15}{36357406}{29441503}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.6.2}Brief history of the FFT}{7}{}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{this whole section is bad, I'll either fix it or remove it later}{7}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid16}{8799518}{14943487}
+\pgfsyspdfmark {pgfid19}{34243870}{14955775}
+\pgfsyspdfmark {pgfid20}{36357406}{14731861}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.6.3}FFT Algorithm}{8}{}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{this could be reworked?}{8}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid6}{17106222}{25608388}
-\pgfsyspdfmark {pgfid9}{34243870}{25620676}
-\pgfsyspdfmark {pgfid10}{36357406}{25396762}
+\pgfsyspdfmark {pgfid21}{17106222}{25608388}
+\pgfsyspdfmark {pgfid24}{34243870}{25620676}
+\pgfsyspdfmark {pgfid25}{36357406}{25396762}
 \@writefile{tdo}{\contentsline {todo}{This section could be reworked}{9}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid11}{8799518}{39513565}
-\pgfsyspdfmark {pgfid14}{34243870}{39525853}
-\pgfsyspdfmark {pgfid15}{36357406}{39301939}
+\pgfsyspdfmark {pgfid26}{30640106}{40299997}
+\pgfsyspdfmark {pgfid29}{34243870}{40312285}
+\pgfsyspdfmark {pgfid30}{36357406}{40088371}
+\@writefile{tdo}{\contentsline {todo}{can I keep this?}{9}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid31}{24065260}{18667506}
+\pgfsyspdfmark {pgfid34}{34243870}{18679794}
+\pgfsyspdfmark {pgfid35}{36357406}{18455880}
 \citation{Reducible2020}
 \@writefile{lol}{\contentsline {lstlisting}{../snippets/fft.f90}{10}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.6.4}Inverse FFT}{10}{}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{does this need source?}{10}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid16}{28340570}{9271891}
-\pgfsyspdfmark {pgfid19}{34243870}{9284179}
-\pgfsyspdfmark {pgfid20}{36357406}{9060265}
+\pgfsyspdfmark {pgfid36}{28340570}{8485459}
+\pgfsyspdfmark {pgfid39}{34243870}{8497747}
+\pgfsyspdfmark {pgfid40}{36357406}{8273833}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Diagram of an FFT with 8 elements. The process starts with splitting down the input vector to the recursive base case $N=1$. After that the values are combined using the core computations of the Radix-2 FFT. The right-most column in the graph is the output transform of the left-most column.\relax }}{11}{}\protected@file@percent }
 \newlabel{fig:FFT-Alg}{{4}{11}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.6.5}Notable FFT implementations}{11}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Fourier transform applications}{11}{}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{This whole section shouldn't need a source}{11}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid21}{10437921}{15813113}
-\pgfsyspdfmark {pgfid24}{34243870}{15825401}
-\pgfsyspdfmark {pgfid25}{36357406}{15601487}
+\pgfsyspdfmark {pgfid41}{10437921}{15813113}
+\pgfsyspdfmark {pgfid44}{34243870}{15825401}
+\pgfsyspdfmark {pgfid45}{36357406}{15601487}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Wireless communication}{11}{}\protected@file@percent }
 \@writefile{tdo}{\contentsline {todo}{https://warse.org/IJWCNT/static/pdf/file/ijwcnt04332014.pdf}{11}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid26}{8799518}{11202013}
-\pgfsyspdfmark {pgfid29}{34243870}{11214301}
-\pgfsyspdfmark {pgfid30}{36357406}{10990387}
+\pgfsyspdfmark {pgfid46}{8799518}{11202013}
+\pgfsyspdfmark {pgfid49}{34243870}{11214301}
+\pgfsyspdfmark {pgfid50}{36357406}{10990387}
 \@writefile{tdo}{\contentsline {todo}{Source? Even though some literature and sources just take this for granted. When n = m, the integral is $sin^2(nx)$ which will always be positive so the integral is not 0.}{11}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid31}{25840725}{8056285}
-\pgfsyspdfmark {pgfid34}{34243870}{8068573}
-\pgfsyspdfmark {pgfid35}{36357406}{7844659}
+\pgfsyspdfmark {pgfid51}{25840725}{8056285}
+\pgfsyspdfmark {pgfid54}{34243870}{8068573}
+\pgfsyspdfmark {pgfid55}{36357406}{7844659}
 \citation{Reducible2020}
 \citation{Reducible2020}
 \citation{Reducible2020}
 \citation{Emerencia2007}
 \@writefile{tdo}{\contentsline {todo}{Source?}{12}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid36}{23262980}{37154269}
-\pgfsyspdfmark {pgfid39}{34243870}{37166557}
-\pgfsyspdfmark {pgfid40}{36357406}{36942643}
+\pgfsyspdfmark {pgfid56}{24755748}{37154269}
+\pgfsyspdfmark {pgfid59}{34243870}{37166557}
+\pgfsyspdfmark {pgfid60}{36357406}{36942643}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Images are signals}{12}{}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{does the DCT need a source?}{12}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid61}{25503949}{28605011}
+\@writefile{tdo}{\contentsline {todo}{there is one paper that uses the FFT specifically, need to look into what makes it special there, or not?}{12}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid66}{28618732}{28605011}
+\pgfsyspdfmark {pgfid64}{34243870}{28617299}
+\pgfsyspdfmark {pgfid65}{36357406}{28393385}
+\pgfsyspdfmark {pgfid69}{34243870}{25777407}
+\pgfsyspdfmark {pgfid70}{36357406}{25553493}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Multiplication}{12}{}\protected@file@percent }
+\@writefile{tdo}{\contentsline {todo}{This whole section may be wrong as I delved deeper into the FFT algorithm after I wrote this}{12}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid71}{8799518}{26347209}
+\pgfsyspdfmark {pgfid74}{34243870}{17432491}
+\pgfsyspdfmark {pgfid75}{36357406}{17208577}
 \bibstyle{IEEEtran}
 \bibdata{references}
 \bibcite{Bounchaleun2019}{1}
@@ -85,10 +113,10 @@
 \bibcite{Cooley1987}{5}
 \bibcite{Reducible2020}{6}
 \bibcite{Emerencia2007}{7}
-\@writefile{tdo}{\contentsline {todo}{Do I need a source?}{13}{}\protected@file@percent }
-\pgfsyspdfmark {pgfid41}{19531058}{41872861}
-\pgfsyspdfmark {pgfid44}{34243870}{41885149}
-\pgfsyspdfmark {pgfid45}{36357406}{41661235}
+\@writefile{tdo}{\contentsline {todo}{Do I need a source? Or is it sufficiently well known that RSA can have hundreds of digits long integers.}{13}{}\protected@file@percent }
+\pgfsyspdfmark {pgfid76}{19531058}{41872861}
+\pgfsyspdfmark {pgfid79}{34243870}{41885149}
+\pgfsyspdfmark {pgfid80}{36357406}{41661235}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Music and audio processing}{13}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4} Using short time Fourier transform for pitch detection}{13}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Implementation}{13}{}\protected@file@percent }

@@ -2,7 +2,7 @@
 In the beginning of the 1800s, Joseph Fourier was working on a physics problem called the heat equation, a certain partial differential equation. He had the idea of expressing the original function as a sum of sine and cosine functions as these would integrate and differentiate easily, making the differential equation easier to solve. He eventually developed and introduced the idea of Fourier series, a way of expressing a function as a sum of trigonometric functions \cite{Bounchaleun2019}.
 % Fourier Series
 \subsection{Fourier Series} 
-If a function has a period of $2\pi$, the Fourier series takes the form $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$ and states that a function can be represented by an infinite number of sine and cosine waves with different magnitudes and coefficients, plus some constant term. Using this representation and a the properties of a few integrals of trigonometric functions, one can derive formulae for $a_0$, $a_n$ and $b_n$.
+If a function has a period of $2\pi$, the Fourier series takes the form $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$ and states that a function can be represented by an infinite number of sine and cosine waves with different magnitudes and coefficients, plus some constant term. Using this representation and the properties of a few integrals of trigonometric functions, one can derive formulae for $a_0$, $a_n$ and $b_n$.
 
 As an example, the following series $$\pi -2sin(x) -sin(2x) -\frac{2}{3}sin(3x) -\frac{1}{2}sin(4x) ... $$ is a sort of sawtooth wave. As a sawtooth wave is essentially just $f(x) = x$ over some interval it's relatively easy to compute the coefficients using the derived formulae. The same goes for the square and triangle waves, althought the triangle wave might be more difficult to calculate analytically.
  
@@ -22,7 +22,7 @@ The variable $\zeta$ is used here to emphasize that the output is complex. It's 
 
 % High level description of the Fourier transform.
 \subsubsection{The big idea}
-The idea behind the Fourier transform is that when some signal/function is multiplied by some sinusoid, if that sinusoid is a part of the signals, the frequencies "sync up" and if the sinusoid is not part of the signal, nothing special happens. On the interval $[0, 2\pi]$ any $sin(nx), n\in\mathbb{Z}$ will work against $sin(mx), m\in\mathbb{Z}$ and the "average" value is 0 except when $n=m$ in which case the "average" value is $\pi$. To get a non-zero "average" $n$ needs to equal $m$ which in turn implies that both signals contain a particular sinusoid. More formally 
+The idea behind the Fourier transform is that when some signal/function is multiplied by some sinusoid, if that sinusoid is a part of the signals, the frequencies "sync up" and if the sinusoid is not part of the signal, nothing special happens. On the interval $[0, 2\pi]$ any $sin(nx), n\in\mathbb{Z}$ will work against $sin(mx), m\in\mathbb{Z}$ and the "average" value is 0 except when $n=m$ in which case the "average" \todo{"average" is flaky}value is $\pi$. To get a non-zero "average" $n$ needs to equal $m$ which in turn implies that both signals contain a particular sinusoid. More formally 
 \[ \int_0^{2\pi} sin(mx)sin(nx)dx = \int_0^{2\pi} cos(mx)cos(nx)dx= 
 \begin{cases} % Some issues with cases
       0 & m\neq n \\
@@ -47,7 +47,6 @@ $$X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi kn}{N}}$$
 % Matrix
 \subsubsection{Matrix representation for the DFT computations} 
 The DFT can be represented and computed by a matrix-vector multiplication. 
-transformIdea.png
 $$
 % DFT coefficients
 \begin{bmatrix}
@@ -78,7 +77,7 @@ $$
     x(n) \\
 \end{bmatrix}
 $$
-where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principle fifth root of unity $e^{2\pi i/5} $. 
+where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principle N-th root of unity $e^{2\pi i/N} $. 
 
 \todo{but why a matrix when the summation formula is both practical and more compact..? Also, FFT? What's the damn point?}
 
@@ -105,11 +104,11 @@ With the built-in complex data types and extensive mathematical and scientific c
 
 \lstinputlisting[style=python]{../snippets/dft.py}
 
-For a more primitive language like C, without complex exponentiation, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implmentation (without using a struct for complex numbers) is shown below. 
+For a more primitive language like C, without complex exponentiation, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implementation (without using a struct for complex numbers) is shown below. 
 
 \lstinputlisting[style=c]{../snippets/dft.c}
 
-These examples are purely illustrative, there's no reason to implement the DFT because an FFT does the same transformation, just with less computations, and the difference just grows with the sample size.
+These examples are purely illustrative, there's no reason to implement the DFT in practice because there are algorithms that do the same transformation, just with less computations, and the difference just grows with the sample size.
 \subsubsection{Computing the inverse}
 Writing the inverse discrete Fourier transform in Python is as straightforward as the DFT due to the cmath library, but an additional normalization is added as shown below 
 
@@ -131,11 +130,11 @@ The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$
 \subsubsection{Time complexity}
 Time complexity refers to the asymptotic performance of an algorithm. Even though it in many cases correlates with real performance, it's ultimately theoretical and only considers the highest order term, because it's the biggest contributor when the input size grows towards infinity. For example, consider an algorithm for multiplying 2 numbers. One such algorithm is taught in elementary school and multiplies every digit with every other digit, shifting one step for every iterations for multiplying by a power of 10 then adding all numbers together to get the final result. This algorithm takes $N^2+N$ steps but as N grows larger and larger, the $N^2$ term will contribute the most, so we say that the algorithm has a complexity of $O(N^2)$, called Big-O. For multiplying two 1000 digit long integers, the multiplication will take a million operations and the summation will take 1000. Increasing the input size with 1 digit adds only 1 more addition, but it adds 1001 more multiplication steps.
 
-Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic. An improvement from $O(n^2)$ to $O(nlogn)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees around a 12800x speedup.
+Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic \todo{Does this need source?}. An improvement from $O(n^2)$ to $O(nlogn)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees around a 12800x speedup.
 
-This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but in essentially, the FFT is considered by some  to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
+This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but essentially, the FFT is considered by some  to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
 
-\subsubsection{Brief history of the FFT}
+\subsubsection{Brief history of the FFT} \todo{this whole section is bad, I'll either fix it or remove it later}
 The history of the FFT is long and cloudy with multiple scientists working on a similar problem between 1800-2000. Cooley and Tukey introduced their algorithm in 1965 and at the time it was regarded as a completely new and revolutionizing algorithm. Based on the papers [A] and [B], the FFT and similar numerical methods were developed in two chains. One of them was started with Euler and Lagrange which Gauss based his work on. Runge's work is based on ????????? Gauss and was the basis for a lot of other development. The other chain, which seemingly does not link to Gauss is where Cooley-Tukey exists. They tributed I.J. Good in their paper even though their algorithm was pretty different from the Good one, which is now commonly called the Prime Factor Algorithm and sometimes Good-Thomas. 
 
 % Yates used? FFT for a convolution
@@ -180,23 +179,25 @@ X_k = \left\{\begin{array}{lr}
     \end{array}\right\}
 \]
 this is saying that the DFT can be computed in two layers, the lower $N/2$ terms and the upper $N/2$ terms.
-When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/2} + T^{N/2}O_{k-N/2}$, which are the same O and E as the lower $N/2$ terms, just with an offset of N/2. The the twiddle factor is raised to the power of N/2 because it too was in terms of k. We can thus split $X_k$ into \todo{This section could be reworked}
+When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/2} + T^{N/2}O_{k-N/2}$, which are the same O and E as the lower $N/2$ terms, just with an offset of N/2. The twiddle factor is raised to the power of N/2 because it too is in terms of k. We can thus split $X_k$ into \todo{This section could be reworked}
 
 $$X_k = E_k + TO_k$$  
 $$X_{k+N/2} = E_k + T^{N/2}O_k$$
+which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritten using the following property of complex exponentials
 
-which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritten using the following property 
 $$e^{\frac{-2\pi i(k+N/2)}{N}} = -e^{\frac{-2\pi i(k)}{N}}$$
 which gives
+
 $$X_k = E_k + TO_k$$  
 $$X_{k+N/2} = E_k - TO_k$$
 
-recall that
+Recall that
+
 $$E_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}$$
 $$O_k = \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n}$$
 and that the DFT is
 $$X_k = \sum^{N}_{n=0} x_nT^{n}$$
-This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform (no pun intended) this purely mathematical notation into something that looks more like a complete algorithm, express the computations with a loop
+This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform (no pun intended) \todo{can I keep this?} this purely mathematical notation into something that looks more like a complete algorithm, express the computations with a loop
 
 \begin{lstlisting}
 do k = 0, N/2-1
@@ -207,8 +208,8 @@ end do
 \end{lstlisting}
 In Fortran, arrays are indexed starting from 1, this means that every array access needs an offset of 1. Before these computations we need to compute the evens and odds.
 \begin{lstlisting}
-    E = r2fft(input(1:N:2))
-    O = r2fft(input(2:N:2))
+E = r2fft(input(1:N:2))
+O = r2fft(input(2:N:2))
 \end{lstlisting}
 Any recursive algorithm also needs a base case.
 \begin{lstlisting}    
@@ -217,40 +218,8 @@ if (N == 1) then
     return
 end if
 \end{lstlisting}
-Adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
-% \begin{lstlisting}[style=fortran]
-% recursive function r2fft(input) result(X)
-%     complex, dimension(:) :: input
-%     complex, dimension(SIZE(input)) :: X
-%     complex, dimension(SIZE(input)/2) :: O, E
-%     complex :: T, i
-%     integer :: N
-%     real :: PI
+Putting everything together and adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
 
-%     PI = 3.14159265358979323
-%     i = cmplx(0, 1)
-%     N = size(input)
-
-%     ! Recursive base case
-%     if (N == 1) then
-%         X = input
-%         return
-%     end if
-
-%     ! Split
-%     E = r2fft(input(1:N:2))
-%     O = r2fft(input(2:N:2))
-
-%     ! Combination step
-%     do k = 0, N/2-1
-%         T = exp(-2*i * PI * k / N) 
-%         X(k+1) = E(k+1) + T * O(k+1)
-%         X(k+1 + N/2) = E(k+1) - T * O(k+1)
-%     end do
-% end function r2fft
-% \end{lstlisting}
-
-% Try lstinput
 \lstinputlisting[style=fortran]{../snippets/fft.f90}
 
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
@@ -269,9 +238,8 @@ The inverse of the FFT can be derived using the DFT matrix previously shown. It 
 %https://github.com/numpy/numpy/blob/main/numpy/fft/_pocketfft.py
 \subsubsection{Notable FFT implementations}
 \textbf{Fastest Fourier Transform in the west}, more known by it's acronym FFTW, is a ...
-% FFTW
-% SciPy
-% FFT-JS: https://www.npmjs.com/package/fft-js
+\textbf{PocketFFT}, used by Numpy
+
 
 
 

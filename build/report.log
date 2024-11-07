@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  7 NOV 2024 18:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/CVE-2023-32700 patched) (preloaded format=pdflatex 2024.4.15)  7 NOV 2024 19:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -677,7 +677,7 @@ File: ./images/transformIdea.png Graphic file (type png)
 Package pdftex.def Info: ./images/transformIdea.png  used on input line 38.
 (pdftex.def)             Requested size: 345.0pt x 142.12218pt.
  [3 <./images/transform.png>] [4 <./images/transformIdea.png>]
-Overfull \hbox (64.44519pt too wide) in paragraph at lines 97--97
+Overfull \hbox (64.44519pt too wide) in paragraph at lines 96--96
 \OT1/cmr/m/n/10 [\OMS/cmsy/m/n/10 ^^@\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cm
 r/m/n/10 01298834\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr
 /m/n/10 62287525\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/
@@ -702,7 +702,7 @@ File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 <./images/filtered_signal.png, id=45, 1380.15625pt x 388.45125pt>
 File: ./images/filtered_signal.png Graphic file (type png)
 <use ./images/filtered_signal.png>
-Package pdftex.def Info: ./images/filtered_signal.png  used on input line 123.
+Package pdftex.def Info: ./images/filtered_signal.png  used on input line 122.
 (pdftex.def)             Requested size: 345.0pt x 97.10071pt.
  [6 <./images/filtered_signal.png>] [7] [8] [9]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -718,7 +718,7 @@ File: lstlang1.sty 2020/03/24 1.8d listings language file
 <./images/fft.jpg, id=62, 444.02689pt x 166.51009pt>
 File: ./images/fft.jpg Graphic file (type jpg)
 <use ./images/fft.jpg>
-Package pdftex.def Info: ./images/fft.jpg  used on input line 262.
+Package pdftex.def Info: ./images/fft.jpg  used on input line 231.
 (pdftex.def)             Requested size: 345.0pt x 129.3819pt.
 ) [10] (./chapters/applications.tex
 Overfull \hbox (219.63953pt too wide) in paragraph at lines 6--6
@@ -738,20 +738,27 @@ Overfull \hbox (4.66747pt too wide) in paragraph at lines 6--7
 ion Mul-ti-plex-ing (OFMD)
  []
 
-[11 <./images/fft.jpg>] [12])
+[11 <./images/fft.jpg>]
+
+LaTeX Warning: Marginpar on page 12 moved.
+
+
+LaTeX Warning: Marginpar on page 12 moved.
+
+[12])
 Overfull \hbox (6.14497pt too wide) in paragraph at lines 123--123
 |[] \OT1/comfortaa/b/n/14.4 Us-ing short time Fourier trans-form for pitch
  []
 
 (./chapters/pitch_detection.tex) (build/report.bbl) [13] (build/report.aux) ) 
 Here is how much of TeX's memory you used:
- 18210 strings out of 480806
- 342936 string characters out of 5905128
- 1058821 words of memory out of 6000000
- 35213 multiletter control sequences out of 15000+600000
+ 18268 strings out of 480806
+ 344283 string characters out of 5905128
+ 1067382 words of memory out of 6000000
+ 35271 multiletter control sequences out of 15000+600000
  421412 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 99i,10n,150p,1136b,1704s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,10n,150p,1191b,1704s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/
 usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/sh
 are/texlive/texmf-dist/fonts/enc/dvips/comfortaa/a_64c3ob.enc}</usr/share/texli
@@ -776,7 +783,7 @@ ublic/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/
 sfrm1000.pfb>
-Output written on build/report.pdf (13 pages, 659898 bytes).
+Output written on build/report.pdf (13 pages, 662554 bytes).
 PDF statistics:
  149 PDF objects out of 1000 (max. 8388607)
  103 compressed objects within 2 object streams
