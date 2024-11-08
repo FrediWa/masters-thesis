@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[a4paper,12pt]{article}
 \usepackage{graphicx}
 \usepackage{lipsum, float}
 \usepackage{cite}
@@ -11,6 +11,7 @@
 \usepackage[font={small,it}]{caption}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage[onehalfspacing]{setspace}
 
 % Code example styles
 \definecolor{backcolour}{rgb}{0.15,0.15,0.20}
@@ -79,7 +80,7 @@
 % \lstset{style=fortran}
 
 % the 4.5cm left margin is annoying as shit but a requirement. Uncomment before final draft.
-% \usepackage[a4paper, left=4.5cm, right=2cm, top=2.5cm, bottom=3cm]{geometry}
+\usepackage[a4paper, left=4.5cm, right=2cm, top=2.5cm, bottom=3cm]{geometry}
 \usepackage[color=red!20]{todonotes}
 
 \newfloat{floatbox}{tb}{abox}[section]
@@ -102,7 +103,7 @@
 \renewcommand{\cftsubsecfont}{\fontfamily{comfortaa}\selectfont}
 \renewcommand{\cftsubsubsecfont}{\fontfamily{comfortaa}\selectfont}
 \renewcommand{\contentsname}{\fontfamily{comfortaa}\selectfont Table of Contents}
-
+\input{chapters/cover}
 \input{chapters/abstract}
 
 % ToC
@@ -123,6 +124,7 @@
 \section{ Using short time Fourier transform for pitch detection}
 \input{chapters/pitch_detection}
 \section{Implementation}
+\input{chapters/implementation}
 \section{Analysis and discussion}
 
 % Conclusions
