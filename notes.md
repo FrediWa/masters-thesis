@@ -15,56 +15,16 @@ https://dsp.stackexchange.com/questions/13/what-is-the-difference-between-a-four
 
 Turn mp3 into txt 
 `ffmpeg -i input.mp3 -f wav - | od -An -td2 -w2 -v> samples.txt`
+## Missing fundamental phenomena 
+Ears may hear a 100Hz signal even though a small speaker may be physically unable to produce the 100Hz signal
+https://en.wikipedia.org/wiki/Missing_fundamental
 
-FFT(0, 1, 2, 3, 4, 5, 6, 7)
-    n=8
-    E = 0, 2, 4, 6
-    O = 1, 3, 5, 7
-    FFT(0, 2, 4, 6)
-        n=4
-        E = 0, 4
-        O = 2, 6
-        FFT(0, 4)
-            n = 2
-            E = 0
-            O = 4
-            FFT(0)
-                n = 1: return [0]
-            y_even = [0]
-            FFT(4)
-                n = 1: return [4]
-            y_odd = [4]
-            x = 1 // starting twiddle factor
-            loop 0<1:
-                // 0
-                y[0] = y_even[0] +1 * y_odd[0] = 0 + 4
-                y[4] = y_even[0] -1 * y_odd[0] = 0 - 4
-            return y
-        y_even = [4, -4]
-        FFT(2, 6)
-            n = 2
-            E = 2
-            O = 6
-            FFT(2)
-                n = 1: return [0]
-            y_even = [2]
-            FFT(6)
-                n = 1: return [4]
-            y_odd = [6]
-            x = 1 // starting twiddle factor
-            loop 0<1:
-                // 0
-                y[0] = y_even[0] +1 * y_odd[0] = 2 + 6
-                y[4] = y_even[0] -1 * y_odd[0] = 2 - 6
-            return y
-        y_odd = [8, -6]
-        x = 1
-        loop 0 < 2:
-            // 0
-            y[0] = y_even[0] +1 * y_odd[0] = 4 +
-            y[4] = y_even[0] -1 * y_odd[0] = 4 -
-            // 0
-            y[1] = y_even[1] +1 * y_odd[1] = -4 +
-            y[5] = y_even[1] -1 * y_odd[1] = -4 -
+## Polyphonic content
+Polyphonic may be harder to detect, but be a tad easier when where notes are not harmonious
+page 1-2
+https://gotsopoulos.com/files/Gotsopoulos-BachelorThesis.pdf
 
-
+## Size of FFT frequency bins
+A base singer should be able to go as low as F2 (https://www.reddit.com/r/barbershop/comments/16bmbxz/what_is_the_typical_lowest_note_sang_in_a/?rdt=52566) which is around 87Hz. The difference between F2 and G2 is about 11Hz. With a sample size of 4192 and a sampling rate of 48000, the bin size is about 11.45, meaning both notes are very close to eachother. 
+https://gotsopoulos.com/files/Gotsopoulos-BachelorThesis.pdf
+It is thus more computationally intense to analyze lower notes
