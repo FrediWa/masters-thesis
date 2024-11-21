@@ -24,16 +24,24 @@ The characteristics of the sound being played becomes even more evident when it'
 \end{figure}
 
 \subsubsection{Semitones, notes, frequency and pitch}
-Semitone is typically defined as the smallest interval in western music and is 1/12th of an octave. Semitone is sometimes also used to talk about, not the interval, but the notes that bound the interval. This non-interval semitone is sometimes also called a pitch.   
+Semitone is typically defined as the smallest interval in western music and is 1/12th of an octave. Semitone is sometimes also used to talk about, not the interval, but the notes that bound the interval. This non-interval semitone is sometimes also called a pitch. In this work, semitone will be used to describe the notes at the bounds.   
 An octave is the difference between some frequency $f_1$ and $f_2 = 2*f_1$, in other words going up an octave doubles the frequency. For example, the pitches F2 and F\#2 bound a semitone interval. In western music, tuning typically starts from A4, which is defined in this system to have a frequency of 440Hz, and every other note is derived from there. A3 (an octave lower) will be 220Hz and A5 will be 880Hz. The frequency for the other pitches can be approximated with equal temperament tuning, meaning that all semitones equally spaced within octaves. This means that the frequency of any one pitch is exactly $2^{1/12}$ times the frequency of the previous one. 
 
-\subsubsection{Pitch perception}
-Even though we can clearly define any one pitch to be some frequency 
+% \subsubsection{Pitch perception}
+% Even though we can clearly define any one pitch to be some frequency, human ears are more complex. 
 % What do I want to establish in this chapter????
 % What is pitch perception at a high level
 % 
 \subsection{Fundamental frequency estimation}
-As there is no strict definition for pitch, pitch detection isn't very well defined either. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding semitone/pitch (because the note names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. Pitch detection is also sometimes just a colloquialism for fundamental frequency estimation, or $f_0$ estimation.
+As there is no strict definition for pitch, pitch detection isn't very well defined either. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding semitone/pitch (because the note names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}. 
+
+\subsection{Picking peaks from the frequency-magnitude plot}
+The Fourier transform is used to get the frequency-domain data, which can be used to plot which frequencies are part of the original signal. These frequencies that are part of the signal are called partials. Intuitively, for a lot of signals, anyone can look at the frequency-magnitude plot and point to a peak and claim that it's the fundamental frequency. Perhaps they are looking for some periodicity with the largest peaks (if there are multiple) and choosing out of those the peak that has the lowest frequency. This is a very straightforward approach and correct for some signals. 
+\subsubsection{Harmonic Product Spectrum}
+Harmonic Product Spectrum (HPS) is an algorithm that does almost does the intuitive approach. Simply put, the HPS iteratively multiplies downsampled version of a signal. The result is that harmonics (or integer multiples of the fundamental frequency) interfere and build on eachother. 
+% https://www.cs.otago.ac.nz/research/publications/oucs-2008-03.pdf
+
+\subsubsection{Addressing drawbacks of HPS}
 
 % \subsection{Short-time Fourier Transform}
 % Problems with FFT, might move this to real-time
@@ -44,7 +52,7 @@ One problem with the FFT that  \todo{source: Gotsopoulos} addresses is the size 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/fft_bin_size_chart.png}
-    \caption{As the FFT window shrinks, different notes may fall into the same bin. Bars represent the bin sizes for various window sizes at 48kHz sampling rate and dashed lines show semitone intervals (the exact note values are irrelevant). For notes in the 4th octave, the window size can be smaller, but in the 2nd octave even 8192 samples is not enough to discern all pairs of semitones.\label{fig:fftBinSizeChart}}
+    \caption{As the FFT window shrinks, different notes may fall into the same bin. Bars represent the bin sizes for various window sizes at 48kHz sampling rate and dashed lines show semitone intervals (the exact note values are irrelevant). For notes in the 4th octave, the window size can be smaller, but in the 2nd octave even 8192 samples is not enough to discern all pairs of semitones because the bins are larger than those semitone differences.\label{fig:fftBinSizeChart}}
 \end{figure}
 
 Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go this low. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 <=> x = 48000/4 = 12000$ 12000 samples would be enough to discern the lowest notes. 
