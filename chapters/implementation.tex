@@ -2,13 +2,23 @@
 \subsection{Web Audio API}
 As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers controls over audio processing functionality on browsers, by getting access to user audio devices, adding effects and more. 
 The Web Audio API operates in a AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories; input or source nodes, modifier nodes and output nodes. The nodes are then connected to each other to form the graph.
+
 \subsubsection{Sources and destinations}
 The source node, as their names imply are entry points for audio control graph, they provide signals. Some of these include the OscillatorNode, a node which produces pure sinusoids, a MediaElementAudioSourceNode, which uses the media in an existing HTML audio element. As the purpose of the application is for the user to be able to record their own singing and have it analyzed for pitch correctness, the source in this case will be a MediaStreamAudioSourceNode, which provides a source signal from a MediaStream. The actual source will the method navigator.mediaDevices.getUserMedia\(\) that provides the MediaStream, but this is technically outside the AudioContext so it's not a source node.  
 The output may be either the user's system's speakers, or another MediaStream. In this case, there won't be an output node because it's simply not needed. The output will be the result of the fourier analysis.
+
 \subsubsection{Modifiers} 
 The modifier nodes are the nodes that are neither sources nor destinations, they take in the signal from a node, performs some transform on the signal, and then hands it over to the next node, or nodes, in the graph. Some of these nodes apply effects, like rever or gain, some can be used for visualizing audio, some can be used to split audio into separate channels for per-channel modification.
+
 \subsection{Pitch detector architecture}
+The pitch detector will take the form of a pipeline with 5 stages: recording, zero-pad, FFT, HPS and getting the note name. 
+
 While the WebAudio API provides rich control over audio in the browser, the approach for this work will be much simpler.  
+
+\subsection{Pitch detector implementation}
+
+\subsection{Integrating with VSS}
+VSS is an initialism that will be used to refer to the host application that can compare the pitch detector result to the notes of a piece or song. 
 % The big idea:
 % source node (microphone) -> % 
 % https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API
