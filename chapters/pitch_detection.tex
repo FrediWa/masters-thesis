@@ -41,7 +41,11 @@ In this work, the term "note" will be used to describe the base notes and the ba
 \subsection{Fundamental frequency estimation}
 Even though we can define a pitch to be a precise frequency, pitch is more of a sensation perceived by ears and we can distinguish pitch from soundwaves that are not simple oscillations. As shown in \ref{fig:pianoWave}, what we perceive as an A440 can contain a lot of noise.  As it can be difficult to strictly define pitch, pitch detection may also be hard to define. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding semitone (because the sound names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, that could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}. 
 
-\subsection{Short-time Fourier Transform}
+\subsection{Pitch detection methods}
+Pitch detection methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods.
+
+\subsection {Transforming to frequency-domain}
+\subsubsection{Short-time Fourier Transform}
 The short-time Fourier Transform (STFT) is a method of analysing local frequency data by transforming only a portion of a given signal. The STFT is typically defined very similarly to the FT/DFT only with a windowing function applied. The discrete STFT conceptually computes the DFT for a window of the signal, then moves the window over some number of steps (called the hop length) and repeats. The next window may or may not overlap with the previous window.
 
 This sliding window introduces a new dimension to the output data, a time axis. This data constitutes a spectrogram and the typical way to visualize this data is with a heat map by compressing the 2D of the frequency-domain to a column where intensity represents the magnitude value for a frequency. 
@@ -54,7 +58,7 @@ This sliding window introduces a new dimension to the output data, a time axis. 
 
 It's worth pointing out that the STFT is not a special kind of fourier transform, but rather a method of applying the DFT (or contiunuous FT). This means it has the same behaviour but also that it has the problems which will be introduced shortly. 
 
-For real-time processing, it's both imperetive and a bit redundant to talk about the STFT because the entirety of the signal is not availabl, there will inherently be windows. The data will be available as a stream (or chunks) and an FFT can be performed once a buffer is filled. The overlap, which is determined by the hop length, doesn't seem to be of much importance for the purpose of the estimating the fundamental frequency and makes little sense when the data becomes available with time. The overlap is important when considering note lengths and separation of repeated semitones \todo{Evans, Benjamin Peter, PhD}, but this does not seem to be a concern for just pitch detection. The pitch detector will thus have a hop length the size of the window.
+For real-time processing, it's both imperetive and a bit redundant to talk about the STFT because the entirety of the signal is not availabl, there will inherently be windows. The data will be available as a stream (or chunks) and an FFT can be performed once a buffer is filled. The overlap, which is determined by the hop length, doesn't seem to be of much importance for the purpose of the estimating the fundamental frequency and makes little sense when the data becomes available with time. The overlap is important when considering note lengths and separation of repeated semitones \todo{Evans, Benjamin Peter, PhD}, but does not seem to be a concern for just pitch detection. The pitch detector will thus have a hop length the size of the window.
 
 \subsection{Picking peaks from the spectrum}
 The Fourier transform is used to get the spectrum data, which can be used to plot which frequencies are part of the original signal. These frequencies that are part of the signal are called partials. Intuitively, for a lot of signals, anyone can look at the frequency-magnitude plot and point to a peak and claim that it's the fundamental frequency and probably be right. Perhaps they are looking for some periodicity with the largest peaks (if there are multiple) and choosing out of those the peak that has the lowest frequency. This is a very straightforward approach and correct for some signals. 
@@ -84,9 +88,7 @@ One problem with the FFT that  \todo{source: Gotsopoulos} addresses is the size 
 
 Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go this low. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 <=> x = 48000/4 = 12000$ 12000 samples would be enough to discern the lowest notes. 
 
-This introduces another problem, which has implications for real-time pitch detection which is that collecting 12000 samples at 48kHz takes 0.25s, which arguably is not real-time anymore. As the bin size is $B = S/W$ means that $W = S/B$ and the latency (time taken to fill the FFT window) $L = W/S = \frac{S/B}{S} = 1/B$, the bin size and latency are inversely proportional, both can not be minimized. For a bin size of 4, it will necessarily take 0.25s to collect the FFT samples.
-
-This follows that naively transforming audio makes real-time pitch detection for base singers impossible, the detection latency will inherently always be too long.
+This introduces another problem, which has implications for real-time pitch detection which is that collecting 12000 samples at 48kHz takes 0.25s, which arguably is not real-time anymore. As the bin size is $B = S/W$ means that $W = S/B$ and the latency (time taken to fill the FFT window) $L = W/S = \frac{S/B}{S} = 1/B$, the bin size and latency are inversely proportional, both can not be minimized. For a bin size of 4, it will necessarily take 0.25s to collect the FFT samples. This follows that naively transforming audio makes real-time pitch detection for base singers impossible, the detection latency will inherently always be too long.
 
 % Narrowing the problem
 \subsection{Real-time pitch detection}
@@ -101,13 +103,14 @@ A popular approach to increasing frequency resolutions is to pad the end of the 
 \end{figure}
 
 \subsubsection{Reducing sampling rate and window size}
+As the bin size is the ratio of the sampling rate to number of samples, $B = S/N$, reducing both $N$ and $S$ keeps the bin size small. 
 \subsection{Finding nearest semitone}
 %https://newt.phys.unsw.edu.au/jw/notes.html
-As already established, western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4, 440Hz, as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
+As already established, western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4 (440Hz) as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
 $$f(i) = 2^{i/12}*440$$
 For example the -2-th semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI (Musical Instrument Digital Interface) number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th semitone the following function can be used.
 $$f(i) = 2^{\frac{i-69}{12}}*440$$
-To find the semitone corresponding to the a frequency $f$, the function can be rewritten as a function of $f$.
+To find the frequency for a MIDI number, the function can be rewritten as a function of $f$.
 First divide both sides by 440
 $$f/440 = 2^{\frac{i-69}{12}}$$
 then remove the exponent using a logarithm
@@ -120,3 +123,4 @@ While the MIDI numbers are discrete, the derived formula interpolates between th
 
 The function that will be used in the pitch detector is
 $$M(f) = round(12*\log_2(f/440)+69)$$
+

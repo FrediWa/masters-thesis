@@ -1,19 +1,19 @@
-class PadderProcessor extends AudioWorkletProcessor {
+export class FFTProcessor extends AudioWorkletProcessor {
     constructor() {
         super();
-        this.buffer = []; // Temporary storage for accumulating data
-        this.chunkSize = 6000; // Desired chunk size
+        this.buffer = [];
+        this.chunkSize = 6000;
         this.targetSize = 16384
     }
 
     process(inputs, outputs) {
-        const input = inputs[0]; // Single input channel
-        const output = outputs[0]; // Single output channel
+        const input = inputs[0]; 
+        const output = outputs[0]; 
 
         if (input.length > 0) {
-            console.log("input", input);
-            // Accumulate input samples
-            this.buffer.push(...input[0]); // Append input samples to the buffer
+            
+            console.log("input", input, input[0].length);
+            this.buffer.push(...input[0]); 
 
             if (this.buffer.length >= this.chunkSize) {
                 // Process the accumulated chunk
@@ -33,5 +33,4 @@ class PadderProcessor extends AudioWorkletProcessor {
     }
 }
 
-registerProcessor('zero-padding-processor', PadderProcessor);
- 
+registerProcessor('FFTprocessor', FFTProcessor);

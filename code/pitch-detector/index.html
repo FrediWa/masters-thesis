@@ -5,23 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pitch detector</title>
 </head>
-<script>
-    // Globals
-    const sampleRate = 48000;  
-    const frequency = 440;     
-    const sampleCount = 12000;
-    const signal = new Float32Array(sampleCount); 
-
-</script>
-<script src="./fftjs.js"></script>
-<script src="./recorder.js"></script>
-<script src="./analyzer.js"></script>
-<script>
-
-    const f = new FFTJS(8192);
-    out = f.createComplexArray();
-    console.log(f);
-</script>
+<script type="module" src="./PitchDetector.js"></script>
 <body>  
+    <button id="pd-start-btn">Start recording</button>
+    <button id="pd-stop-btn">Stop recording</button>
+    <canvas id="waveCanvas"></canvas>
+    <canvas id="fftCanvas"></canvas>
+    <canvas id="hpsCanvas"></canvas>
 </body>
 </html>
