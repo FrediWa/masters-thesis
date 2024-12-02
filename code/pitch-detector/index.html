@@ -6,11 +6,17 @@
     <title>Pitch detector</title>
 </head>
 <script type="module" src="./PitchDetector.js"></script>
+<style>
+    #canvas-container { width: 100%; display: flex; justify-content: center; }
+    #canvas-container canvas { border: 1px solid #000; margin: 20px 10px; width: 30%;}
+</style>
 <body>  
     <button id="pd-start-btn">Start recording</button>
     <button id="pd-stop-btn">Stop recording</button>
-    <canvas id="waveCanvas"></canvas>
-    <canvas id="fftCanvas"></canvas>
-    <canvas id="hpsCanvas"></canvas>
+    <div id="canvas-container">
+        <canvas id="waveCanvas"></canvas>
+        <canvas id="fftCanvas"></canvas>    
+        <canvas id="hpsCanvas"></canvas>
+    </div>
 </body>
 </html>

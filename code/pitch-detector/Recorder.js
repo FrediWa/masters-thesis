@@ -3,7 +3,8 @@ export class Recorder {
 
     static async startRecording(pdContext) {
         const stream = await navigator.mediaDevices.getUserMedia({audio: {
-            channelCount: 2, 
+            channelCount: pdContext.CHANNELS, 
+            sampleRate: pdContext.SAMPLING_RATE,
         }})
 
         pdContext.microphoneStream = stream;

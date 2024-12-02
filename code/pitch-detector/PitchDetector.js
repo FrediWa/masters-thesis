@@ -1,34 +1,51 @@
 import { Recorder } from "./Recorder.js";
 import { PDContext } from "./PDContext.js";
 import { FFTProcessorNode } from "./nodes/FFTProcessorNode.js";
+import { VisualizerNode } from "./nodes/VisualizerNode.js";
 
 export class PitchDetector {
 
     constructor() {
-      this.SAMPLING_RATE = 44100;
-      this.MAX_HPS_HARMONICS = 4;
-      this.FFT_WINDOW = 16384;
-      this.FFT_SAMPLES = 6000;
+      this.pdContext = new PDContext();
+      this.nodes = {}
 
       this.recording = false;
-
-      this.setupDOM();
-      this.setupaAudioGraph();
-      
+      this.setup();
     }
 
-    setupDOM() {
-      document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
-      document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
-    }
-
-    setupaAudioGraph() {
-      this.pdContext = new PDContext();
-
-      this.fftNode = new FFTProcessorNode();
-      this.fftNode.init(this.pdContext.audioContext);
+    
+    async setupProcessors() {
+      await this.pdContext.audioContext.audioWorklet.addModule('./processors/FFTProcessor.js');
+      await this.pdContext.audioContext.audioWorklet.addModule('./processors/VizProcessor.js');
     }
     
+    async setupAudioGraph() {
+      await this.setupProcessors();
+
+      this.nodes.fftNode = new FFTProcessorNode(this.pdContext.audioContext);
+      this.nodes.waveformVisualizer = new VisualizerNode(this.pdContext.audioContext);
+      this.nodes.spectrumVisualizer = new VisualizerNode(this.pdContext.audioContext);
+      this.nodes.peakVisualizer     = new VisualizerNode(this.pdContext.audioContext);
+      
+      // await this.nodes.fftNode(this.pdContext.audioContext);
+      
+      this.nodes.fftNode.connect(this.nodes.spectrumVisualizer);
+    }
+    
+    setupDOM() {
+        document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
+        document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
+        
+        this.nodes.waveformVisualizer.setCanvas(document.querySelector("#waveCanvas"));
+        this.nodes.spectrumVisualizer.setCanvas(document.querySelector("#fftCanvas"));
+        // this.nodes.peakVisualizer.setCanvas(document.querySelector("#hpsCanvas"));
+    }
+      
+    async setup() {
+      await this.setupAudioGraph();
+      this.setupDOM();
+    }
+
     async start() {
       if (this.recording)
         return;
@@ -36,8 +53,12 @@ export class PitchDetector {
       
       await Recorder.startRecording(this.pdContext);
 
+      this.nodes.spectrumVisualizer.resume();
+
       this.pdContext.microphoneNode.connect(this.pdContext.audioContext.destination);
-      this.pdContext.microphoneNode.connect(this.fftNode.node);  
+      this.pdContext.microphoneNode.connect(this.nodes.fftNode);  
+
+      this.pdContext.microphoneNode.connect(this.nodes.waveformVisualizer);  
     }
 
     stop() {
@@ -46,7 +67,9 @@ export class PitchDetector {
       this.recording = false;
 
       Recorder.stopRecording(this.pdContext);
+      this.nodes.spectrumVisualizer.suspend();
     }
 }
 
 const detector = new PitchDetector();
+

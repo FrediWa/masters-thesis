@@ -1,7 +1,11 @@
 \subsection{Application plan}
 \subsection{Web Audio API}
 As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers controls over audio processing functionality on browsers, by getting access to user audio devices, adding effects and more. 
-The Web Audio API operates in a AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories; input or source nodes, modifier nodes and output nodes. The nodes are then connected to each other to form the graph.
+The Web Audio API operates in a AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories; input or source nodes, modifier nodes and output nodes. The nodes are then connected to each other to form the graph. 
+
+The graph operates by passing blocks of data (called render quanta) between nodes, where one render quantum consists of frames of samples, where one frame contains one sample for every audio channel, at least according to the W3C Audio API 1.1 specifications. Render quantum seems to be a term reserved for the low level processing of the data passing between nodes, and in reality the audio samples are contiguous for each channel. The important thing to realize here is that the blocks of data, which will be called render quanta for a lack of naming at API level, are 128 in length.
+
+%https://www.w3.org/TR/webaudio/#rendering-loop
 
 \subsubsection{Sources and destinations}
 The source node, as their names imply are entry points for audio control graph, they provide signals. Some of these include the OscillatorNode, a node which produces pure sinusoids, a MediaElementAudioSourceNode, which uses the media in an existing HTML audio element. As the purpose of the application is for the user to be able to record their own singing and have it analyzed for pitch correctness, the source in this case will be a MediaStreamAudioSourceNode, which provides a source signal from a MediaStream. The actual source will the method navigator.mediaDevices.getUserMedia\(\) that provides the MediaStream, but this is technically outside the AudioContext so it's not a source node.  
@@ -11,10 +15,15 @@ The output may be either the user's system's speakers, or another MediaStream. I
 The modifier nodes are the nodes that are neither sources nor destinations, they take in the signal from a node, performs some transform on the signal, and then hands it over to the next node, or nodes, in the graph. Some of these nodes apply effects, like rever or gain, some can be used for visualizing audio, some can be used to split audio into separate channels for per-channel modification.
 
 The available modifiers unfortunately do not help with the development of the pitch detector, so a lot of the would be done with Worklet nodes, a node that allows custom functionality. With this in mind, the simplest way is to not use the Audio API node-based framework, but to just take the output from the microphone and process data using function calls.
-\subsection{Pitch detector architecture}
-The pitch detector will take the form of a pipeline with 5 stages: recording, zero-pad, FFT, HPS and getting the note name. 
 
-While the WebAudio API provides rich control over audio in the browser, the approach for this work will be much simpler.  
+
+\subsection{Pitch detector architecture}
+The identified steps of our pitch detector at the highest level are recording, zero-padding, FFT, peak picking and some post processing. For building a pitch detector for the web, there seems to be mainly two ways to go about it: either by simply taking the stream of data from the microphone and process everything with callback functions or by using the audio context graph framework. While the former approach would most likely result in less code, the latter would probably result in a cleaner code structure, with possibility to extend the pipeline with additional processing with ease as well as easily getting insight into each stage for either analysis or debugging purposes. 
+
+
+
+\subsubsection{Worklet nodes}
+
 
 \subsection{Setting up the audio context}
 \subsubsection{Audio processors}

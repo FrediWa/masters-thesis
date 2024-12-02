@@ -1,35 +1,53 @@
+import { FFTJS } from '../fftjs.js'
+
 export class FFTProcessor extends AudioWorkletProcessor {
     constructor() {
         super();
-        this.buffer = [];
-        this.chunkSize = 6000;
-        this.targetSize = 16384
+
+        this.FFTWindowSize = 16384;
+        this.targetSampleSize = 6000;
+        this.samplesGathered = 0;
+        this.buffer = new Float32Array(this.FFTWindowSize);   
+        this.spectrumBuffer = new Float32Array(this.FFTWindowSize);
+        this.readIndexOffset = 0;
+
+        this.fft = new FFTJS(this.FFTWindowSize);
     }
 
     process(inputs, outputs) {
         const input = inputs[0]; 
         const output = outputs[0]; 
+        const inputBuffer = input[0];
 
         if (input.length > 0) {
-            
-            console.log("input", input, input[0].length);
-            this.buffer.push(...input[0]); 
-
-            if (this.buffer.length >= this.chunkSize) {
-                // Process the accumulated chunk
-                const chunk = this.buffer.slice(0, this.chunkSize);
-                this.buffer = this.buffer.slice(this.chunkSize); // Remove processed chunk
-
-                // Perform your operation on the chunk here
-                // For simplicity, just copy it to the output
-                output[0].set(chunk.slice(0, 128));
-            } else {
-                // If not enough data, just pass zeros
-                output[0].fill(0);
+            console.log(inputBuffer);
+            // Copy samples from input to internal buffer.
+            for(let i = 0; i < inputBuffer.length; i++) {
+                this.buffer[i + this.samplesGathered] = inputBuffer[i]
             }
+
+            this.samplesGathered += inputBuffer.length;
+            
+            if (this.samplesGathered >= this.targetSampleSize) {
+                
+                // Zero pad starting at the last index.
+                this.buffer.fill(0, this.samplesGathered, this.FFTWindowSize)
+            
+                this.fft.realTransform(this.spectrumBuffer, this.buffer);
+                
+                this.samplesGathered = 0;
+            } 
+
+            // Copy spectrum data from ring buffer to output.
+            const frameSize = 128;
+            for (let i = 0; i < frameSize; i++) {
+                output[i] = this.spectrumBuffer[i + this.readIndexOffset]; 
+            }
+            this.readIndexOffset += frameSize;
+            this.readIndexOffset %= this.FFTWindowSize;
         }
 
-        return true; // Keep processing
+        return true; 
     }
 }
 
