@@ -13,7 +13,7 @@ export class Recorder {
     }
 
     static stopRecording(pdContext) {
-      pdContext.microphoneNode?.disconnect();
-      pdContext.microphoneStream?.getTracks().forEach(track => track.stop());
+        pdContext.microphoneStream?.getTracks().forEach(track => track.stop());
+        pdContext.microphoneNode?.disconnect();
     }
 }

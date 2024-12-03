@@ -10,6 +10,7 @@ export class PitchDetector {
       this.nodes = {}
 
       this.recording = false;
+      this.ready = false;
       this.setup();
     }
 
@@ -22,12 +23,10 @@ export class PitchDetector {
     async setupAudioGraph() {
       await this.setupProcessors();
 
-      this.nodes.fftNode = new FFTProcessorNode(this.pdContext.audioContext);
+      this.nodes.fftNode            = new FFTProcessorNode(this.pdContext.audioContext);
       this.nodes.waveformVisualizer = new VisualizerNode(this.pdContext.audioContext);
       this.nodes.spectrumVisualizer = new VisualizerNode(this.pdContext.audioContext);
       this.nodes.peakVisualizer     = new VisualizerNode(this.pdContext.audioContext);
-      
-      // await this.nodes.fftNode(this.pdContext.audioContext);
       
       this.nodes.fftNode.connect(this.nodes.spectrumVisualizer);
     }
@@ -44,30 +43,33 @@ export class PitchDetector {
     async setup() {
       await this.setupAudioGraph();
       this.setupDOM();
+
+      this.ready = true;
     }
 
     async start() {
       if (this.recording)
         return;
       this.recording = true
+
+      this.pdContext.audioContext.resume();
       
       await Recorder.startRecording(this.pdContext);
 
-      this.nodes.spectrumVisualizer.resume();
-
       this.pdContext.microphoneNode.connect(this.pdContext.audioContext.destination);
-      this.pdContext.microphoneNode.connect(this.nodes.fftNode);  
+      this.pdContext.microphoneNode.connect(this.nodes.fftNode); 
 
-      this.pdContext.microphoneNode.connect(this.nodes.waveformVisualizer);  
+      // this.pdContext.microphoneNode.connect(this.nodes.waveformVisualizer);  
     }
 
-    stop() {
+   stop() {
       if (!this.recording)
         return;
       this.recording = false;
 
+      this.pdContext.audioContext.suspend();
+
       Recorder.stopRecording(this.pdContext);
-      this.nodes.spectrumVisualizer.suspend();
     }
 }
 
