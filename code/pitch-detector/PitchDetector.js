@@ -1,75 +1,101 @@
 import { Recorder } from "./Recorder.js";
 import { PDContext } from "./PDContext.js";
-import { FFTProcessorNode } from "./nodes/FFTProcessorNode.js";
-import { VisualizerNode } from "./nodes/VisualizerNode.js";
+import { AccumulatorNode } from "./nodes/AccumulatorNode.js";
+import { FFTJS } from "./fftjs.js"
+import { zeroPad, fft, hps, postProcess, getNodeName } from "./analysis.js"
 
+const RENDER_QUANTUM_SIZE = 128;
+const FFT_WINDOW_SIZE = 16384;
+const FFT_TARGET_SAMPLE_SIZE = 6000;
 export class PitchDetector {
 
     constructor() {
-      this.pdContext = new PDContext();
+      this.audioContext = new AudioContext();
       this.nodes = {}
-
       this.recording = false;
-      this.ready = false;
+      
+      this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
+      this.fftBufferIteratorOffset = 0;
+      this.FFTJS = new FFTJS(FFT_WINDOW_SIZE);
+
       this.setup();
     }
 
-    
     async setupProcessors() {
-      await this.pdContext.audioContext.audioWorklet.addModule('./processors/FFTProcessor.js');
-      await this.pdContext.audioContext.audioWorklet.addModule('./processors/VizProcessor.js');
+      await this.audioContext.audioWorklet.addModule('./processors/AccumulatorProcessor.js');
     }
     
     async setupAudioGraph() {
       await this.setupProcessors();
 
-      this.nodes.fftNode            = new FFTProcessorNode(this.pdContext.audioContext);
-      this.nodes.waveformVisualizer = new VisualizerNode(this.pdContext.audioContext);
-      this.nodes.spectrumVisualizer = new VisualizerNode(this.pdContext.audioContext);
-      this.nodes.peakVisualizer     = new VisualizerNode(this.pdContext.audioContext);
       
-      this.nodes.fftNode.connect(this.nodes.spectrumVisualizer);
+      this.nodes.elementSource = this.audioContext.createMediaElementSource(
+        document.getElementById("media-element-source")
+      );
+
+      this.nodes.accumulator = new AccumulatorNode(
+        this.audioContext, 
+        this.fftCallback.bind(this),
+      );
+
     }
     
     setupDOM() {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
-        
-        this.nodes.waveformVisualizer.setCanvas(document.querySelector("#waveCanvas"));
-        this.nodes.spectrumVisualizer.setCanvas(document.querySelector("#fftCanvas"));
-        // this.nodes.peakVisualizer.setCanvas(document.querySelector("#hpsCanvas"));
     }
       
     async setup() {
       await this.setupAudioGraph();
       this.setupDOM();
-
-      this.ready = true;
     }
 
     async start() {
       if (this.recording)
         return;
       this.recording = true
-
-      this.pdContext.audioContext.resume();
       
-      await Recorder.startRecording(this.pdContext);
+      await this.audioContext.resume();
+      this.fftBufferIteratorOffset = 0;
 
-      this.pdContext.microphoneNode.connect(this.pdContext.audioContext.destination);
-      this.pdContext.microphoneNode.connect(this.nodes.fftNode); 
+      this.nodes.elementSource.connect(this.audioContext.destination);
+      this.nodes.elementSource.connect(this.nodes.accumulator); 
 
-      // this.pdContext.microphoneNode.connect(this.nodes.waveformVisualizer);  
+      const mediaElement = document.getElementById("media-element-source");
+      mediaElement.currentTime = 0;
+      mediaElement.play();
+      mediaElement.loop = true;
     }
+    
+    
 
-   stop() {
+    stop() {
       if (!this.recording)
         return;
       this.recording = false;
 
-      this.pdContext.audioContext.suspend();
+      this.audioContext.suspend();
 
-      Recorder.stopRecording(this.pdContext);
+      Recorder.stopRecording(this);
+    }
+
+    fftCallback(data) {
+      console.log("callback");
+      for (let i = 0; i < RENDER_QUANTUM_SIZE; i++) {
+        this.fftInputBuffer[i + this.fftBufferIteratorOffset] = data[i];
+      }
+
+      this.fftBufferIteratorOffset += RENDER_QUANTUM_SIZE;
+      
+      // Perform all the analysis once enough samples.
+      if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
+        console.log("perform analysis");
+        const transform = fft(this.fftInputBuffer);
+        const hps = hps(transform);
+        const midiNumber = postProcess(hps);
+        const noteName = getNoteName(midiNumber);
+      }
+  
     }
 }
 
