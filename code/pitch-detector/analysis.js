@@ -1,27 +1,47 @@
-function zeroPad(array, size) {
-      const zeroPaddedArray = array;
-      return zeroPaddedArray;
+import visualize from "./visualize.js";
+
+function hps(array, maxHarmonics) {
+    const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
+    harmonicProductSpectrum.fill(1); // Multiplicative identity for HPS. 
+
+    for (let harmonic = maxHarmonics; harmonic >= 2; harmonic--) {
+
+
+        for(let i = 0; i < harmonicProductSpectrum.length; i++) {
+            harmonicProductSpectrum[i] *= array[i*harmonic];
+        }
+    }
+    
+    return harmonicProductSpectrum; 
 }
 
-function fft(array) {
-    console.log(array.length)
-    const transform = array;
-    return transform;
+function postProcess(array, binSize) {
+    /*
+    Conclusion:
+    If you need your code to run fast, don't use indexOf(max). 
+    reduce is ok but use the custom loop if you need the best performances.
+    */
+    let largest = 0;
+    let largestIndex = 0;
+
+    for(let i = 0; i < array.length; i++) {
+        if (array[i] < largest)
+            continue ;
+        largest = array[i];
+        largestIndex = i;
+    }
+    const frequency = largestIndex * binSize;
+    const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
+    console.log(binSize);
+    return [midiNumber, frequency];
 }
 
-function hps(array) {
-    const hps = array;
-    return hps; 
+function getNoteName(midiNumber) {
+    const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
+    const letter = SEMITONES[midiNumber % 12];
+    const octaveNumber = parseInt(midiNumber /12) -1;
+
+    return "" + letter + octaveNumber;
 }
 
-function postProcess(array) {
-    const midiNumber = array[0];
-    return midiNumber;
-}
-
-function getNodeName(midi) {
-    const noteName = "A4";
-    return noteName;
-}
-
-export { zeroPad, fft, hps, postProcess, getNodeName }
+export { hps, postProcess, getNoteName }

@@ -1,8 +1,8 @@
 import { Recorder } from "./Recorder.js";
-import { PDContext } from "./PDContext.js";
 import { AccumulatorNode } from "./nodes/AccumulatorNode.js";
 import { FFTJS } from "./fftjs.js"
-import { zeroPad, fft, hps, postProcess, getNodeName } from "./analysis.js"
+import { hps, postProcess, getNoteName } from "./analysis.js"
+import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
 const FFT_WINDOW_SIZE = 16384;
@@ -13,10 +13,10 @@ export class PitchDetector {
       this.audioContext = new AudioContext();
       this.nodes = {}
       this.recording = false;
-      
+
+      this.FFT = new FFTJS(FFT_WINDOW_SIZE);
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
-      this.FFTJS = new FFTJS(FFT_WINDOW_SIZE);
 
       this.setup();
     }
@@ -35,9 +35,8 @@ export class PitchDetector {
 
       this.nodes.accumulator = new AccumulatorNode(
         this.audioContext, 
-        this.fftCallback.bind(this),
+        this.accumulatorCallback.bind(this),
       );
-
     }
     
     setupDOM() {
@@ -53,7 +52,7 @@ export class PitchDetector {
     async start() {
       if (this.recording)
         return;
-      this.recording = true
+      this.recording = true;
       
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
@@ -67,8 +66,6 @@ export class PitchDetector {
       mediaElement.loop = true;
     }
     
-    
-
     stop() {
       if (!this.recording)
         return;
@@ -79,21 +76,40 @@ export class PitchDetector {
       Recorder.stopRecording(this);
     }
 
-    fftCallback(data) {
+    accumulatorCallback(data) {
       console.log("callback");
+      // Copy buffer chunk to fft input vector.
       for (let i = 0; i < RENDER_QUANTUM_SIZE; i++) {
         this.fftInputBuffer[i + this.fftBufferIteratorOffset] = data[i];
       }
-
       this.fftBufferIteratorOffset += RENDER_QUANTUM_SIZE;
       
       // Perform all the analysis once enough samples.
       if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
         console.log("perform analysis");
-        const transform = fft(this.fftInputBuffer);
-        const hps = hps(transform);
-        const midiNumber = postProcess(hps);
+
+        const square = (x) => x*x;
+
+        // Run the fourier transform and compute spectrum data.
+        const transform  = this.FFT.createComplexArray();
+        this.FFT.realTransform(transform, this.fftInputBuffer);
+        const spectrum = new Float32Array(16384);
+        for (let i = 0; i < 16384; i++) {
+          spectrum[i] = Math.sqrt(square(transform[i])+square(transform[i+1]))
+        }
+
+        visualize("fftCanvas", spectrum, [40, 2000]);
+
+        const peak = hps(spectrum, 4);
+        visualize("hpsCanvas",  peak, [40, 2000]);
+
+        const binSize = this.audioContext.sampleRate / FFT_WINDOW_SIZE;
+        const [midiNumber, frequency] = postProcess(peak, binSize);
+        console.log(midiNumber, frequency);
         const noteName = getNoteName(midiNumber);
+        document.getElementById("note-name").innerHTML = noteName;
+
+        this.fftBufferIteratorOffset = 0;
       }
   
     }

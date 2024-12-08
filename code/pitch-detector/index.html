@@ -7,17 +7,18 @@
 </head>
 <script type="module" src="./PitchDetector.js"></script>
 <style>
-    #canvas-container { width: 100%; display: flex; justify-content: center; }
+    #canvas-container { width: 100%; display: block; justify-content: center; }
     #canvas-container canvas { border: 1px solid #000; margin: 20px 10px; width: 30%;}
 </style>
 <body>  
     <button id="pd-start-btn">Start recording</button>
     <button id="pd-stop-btn">Stop recording</button>
-    <audio id="media-element-source" src="../pianoA.mp3"></audio>
+    <audio id="media-element-source" src="../frediA.mp3"></audio>
     <div id="canvas-container">
         <canvas id="waveCanvas"></canvas>
-        <canvas id="fftCanvas"></canvas>    
+        <canvas id="fftCanvas"></canvas>
         <canvas id="hpsCanvas"></canvas>
+        <h1 id="note-name">-</h1>
     </div>
 </body>
 </html>
