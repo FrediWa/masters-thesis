@@ -13,6 +13,9 @@ export class PitchDetector {
       this.audioContext = new AudioContext();
       this.nodes = {}
       this.recording = false;
+      this.timer = 0;
+      this.time = 0;
+      this.noteGraph = null;
 
       this.FFT = new FFTJS(FFT_WINDOW_SIZE);
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
@@ -42,6 +45,9 @@ export class PitchDetector {
     setupDOM() {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
+        this.noteGraphCtx = document.querySelector("#note-graph").getContext("2d");
+        this.noteGraphCtx.clearRect(0, 0, canvas.width, canvas.height);
+        
     }
       
     async setup() {
@@ -76,8 +82,9 @@ export class PitchDetector {
       Recorder.stopRecording(this);
     }
 
-    accumulatorCallback(data) {
-      console.log("callback");
+    analyze(data) {
+      if(this.timer == 0) 
+        this.timer = performance.now();
       // Copy buffer chunk to fft input vector.
       for (let i = 0; i < RENDER_QUANTUM_SIZE; i++) {
         this.fftInputBuffer[i + this.fftBufferIteratorOffset] = data[i];
@@ -98,6 +105,9 @@ export class PitchDetector {
           spectrum[i] = Math.sqrt(square(transform[i])+square(transform[i+1]))
         }
 
+        console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.time, "ms");
+        this.timer = 0;
+
         visualize("fftCanvas", spectrum, [40, 2000]);
 
         const peak = hps(spectrum, 4);
@@ -110,8 +120,12 @@ export class PitchDetector {
         document.getElementById("note-name").innerHTML = noteName;
 
         this.fftBufferIteratorOffset = 0;
-      }
-  
+    }
+  }
+
+    accumulatorCallback(data) {
+      console.log("callback");
+      this.analyze(data);
     }
 }
 

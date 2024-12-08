@@ -13,5 +13,4 @@ export class AccumulatorNode extends AudioWorkletNode{
     handlePortData(data) {
         this.callback(data);
     }
-
 }

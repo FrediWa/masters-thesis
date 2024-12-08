@@ -77,7 +77,6 @@ One problem with the HPS is that it does not perform well in the case of lacking
 
 % Problems with FFT, might move this to real-time
 \subsection{Problems with the FFT}
-\subsubsection{Frequency bin sizes}
 One problem with the FFT that  \todo{source: Gotsopoulos} addresses is the size of the frequency bins. This is also noted for the STFT, limiting how short the STFT can be for achieving sufficient frequency resolution \todo{Evans, Benjamin Peter, PhD}. The FFT doesn't find precise frequencies, it finds bins of frequencies with the size $S/N$ where S is the sampling rate and N is the FFT buffer size. As frequency grows exponentially (doubles every octave), higher notes are spaced further apart. This means that for lower notes, the frequency bins need to be significantly smaller as shown in figure \ref{fig:fftBinSizeChart}. Base singers may need to go very low, around F2 (87Hz) and in order to avoid notes in this range to fall into the same bin, the window size needs to be very small.  
 
 \begin{figure}[ht]

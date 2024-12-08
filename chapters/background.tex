@@ -239,7 +239,7 @@ This algorithm assumes the input is a power of 2 but the implementation does not
 % Todo: Add an explanation for the time complexity given the derived formula. The same rozman proof contains that as well
 
 \subsubsection{Inverse FFT}
-The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. This means that the IFFT is the FFT algorithm with $\omega = \frac{1}{n}e^$ In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same \_raw\_fft method to compute both FFT and IFFT. \todo{does this need source?} 
+The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. This means that the IFFT is the FFT algorithm with $\omega = \frac{1}{n}e^{\frac{i2\pi kn}{N}}$ In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same \_raw\_fft method to compute both FFT and IFFT. \todo{does this need source?} 
 
 %https://github.com/numpy/numpy/blob/main/numpy/fft/_pocketfft.py
 \subsubsection{Notable FFT implementations}
