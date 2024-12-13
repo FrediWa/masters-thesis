@@ -14,12 +14,12 @@ The output may be either the user's system's speakers, or another MediaStream. I
 \subsubsection{Modifiers} 
 The modifier nodes are the nodes that are neither sources nor destinations, they take in the signal from a node, performs some transform on the signal, and then hands it over to the next node, or nodes, in the graph. Some of these nodes apply effects, like rever or gain, some can be used for visualizing audio, some can be used to split audio into separate channels for per-channel modification.
 
-The available modifiers unfortunately do not help with the development of the pitch detector, so a lot of the would be done with Worklet nodes, a node that allows custom functionality. With this in mind, the simplest way is to not use the Audio API audio graph, but to just take the output from the microphone and in the simplest possible way turn it into data to be processed using regular procedural programming. The AnalyserNode has fourier transform capabilities but there does not seem to be a way to zero-pad it, which which is integral to achieving both real-time processing and enough frequency resolution for base singers. 
+The available modifiers unfortunately do not help with the development of the pitch detector, so a lot of the processing would be done with Worklet nodes, a node that allows custom functionality. With this in mind, the simplest way is to not use the Audio API audio graph, but to just take the output from the microphone and in the simplest possible way turn it into data to be processed using regular procedural programming. The AnalyserNode has fourier transform capabilities but there does not seem to be a way to zero-pad it, which is integral to achieving both real-time processing and enough frequency resolution for base singers. 
 
 \subsection{Pitch detector architecture}
-The identified steps of our pitch detector at the highest level are recording, zero-padding, FFT, peak picking and some post processing. It's a simple pipeline of collecting enough samples for the FFT from a microphone and then running analysis on the spectrum data. The only problem at this stage is converting the stream from the microphone to something that can be processed. There seems to be mainly two ways to go about implementing this kind of conversion. One way is to feed the stream from the microphone into a recorder and decoding the binary data that becomes available with time. The other is to build a custom audio processor that handles the processing, whatever that may be. 
+The identified steps of the pitch detector at the highest level are recording, zero-padding, FFT, peak picking and some post processing. It's a simple pipeline of collecting enough samples for the FFT from a microphone and then running analysis on the spectrum data. The only problem at this stage is converting the stream from the microphone to something that can be processed. There seems to be mainly two ways to go about implementing this kind of conversion. One way is to feed the stream from the microphone into a recorder and decoding the binary data that becomes available with time. The other is to build a custom audio processor that handles the processing, whatever that may be. 
 
-As the fourier transform and any peak picking algorithm of choice works in the frequency-domain, using the audio graph doesn't make much sense. The only thing the audio graph would be responsible for would be moving the render quanta between processors. Figure \ref{fig:pdArch} shows the proposed architecture which uses a bridge node to send the raw audio data from the audio rendering thread to the main thread. For every render quanta processed the data is passed through the node-processor port from the processor to the node in the main thread where it's passed from the node to a callback function. This callback function may then be used to accumulate the render quanta and analysis can be begin.
+As the fourier transform and any peak picking algorithm of choice works in the frequency-domain, using the audio graph doesn't make much sense. The only thing the audio graph would be responsible for would be moving the render quanta between processors, but this is a bit like using a chainsaw to slice bread. Figure \ref{fig:pdArch} shows the proposed architecture which uses a bridge node to send the raw audio data from the audio rendering thread to the main thread. For every render quanta processed the data is passed through the node-processor port from the processor to the node in the main thread where it's passed from the node to a callback function. This callback function may then be used to accumulate the render quanta start analysis.
 
 \begin{figure}[ht]
     \centering
@@ -33,10 +33,12 @@ The proposed architecture offers flexibility without being overly complicated. T
 Audio worklet ndoes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode.
 
 
-\subsection{Setting up the audio context}
+\subsection{Implementing the pitch detector}
+
 \subsubsection{Audio processors}
 
 \subsection{Post processing}
+
 \subsubsection{MIDI number to semitone name}
 The MIDI number is conveniant because it's a simple integer and a standard. However, for most people, the semitone name means more than the MIDI number. To convert the MIDI number to a semitone, two formulae can be derived using known MIDI numbers and their corresponding notenames. As the semitones repeat every octave and an octave consists of 12 semitones, the index that will be used to find the semitone is computed with modulo 12. The octave number is computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. 
 \begin{lstlisting}[style=javascript]

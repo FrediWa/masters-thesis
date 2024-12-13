@@ -5,9 +5,9 @@ Sound physically is propagation through a medium, a vibration which some things 
 
 % source: https://api.pageplace.de/preview/DT0400.9781292055152_A24617782/preview-9781292055152_A24617782.pdf The Science of Sound - Rossing, Moore, Wheeler
 
-One of the simplest ways to generate a sound is connecting a speaker to a device that generates an analog current in the shape of a wave. The current moves an electromagnet which moves a membrane at the same frequency as the generator. This membrane displaces air at some rate which ears pick up as sound. A 440Hz wave, a signal that oscillates 440 times per second that is, will produce a sound wave of 440Hz \todo{this most likely needs a source}. An ear picks up this signal as what we call an A4 note. Ironically, the purity of the signal makes it sound harsh and it is noise in the signal that gives warmth and beauty to the note. This can be observed in figure \ref{fig:pianoWave} where the signal (sound made by an electric piano) largely matches a pure A4 (440Hz sinusoid) but not quite.
+One of the simplest ways to generate a sound is connecting a speaker to a device that generates an analog current in the shape of a wave. The current moves an electromagnet which moves a membrane at the same frequency as the generator. This membrane displaces air at some rate which ears pick up as sound. A 440Hz wave, a signal that oscillates 440 times per second that is, will produce a sound wave of 440Hz \todo{this might not need a source}. An ear picks up this signal as what we call an A4 note. Interestingly, the purity of the signal makes it sound harsh and it is noise in the signal that gives warmth and beauty to the note. This can be observed in figure \ref{fig:pianoWave} where the signal (sound made by an electric piano) largely matches a pure A4 (440Hz sinusoid) but not quite.
 
-%https://eprints.hud.ac.uk/id/eprint/17816/1/Final_Thesis_-_November_2012.pdf
+%https://eprints.hud.ac.uk/id/eprint/17816/1/Final_Thesis_-_November_2012.pdf why is this here?
 
 \begin{figure}[ht]
     \centering
@@ -15,13 +15,15 @@ One of the simplest ways to generate a sound is connecting a speaker to a device
     \caption{A slice of the recording of a A4 note played on a Yamaha electric piano (blue solid). The signal contains a lot of irregularity but also clear regularity which becomes more evident when layering a pure A4 note on top (red dashed).\label{fig:pianoWave}}
 \end{figure}
 
-The characteristics of the sound being played becomes even more evident when it's converted to the frequency-domain through the FFT as shown in figure \ref{fig:pianoFreq}. It reveals that, not only is the sound definitely a A4 note due to the overwhelming amount of the 440Hz signal present in the sound, but also what other frequencies contribute to the sound of that piano. The spectrum also reveals that the particular electric piano that was used to create the sound lacks harmonic content.
+The characteristics of the sound being played becomes even more evident when it's converted to the frequency-domain through the FFT as shown in figure \ref{fig:pianoFreq}. It reveals that, not only is the sound definitely a A4 note due to the overwhelming amount of the 440Hz signal present in the sound, but also what other frequencies contribute to the sound of that piano. 
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/piano_freq.png}
     \caption{The frequency-domain clearly reveals without any guesswork that the signal is a 440Hz signal with some sort of noise/disturbance. The red vertical line is placed at $x=440$ to show that the peak is the expected 440Hz frequency component.\label{fig:pianoFreq}}
 \end{figure}
+
+The spectrum also reveals that the particular electric piano that was used to create the sound lacks harmonic content. This is not the case for  
 
 \subsubsection{Semitones, notes and pitch} 
 Music terminology can be hard to define without circular definitions. There's also quite a bit of overlap with the same word meaning different things depending on context. We can start with defining the octave which is the difference between two sounds where one sound has twice the frequency of the other and is the largest interval in western music. If a sound oscillates at 440Hz, the sounds corresponding to 220Hz or 880Hz are an octave away.
@@ -30,8 +32,12 @@ Semitone is typically defined as the smallest interval in western music and is 1
 
 In western music, tuning typically starts from A4, which is defined in this system to have a frequency of 440Hz, and every other note is derived from there. A3 (an octave lower) will be 220Hz and A5 will be 880Hz. The frequency for the other pitches can be approximated with equal temperament tuning, meaning that all semitones are equally spaced within octaves. This means that the frequency of any one pitch is exactly $2^{1/12}$ times the frequency of the previous one. Sounds are given identifiers as a letter-number pair based on the octave they are in and their placement within the octave. 
 
+\subsubsection{MIDI numbers}
+As will be apparent later, it's conveniant to have the ability to index sounds. Of course, sounds can be easily compared based on their pitch (or their names, though also based on pitch). But indexing is impossible because the range of values depends on the instrument and in absolute terms, there is no lowest sound.  
+Musical Instrument Digital Interface (MIDI) is a technical standard for protocols, connectors and interfaces relating to music and among other things, numbers corresponding to notes and frequencies. For instance, the first sound on a piano, A0, has the MIDI number 21. Note that A0 is always MIDI number 21, the issue is about which sound should in general be considered the "first". With MIDI numbering it's easy, it will be MIDI number 0. 
+
 \subsubsection{Terminology for readers}
-In this work, the term "note" will be used to describe the base notes and the base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. The term "semitone" will be used to describe all the 12 distinct sounds in an octave, including the sharps/flats of the notes. In other words, the notes are a subset of the semitones. Pitch will be used to describe the measurement/perception of how low or high a sound is. 
+In this work, the term "note" will be used to describe the 12 distinct sounds withiin the octave because for the pitch detector, discerning the base notes and the sharps and flats isn't necessarary. The base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. Pitch will be used to describe the measurement/perception of how low or high a sound is. 
 
 % \subsubsection{Pitch perception}
 % Even though we can clearly define any one pitch to be some frequency, human ears are more complex. 
@@ -39,10 +45,12 @@ In this work, the term "note" will be used to describe the base notes and the ba
 % What is pitch perception at a high level
 % 
 \subsection{Fundamental frequency estimation}
-Even though we can define a pitch to be a precise frequency, pitch is more of a sensation perceived by ears and we can distinguish pitch from soundwaves that are not simple oscillations. As shown in \ref{fig:pianoWave}, what we perceive as an A440 can contain a lot of noise.  As it can be difficult to strictly define pitch, pitch detection may also be hard to define. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding semitone (because the sound names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, that could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}. 
+Even though we can define a pitch to be a precise frequency, pitch is more of a sensation perceived by ears and we can distinguish pitch from soundwaves that are not simple oscillations. As shown in \ref{fig:pianoWave}, what we perceive as an A4 can contain a lot of noise.  As it can be difficult to strictly define pitch, pitch detection may also be hard to define. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding note (because the sound names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, that could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}. 
 
 \subsection{Pitch detection methods}
-Pitch detection methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods.
+Fundamental frequency methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods.
+
+Some common time-domain methods include zero-
 
 \subsection {Transforming to frequency-domain}
 \subsubsection{Short-time Fourier Transform}
@@ -62,6 +70,7 @@ For real-time processing, it's both imperetive and a bit redundant to talk about
 
 \subsection{Picking peaks from the spectrum}
 The Fourier transform is used to get the spectrum data, which can be used to plot which frequencies are part of the original signal. These frequencies that are part of the signal are called partials. Intuitively, for a lot of signals, anyone can look at the frequency-magnitude plot and point to a peak and claim that it's the fundamental frequency and probably be right. Perhaps they are looking for some periodicity with the largest peaks (if there are multiple) and choosing out of those the peak that has the lowest frequency. This is a very straightforward approach and correct for some signals. 
+
 \subsubsection{Harmonic Product Spectrum}
 Harmonic Product Spectrum (HPS) is an algorithm that does almost does the intuitive approach. 
 $$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal X downsampled by r. Simply put, the HPS iteratively multiplies downsampled version of a signal. Downsampling the frequency-domain effectively compresses the frequency-axis by the downsampling rate which means that previously integer multiplies of some value $kN$ are put in the same bins as $N$. When all the downsampled frequency-domain signals are multiplied together, correlated frequencies, or harmonics, form a very sharp peak \cite{McLeod2008}. This peak can be picked out with a max function.
@@ -103,20 +112,14 @@ A popular approach to increasing frequency resolutions is to pad the end of the 
 
 \subsubsection{Reducing sampling rate and window size}
 As the bin size is the ratio of the sampling rate to number of samples, $B = S/N$, reducing both $N$ and $S$ keeps the bin size small. 
-\subsection{Finding nearest semitone}
+
+\subsection{Finding nearest note}
 %https://newt.phys.unsw.edu.au/jw/notes.html
 As already established, western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4 (440Hz) as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
 $$f(i) = 2^{i/12}*440$$
-For example the -2-th semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI (Musical Instrument Digital Interface) number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th semitone the following function can be used.
+For example the -2-th semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th MIDI number the following function can be used.
 $$f(i) = 2^{\frac{i-69}{12}}*440$$
-To find the frequency for a MIDI number, the function can be rewritten as a function of $f$.
-First divide both sides by 440
-$$f/440 = 2^{\frac{i-69}{12}}$$
-then remove the exponent using a logarithm
-$$\log_2(f/440) = \log_2(2^{\frac{i-69}{12}}) = \frac{i-69}{12}$$
-then divide both sides by 12
-$$12*\log_2(f/440) = i-69$$
-and finally subtracting 69 from both sides and giving an appropriate identifier for the function, like M for MIDI number, the final formula for calculating the MIDI number for a frequency is.
+To find a MIDI number based on frequency, the function can be rewritten as a function of $f$.
 $$M(f) = 12*\log_2(f/440)+69$$
 While the MIDI numbers are discrete, the derived formula interpolates between the MIDI numbers. If the input is a number that isn't a semitone, like 450, the result is $M(450) \approx 69.4$. This can be rounded to the nearest integer.
 

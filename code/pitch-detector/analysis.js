@@ -6,7 +6,6 @@ function hps(array, maxHarmonics) {
 
     for (let harmonic = maxHarmonics; harmonic >= 2; harmonic--) {
 
-
         for(let i = 0; i < harmonicProductSpectrum.length; i++) {
             harmonicProductSpectrum[i] *= array[i*harmonic];
         }
@@ -21,6 +20,7 @@ function postProcess(array, binSize) {
     If you need your code to run fast, don't use indexOf(max). 
     reduce is ok but use the custom loop if you need the best performances.
     */
+    // this was from some stack overflow post, can't remember the link.
     let largest = 0;
     let largestIndex = 0;
 
@@ -30,9 +30,9 @@ function postProcess(array, binSize) {
         largest = array[i];
         largestIndex = i;
     }
+
     const frequency = largestIndex * binSize;
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
-    console.log(binSize);
     return [midiNumber, frequency];
 }
 

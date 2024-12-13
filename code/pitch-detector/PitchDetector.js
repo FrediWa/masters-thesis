@@ -5,12 +5,13 @@ import { hps, postProcess, getNoteName } from "./analysis.js"
 import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
-const FFT_WINDOW_SIZE = 16384;
-const FFT_TARGET_SAMPLE_SIZE = 6000;
+const FFT_WINDOW_SIZE = 8192;
+const SAMPLE_RATE = 22050;
+const FFT_TARGET_SAMPLE_SIZE = 2000;
 export class PitchDetector {
 
     constructor() {
-      this.audioContext = new AudioContext();
+      this.audioContext = new AudioContext({sampleRate: SAMPLE_RATE});
       this.nodes = {}
       this.recording = false;
       this.timer = 0;
@@ -36,18 +37,20 @@ export class PitchDetector {
         document.getElementById("media-element-source")
       );
 
+      this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
+
       this.nodes.accumulator = new AccumulatorNode(
         this.audioContext, 
         this.accumulatorCallback.bind(this),
       );
+
+      this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
+      this.nodes.channelSplitter.connect(this.nodes.accumulator, 0);
     }
     
     setupDOM() {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
-        this.noteGraphCtx = document.querySelector("#note-graph").getContext("2d");
-        this.noteGraphCtx.clearRect(0, 0, canvas.width, canvas.height);
-        
     }
       
     async setup() {
@@ -63,8 +66,7 @@ export class PitchDetector {
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
-      this.nodes.elementSource.connect(this.audioContext.destination);
-      this.nodes.elementSource.connect(this.nodes.accumulator); 
+      this.nodes.elementSource.connect(this.nodes.channelSplitter);
 
       const mediaElement = document.getElementById("media-element-source");
       mediaElement.currentTime = 0;
@@ -105,7 +107,7 @@ export class PitchDetector {
           spectrum[i] = Math.sqrt(square(transform[i])+square(transform[i+1]))
         }
 
-        console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.time, "ms");
+        console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
         visualize("fftCanvas", spectrum, [40, 2000]);
