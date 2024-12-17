@@ -24,17 +24,13 @@ def extract_snippet(file_path):
         for snippet_key_pair in snippet_key_pairs:
             snippet = snippet_key_pair[0]
             key = snippet_key_pair[1]
-            print("key", key)
 
             # De-indent lines as the snippet may be indented.
             indent_spaces = len(re.findall(r' +', snippet)[0])
-            print(indent_spaces)
             pattern = r'^ {0,%d}' % indent_spaces
             snippet = re.sub(pattern, '', snippet, flags=re.MULTILINE)
             # snippet = snippet.strip()
-            print(f"({snippet})")
             processed_snippets.append((snippet, key))
-
 
         return processed_snippets
     
@@ -47,6 +43,7 @@ def save_snippet_to_file(file_path, snippets):
     
     for snippet in snippets:  
         filename = f"{basename}-{snippet[1]}{ext}" 
+        print(f"Snippet {filename} processed")
         output_file_path = os.path.join(output_dir, filename)
     
         with open(output_file_path, 'w') as output_file:

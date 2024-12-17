@@ -1,3 +1,4 @@
+//---snippet-start-A
 export class AccumulatorProcessor extends AudioWorkletProcessor {
     process(inputs) {
         const input = inputs[0];
@@ -7,3 +8,4 @@ export class AccumulatorProcessor extends AudioWorkletProcessor {
 }
 
 registerProcessor('AccumulatorProcessor', AccumulatorProcessor);
+//---snippet-end-A

@@ -1,5 +1,9 @@
 # Directory where the files are located
-SOURCE_DIR = ./code/examples
+EXAMPLES_DIR = ./code/examples
+PD_SOURCE_DIR = ./code/pitch-detector
+SOURCE_DIRS = $(EXAMPLES_DIR) $(PD_SOURCE_DIR)
+ALL_SOURCE_FILES = $(foreach dir,$(SOURCE_DIRS),$(shell find $(dir) -type f))
+
 SNIPPET_GENERATOR_SCRIPT = ./generateSnippets.py
 
 report: generate_snippets
@@ -11,7 +15,8 @@ report: generate_snippets
 	pdflatex -output-directory=build report.tex
 	mv build/report.pdf report.pdf
 	
-generate_snippets: $(SOURCE_DIR)/*.*
-	for file in $(SOURCE_DIR)/*.*; do \
+generate_snippets: $(ALL_SOURCE_FILES)
+	rm -rf snippets/*
+	@for file in $(ALL_SOURCE_FILES); do \
 		python $(SNIPPET_GENERATOR_SCRIPT) $$file; \
 	done

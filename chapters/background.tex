@@ -114,7 +114,7 @@ These examples are purely illustrative, there's no reason to implement the DFT i
 Writing the inverse discrete Fourier transform in Python is as straightforward as the DFT due to the cmath library, but an additional normalization is added as shown below 
 
 
-\lstinputlisting[style=python]{../snippets/idft.py}
+\lstinputlisting[style=python]{../snippets/dft-C.py}
 
 The signal that we are turning back to the time-domain is filtered very naively for demonstration purposes. The filter turns unimportant frequencies (components with a magnitude less than 2) to 0. Figure \ref{fig:DFT-IDFT} shows both the original signal and filtered signal in both time and frequency-domain.
 

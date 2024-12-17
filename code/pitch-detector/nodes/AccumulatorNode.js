@@ -1,3 +1,4 @@
+//---snippet-start-A
 export class AccumulatorNode extends AudioWorkletNode{
     constructor(audioContext, callback) {
         super(audioContext, 'AccumulatorProcessor');
@@ -14,3 +15,4 @@ export class AccumulatorNode extends AudioWorkletNode{
         this.callback(data);
     }
 }
+//---snippet-end-A
