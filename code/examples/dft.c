@@ -28,13 +28,13 @@ void DFT(double* signal, double* real_components, double* img_components, int N)
 {
     for(int k = 0; k < N; k++)
     {
-        //---snippet-start
+        //---snippet-start-A
         for(int n = 0; n < N; n++)
         {
             real_components[k] += signal[n] * cos(-2*PI*k*n/N);
             img_components[k]  += signal[n] * sin(-2*PI*k*n/N);
         }
-        //---snippet-end
+        //---snippet-end-A
         int complex_separator = img_components[k] < 0 ? '\0' : '+';
         printf("%d) %f%c%fi\n", k, real_components[k], complex_separator, img_components[k]);
     }

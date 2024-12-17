@@ -103,11 +103,11 @@ To get the frequency-magnitude plot, the magnitudes for each $X_k$ are needed. T
 \subsubsection{Computing DFT with a programming language}
 With the built-in complex data types and extensive mathematical and scientific computing libraries, implementing the DFT in Python is trivial. Leveraging Python's cmath library, the computations can be copied directly and 2 for-loops handles the summation and $X_k$ indexing as shown below.
 
-\lstinputlisting[style=python]{../snippets/dft.py}
+\lstinputlisting[style=python]{../snippets/dft-A.py}
 
 For a more primitive language like C, without complex exponentiation, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implementation (without using a struct for complex numbers) is shown below. 
 
-\lstinputlisting[style=c]{../snippets/dft.c}
+\lstinputlisting[style=c]{../snippets/dft-A.c}
 
 These examples are purely illustrative, there's no reason to implement the DFT in practice because there are algorithms that do the same transformation, just with less computations, and the difference just grows with the sample size.
 \subsubsection{Computing the inverse}
@@ -223,7 +223,7 @@ end if
 \end{lstlisting}
 Putting everything together and adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
 
-\lstinputlisting[style=fortran]{../snippets/fft.f90}
+\lstinputlisting[style=fortran]{../snippets/fft-A.f90}
 
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 \todo{Add the source for the proof/derivation. I don't know where in text to put the citation, nor do I know how to cite this since it seems to be slides from a course.}

@@ -10,7 +10,7 @@ program fft
     end do
 
 contains
-    !---snippet-start
+    !---snippet-start-A
     recursive function r2fft(input) result(X)
         complex, dimension(:) :: input
         complex, dimension(SIZE(input)) :: X
@@ -41,6 +41,6 @@ contains
         end do
         
     end function r2fft
-    !---snippet-end
+    !---snippet-end-A
 end program fft
 

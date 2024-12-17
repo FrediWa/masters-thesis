@@ -21,15 +21,17 @@ signal = [-0.01298834,  0.62287525,  0.64266088,  0.39309558,  0.55407458,
         0.9818192 ,  0.78087388,  0.38900172,  0.1761942 ,  0.04442821,
        -0.29729617, -0.49258935, -0.17076793, -0.06084692, -0.16322715,
        -0.46860467, -0.45899852, -0.44382644, -0.55613981, -0.55769558]
-
+#---snippet-start-B
 N = len(signal)
 X = np.zeros(N, dtype=complex)
 k = 5
 PI = 3.141592653
-#---snippet-start
+#---snippet-end-B
+
+#---snippet-start-A
 for k in range(N): 
     for n in range(N): 
         X[k] += signal[n] * cmath.exp(-2j * PI * k * n / N) 
-#---snippet-end
+#---snippet-end-A
 print(X)
 
