@@ -1,5 +1,5 @@
 //---snippet-start-A
-export class AccumulatorProcessor extends AudioWorkletProcessor {
+export class BridgeProcessor extends AudioWorkletProcessor {
     process(inputs) {
         const input = inputs[0];
         const inputBuffer = input[0];
@@ -7,5 +7,5 @@ export class AccumulatorProcessor extends AudioWorkletProcessor {
     }
 }
 
-registerProcessor('AccumulatorProcessor', AccumulatorProcessor);
+registerProcessor('BridgeProcessor', BridgeProcessor);
 //---snippet-end-A

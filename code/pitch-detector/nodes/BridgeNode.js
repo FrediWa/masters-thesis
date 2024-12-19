@@ -1,7 +1,7 @@
 //---snippet-start-A
-export class AccumulatorNode extends AudioWorkletNode{
+export class BridgeNode extends AudioWorkletNode{
     constructor(audioContext, callback) {
-        super(audioContext, 'AccumulatorProcessor');
+        super(audioContext, 'BridgeProcessor');
         this.callback = callback;
 
         this.port.onmessage = (event) => {

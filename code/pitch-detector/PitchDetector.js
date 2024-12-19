@@ -1,13 +1,13 @@
 import { Recorder } from "./Recorder.js";
-import { AccumulatorNode } from "./nodes/AccumulatorNode.js";
+import { BridgeNode } from "./nodes/BridgeNode.js";
 import { FFTJS } from "./fftjs.js"
 import { hps, postProcess, getNoteName } from "./analysis.js"
 import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
-const FFT_WINDOW_SIZE = 8192;
-const SAMPLE_RATE = 22050;
-const FFT_TARGET_SAMPLE_SIZE = 2000;
+const FFT_WINDOW_SIZE = 16384;
+const SAMPLE_RATE = 44100;
+const FFT_TARGET_SAMPLE_SIZE = 6000;
 export class PitchDetector {
 
     constructor() {
@@ -26,7 +26,7 @@ export class PitchDetector {
     }
 
     async setupProcessors() {
-      await this.audioContext.audioWorklet.addModule('./processors/AccumulatorProcessor.js');
+      await this.audioContext.audioWorklet.addModule('./processors/BridgeProcessor.js');
     }
     
     async setupAudioGraph() {
@@ -39,13 +39,22 @@ export class PitchDetector {
 
       this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
 
-      this.nodes.accumulator = new AccumulatorNode(
+      //---snippet-start-A
+      this.nodes.bridge = new BridgeNode(
         this.audioContext, 
-        this.accumulatorCallback.bind(this),
+        this.bridgeCallback.bind(this),
       );
+      //---snippet-end-A
 
       this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
-      this.nodes.channelSplitter.connect(this.nodes.accumulator, 0);
+      this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
+
+      // const oscillator = this.audioContext.createOscillator();
+
+      // oscillator.frequency.setValueAtTime(330, this.audioContext.currentTime); // value in hertz
+      // oscillator.connect(this.audioContext.destination);
+      // oscillator.connect(this.nodes.bridge);
+      // oscillator.start();
     }
     
     setupDOM() {
@@ -104,18 +113,27 @@ export class PitchDetector {
         this.FFT.realTransform(transform, this.fftInputBuffer);
         const spectrum = new Float32Array(16384);
         for (let i = 0; i < 16384; i++) {
-          spectrum[i] = Math.sqrt(square(transform[i])+square(transform[i+1]))
+          spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
         }
 
         console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
-        visualize("fftCanvas", spectrum, [40, 2000]);
+        visualize("fftCanvas", spectrum, [0, 2000]);
+        let largest = 0;
+        let largestIndex = 0;
+        const binSize = this.audioContext.sampleRate / FFT_WINDOW_SIZE;
 
+        for (let i = 0; i < spectrum.length; i++) {
+            if (spectrum[i] > largest) {   
+                largest = spectrum[i];
+                largestIndex = i;
+            }
+        }
+       console.log("FFT largest", largestIndex, largestIndex*binSize); 
         const peak = hps(spectrum, 4);
         visualize("hpsCanvas",  peak, [40, 2000]);
 
-        const binSize = this.audioContext.sampleRate / FFT_WINDOW_SIZE;
         const [midiNumber, frequency] = postProcess(peak, binSize);
         console.log(midiNumber, frequency);
         const noteName = getNoteName(midiNumber);
@@ -125,7 +143,7 @@ export class PitchDetector {
     }
   }
 
-    accumulatorCallback(data) {
+    bridgeCallback(data) {
       console.log("callback");
       this.analyze(data);
     }

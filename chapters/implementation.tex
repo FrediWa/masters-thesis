@@ -30,8 +30,18 @@ As the fourier transform and any peak picking algorithm of choice works in the f
 The proposed architecture offers flexibility without being overly complicated. The audio graph may be used to change the input from a microphone to a recording for validation/testing. It would also be possible to apply a real-time time-domain low-pass filter between the input node and the bridge node which would allow downsampling and thus smaller FFT windows if computational power is a constraint. 
 
 \subsubsection{Worklet nodes}
-Audio worklet ndoes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode.
+Audio worklet nodes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode.
 
+The code snippet below shows how the BridgeNode is implemented.
+\lstinputlisting[style=javascript]{../snippets/BridgeNode-A.js}
+The bridge node extends or inherits the AudioWorklet node class and methods are added. When the node receives data on its port, it just forwards it to a handler. The handler could do further processing on the data but for the moment only forwards it to the callback function in the pitch detector. The pitch detector callback function is the one responsible for accumulating samples, zero-padding etc.
+
+As the BridgeNode doesn't override or specify anything new, it's really only a thin wrapper for an AudioWorkletNode which is evident by the constructor calling the super constructor, which invokes the parent class constructor. The bridge node is an AudioWorkletNode that uses a BridgeProcessor which also must be created. 
+\lstinputlisting[style=javascript]{../snippets/BridgeProcessor-A.js}
+As the purpose isn't to actually process anything in the audio context, but rather to utilize the flexibility of the audio graph and have processing done elsewhere, the processor simply sends everything it receives over the port to the corresponding node. 
+
+The only thing left to do is to instantiate a BridgeNode. What connects to it may be a microphone, an audiofile, a gain node, a channel splitter, or anything else that may be useful for the pitch detection.
+\lstinputlisting[style=javascript]{../snippets/PitchDetector-A.js}
 
 \subsection{Implementing the pitch detector}
 

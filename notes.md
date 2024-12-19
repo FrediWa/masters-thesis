@@ -28,3 +28,5 @@ https://gotsopoulos.com/files/Gotsopoulos-BachelorThesis.pdf
 A base singer should be able to go as low as F2 (https://www.reddit.com/r/barbershop/comments/16bmbxz/what_is_the_typical_lowest_note_sang_in_a/?rdt=52566) which is around 87Hz. The difference between F2 and G2 is about 11Hz. With a sample size of 4192 and a sampling rate of 48000, the bin size is about 11.45, meaning both notes are very close to eachother. 
 https://gotsopoulos.com/files/Gotsopoulos-BachelorThesis.pdf
 It is thus more computationally intense to analyze lower notes
+
+Page 48 of https://eprints.hud.ac.uk/id/eprint/17816/1/Final_Thesis_-_November_2012.pdf has a figure explaining the difference between the DFT and DTFT

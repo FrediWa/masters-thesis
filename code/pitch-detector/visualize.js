@@ -17,7 +17,6 @@ export default function visualize(canvasID, data, range=[0, 16384]) {
 
     const dataRange = data.slice(range[0], range[1]);
 
-    console.log(dataRange);
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -30,15 +29,17 @@ export default function visualize(canvasID, data, range=[0, 16384]) {
     const xStep = width / dataRange.length;
     const yScale = maxValue !== minValue ? height / (maxValue - minValue) : 1;
 
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 1;
+
     // Draw the data points
     ctx.beginPath();
     ctx.moveTo(0, height - (dataRange[0] - minValue) * yScale); // Start at the first data point
-    for (let i = 1; i < dataRange.length; i++) {
+    for (let i = 0; i < dataRange.length; i++) {
         const x = i * xStep;
         const y = height - (dataRange[i] - minValue) * yScale;
         ctx.lineTo(x, y);
     }
-    ctx.strokeStyle = 'blue';
-    ctx.lineWidth = 2;
+
     ctx.stroke();
 }

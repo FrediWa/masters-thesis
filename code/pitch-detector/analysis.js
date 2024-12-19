@@ -24,13 +24,13 @@ function postProcess(array, binSize) {
     let largest = 0;
     let largestIndex = 0;
 
-    for(let i = 0; i < array.length; i++) {
-        if (array[i] < largest)
-            continue ;
-        largest = array[i];
-        largestIndex = i;
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] > largest) {   
+            largest = array[i];
+            largestIndex = i;
+        }
     }
-
+    console.log("PP", largest, largestIndex)
     const frequency = largestIndex * binSize;
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
     return [midiNumber, frequency];
