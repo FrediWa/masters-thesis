@@ -1,4 +1,5 @@
 import visualize from "./visualize.js";
+import { FFTJS } from "./fftjs.js";
 
 function hps(array, maxHarmonics) {
     const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
@@ -30,10 +31,29 @@ function postProcess(array, binSize) {
             largestIndex = i;
         }
     }
-    console.log("PP", largest, largestIndex)
+    console.log("PP", largest, largestIndex);
     const frequency = largestIndex * binSize;
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
     return [midiNumber, frequency];
+}
+
+function getSpectrum(dataBuffer, fftWindowSize) {
+    const square = (x) => x*x;
+    const FFT = new FFTJS(fftWindowSize);
+
+    console.time("fft")
+    const transform  = FFT.createComplexArray();
+    FFT.realTransform(transform, dataBuffer);
+    
+    // Create spectrum from FFT transform values.
+    const spectrum = new Float32Array(fftWindowSize);
+    for (let i = 0; i < 16384; i++) {
+        spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
+    }
+
+    console.timeEnd("fft");
+
+    return spectrum;
 }
 
 function getNoteName(midiNumber) {
@@ -44,4 +64,4 @@ function getNoteName(midiNumber) {
     return "" + letter + octaveNumber;
 }
 
-export { hps, postProcess, getNoteName }
+export { hps, postProcess, getSpectrum, getNoteName }

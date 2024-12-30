@@ -1,4 +1,6 @@
 \subsection{Application plan}
+The application that implements the proposed pitch detection system will take the form of a graphical web based application. The web is chosen for portability and ease of use. The end user, be it an individual wanting to learn to sing or a choir testing candidates, can use any mobile device with a microphone, be it a laptop, tablet or smartphone, and without installing anything test the accuracy of their singing or tune their guitar.
+
 \subsection{Web Audio API}
 As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers controls over audio processing functionality on browsers, by getting access to user audio devices, adding effects and more. 
 The Web Audio API operates in a AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories; input or source nodes, modifier nodes and output nodes. The nodes are then connected to each other to form the graph. 

@@ -25,19 +25,26 @@ The characteristics of the sound being played becomes even more evident when it'
 
 The spectrum also reveals that the particular electric piano that was used to create the sound lacks harmonic content. This is not the case for  
 
-\subsubsection{Semitones, notes and pitch} 
+\subsubsection{Music 101} 
 Music terminology can be hard to define without circular definitions. There's also quite a bit of overlap with the same word meaning different things depending on context. We can start with defining the octave which is the difference between two sounds where one sound has twice the frequency of the other and is the largest interval in western music. If a sound oscillates at 440Hz, the sounds corresponding to 220Hz or 880Hz are an octave away.
 
 Semitone is typically defined as the smallest interval in western music and is 1/12th of an octave. Semitone is sometimes also used to talk about, not the interval, but the sounds that bound the interval. This non-interval semitone is sometimes also called a pitch and sometimes note.
 
 In western music, tuning typically starts from A4, which is defined in this system to have a frequency of 440Hz, and every other note is derived from there. A3 (an octave lower) will be 220Hz and A5 will be 880Hz. The frequency for the other pitches can be approximated with equal temperament tuning, meaning that all semitones are equally spaced within octaves. This means that the frequency of any one pitch is exactly $2^{1/12}$ times the frequency of the previous one. Sounds are given identifiers as a letter-number pair based on the octave they are in and their placement within the octave. 
 
+The octave contains 12 semitones, but it contains 7 basenotes (the 8th forming the octave). This is called a heptatonic scale and when it sounds "nice" it's called a diatonic scale (formally, it requires a certain structure of intervals). Diatonic scales include the familiar major (happy) and minor (sad) scales. The history and reasoning for the heptatonic sca  les in western music theory is not relevant for the work, but the point is that it's not the only taxonomy for notes. 
+
+The major and minor scales are built up of 7 out of the 12 semitones
+
 \subsubsection{MIDI numbers}
 As will be apparent later, it's conveniant to have the ability to index sounds. Of course, sounds can be easily compared based on their pitch (or their names, though also based on pitch). But indexing is impossible because the range of values depends on the instrument and in absolute terms, there is no lowest sound.  
 Musical Instrument Digital Interface (MIDI) is a technical standard for protocols, connectors and interfaces relating to music and among other things, numbers corresponding to notes and frequencies. For instance, the first sound on a piano, A0, has the MIDI number 21. Note that A0 is always MIDI number 21, the issue is about which sound should in general be considered the "first". With MIDI numbering it's easy, it will be MIDI number 0. 
 
 \subsubsection{Terminology for readers}
-In this work, the term "note" will be used to describe the 12 distinct sounds withiin the octave because for the pitch detector, discerning the base notes and the sharps and flats isn't necessarary. The base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. Pitch will be used to describe the measurement/perception of how low or high a sound is. 
+The base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. In this work, the term "note" will be used to describe the 12 distinct sounds within the octave because for the pitch detector, discerning the base notes and the sharps and flats isn't necessary. Pitch will be used to describe the measurement/perception of how low or high a sound is. 
+
+
+
 
 % \subsubsection{Pitch perception}
 % Even though we can clearly define any one pitch to be some frequency, human ears are more complex. 
@@ -48,14 +55,25 @@ In this work, the term "note" will be used to describe the 12 distinct sounds wi
 Even though we can define a pitch to be a precise frequency, pitch is more of a sensation perceived by ears and we can distinguish pitch from soundwaves that are not simple oscillations. As shown in \ref{fig:pianoWave}, what we perceive as an A4 can contain a lot of noise.  As it can be difficult to strictly define pitch, pitch detection may also be hard to define. From a computational perspective, a possible definition is that pitch detection is the identification of the fundamental frequency and which is the corresponding note (because the sound names are more valuable to musicians than the pure frequencies). The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, that could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}.
 
 \subsubsection{The missing fundamental}
-The missing fundamental is in a sense an audiotory illusion.  
+The missing fundamental is in a sense an audiotory illusion. It's a result of the constructive interference of harmonics that causes peaks with a period that is the greatest common divisor of the angular frequencies of the harmonics. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/missingfund.png}
+    \caption{Constructive interference of harmonics creates the missing fundemental. Even though the blue signal only contains sinusoids with frequencies greater or equal to 220Hz, the most prominent part of the final signal has a period of 110Hz. \label{fig:missingfund}}
+\end{figure}
+
+Pipe organs use this to their advantage. Creating extremely low sounds requires enormous pipes. Taking advantage of the missing fundamental allows relatively smaller organs to produce low sounds.
+% 0:56; https://www.youtube.com/watch?v=Sn07AMCfaAI&t=1169s
 
 \subsection{Pitch detection methods}
-Fundamental frequency methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods.
+Pitch detection methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods. Ine comming time-domain method, zero-crossing rate, is a method in which frequencies are extracted by keeping track of the rate at which the signal crosses the y-axis. This has shown to be effective for certain applications but falls short in other tasks \todo{Source???}. Another is autocorrelation, in which the signal is compared to itself with a different phase. 
 
-Some common time-domain methods include zero-
+This thesis will focus on the frequency-domain approaches, where a fourier transform is used to create a representation of the sound that is easier to analyze and process.
 
 \subsection {Transforming to frequency-domain}
+The first step in detecting pitch using a frequency-domain approach is to transform the original signal into the frequeny-domain and there are multiple ways to achieve that. The DFT and FFT were already introduced in the introductory fourier analysis chapter and as already established, some FFT should be used as the transformer as the DFT has terrible performance. How to apply the FFT isn't yet clear however, as the background used dummy data to demonstrate the algorithm and its performance. Disregarding the question of how to process binary audio files, even if the data was decoded, how should the data be processed? If the whole audio signal is given to the FFT, the spectrum will be a complete mess because real music/song contains more than a single note or chord.
+
 \subsubsection{Short-time Fourier Transform}
 The short-time Fourier Transform (STFT) is a method of analysing a signal by looking at slices of the signal. The STFT is typically defined very similarly to the FT/DFT only with a windowing function applied. The discrete STFT conceptually computes the DFT for a window of the signal, then moves the window over some number of steps (sometimes called the hop length) and repeats. The next window may or may not overlap with the previous window.
 
@@ -67,9 +85,9 @@ This sliding window introduces a new dimension to the output data, a time axis. 
     \caption{High level overview of the SFTF. The STFT performs the DFT for every window which results in a spectrogram. For ease of visualization, the frequency-domain is typically visualized using color intensity for the magnitude. \label{fig:stft}}
 \end{figure}
 
-It's worth pointing out that the STFT is not a special kind of fourier transform, but rather a method of applying the DFT (or contiunuous FT). This means it has the same behaviour but also that it has the problems which will be introduced shortly. 
+It's worth pointing out that the STFT is not a special kind of fourier transform, but rather a method of applying the DFT/FFT (or contiunuous FT). This means it has the same behaviour but also that it has the problems which will be introduced shortly. 
 
-For real-time processing, it's both imperetive and a bit redundant to talk about the STFT because the entirety of the signal is not availabl, there will inherently be windows. The data will be available as a stream (or chunks) and an FFT can be performed once a buffer is filled. The overlap, which is determined by the hop length, doesn't seem to be of much importance for the purpose of the estimating the fundamental frequency and makes little sense when the data becomes available with time. The overlap is important when considering note lengths and separation of repeated semitones \todo{Evans, Benjamin Peter, PhD}, but does not seem to be a concern for just pitch detection. The pitch detector will thus have a hop length the size of the window.
+For real-time processing, it's both imperetive and a bit redundant to talk about the STFT because the entirety of the signal is not available any way, there will inherently be windows. The data will be available as a stream (or chunks) and an FFT can be performed once a buffer is filled. The overlap, which is determined by the hop length, doesn't seem to be of much importance for the purpose of the estimating the fundamental frequency and makes little sense when the data becomes available with time. The overlap is important when considering note lengths and separation of repeated semitones \todo{Evans, Benjamin Peter, PhD}, but does not seem to be a concern for just pitch detection. The pitch detector will thus have a hop length the size of the window, or in other words, no window overlap.
 
 \subsection{Picking peaks from the spectrum}
 The Fourier transform is used to get the spectrum data, which can be used to plot which frequencies are part of the original signal. These frequencies that are part of the signal are called partials. Intuitively, for a lot of signals, anyone can look at the frequency-magnitude plot and point to a peak and claim that it's the fundamental frequency and probably be right. Perhaps they are looking for some periodicity with the largest peaks (if there are multiple) and choosing out of those the peak that has the lowest frequency. This is a very straightforward approach and correct for some signals. 
@@ -87,6 +105,21 @@ $$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal X downsampled by r. Sim
 HPS is a good algorithm because it's simple and easy to compute making it suitable for real-time analysis. It also has the ability to 
 One problem with the HPS is that it does not perform well in the case of lacking harmonics \cite{McLeod2008}. This likely won't be a problem because human voices should be rich in harmonic content. According to \cite{Smyth2019}, the HPS is also prone to getting octaves wrong, but that did not seem to be the case when testing preliminarily with guitar, piano and a voice.
 
+\subsubsection{Constant False Alarm Rate}
+
+% https://www.youtube.com/watch?v=BEg29UuZk6c 
+Constant False Alarm Rate (CFAR) is an algorithm that gives a dynamic threshold. It works by looking at some amount of reference cells that are beyond some gap around the target cell. For example for cells 5, 6, 7, 8, 9, 10, 11, 12, 13 the threshold given a gap size of 2 and reference cell count of 2 and the target is 9, the reference cells are 5, 6, 12 and 13. 7, 8, 10 and 11 are gap cells. The reference cells are then averaged (but other statistical methods can be used) and a bias may be applied. If the value of cell 9 is above the computed threshold, it's considered a target and noise if below.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/cfar.png}
+    \caption{Diagram of the CFAR algorithm with 2 gaps and 2 reference cells. The gap cells around the target point P are excluded but the reference cells in light blue are. The reference cells are averaged which gives the threshold T for point P. As P is greater than T, P is regarded as a target.\label{fig:cfar}}
+\end{figure}
+
+To effectively use CFAR, the parameters must be carefully chosen. If the bias is too low, invalid targets may be considered targets and vice versa if the bias is too high. The gap and reference cells can be farly flexible but not too large as smaller harmonics may be considered noise compared to greater harmonics. The lowest pitch we want to estimate is around 50Hz and if we assume monophonic singing, the spectrum should mostly contain integer multiples of the fundemental frequency which means that no peaks should ever be closer than 50Hz. With 4Hz bins, we can freely chose up to 12 gap and reference cells and not have a harmonic interfere with the CFAR computations of another. 
+
+As CFAR only finds the peaks, one problem with using it alone as a fundemental frequency estimator is that the peaks usually, for one reason or another, are not exact frequencies and thus the harmonics are not integer multiples of the fundemental. This leads to a problem called the Approximate Greatest Common Divisor (AGCD) and sometimes Approximate Common Divisor Problem. Given a sequence of numbers, 109, 222, 437, it can be easy to intuitively see that all numbers are very close to a multiple of 110 but finding this analytically seems to be a pretty difficult problem and one out of scope for this work, especially since HPS is already proven to work fairly well. CFAR could however be used to give a rough number for peaks, which may be used to dynamically adjust the amount of iterations the HPS uses. If CFAR finds very few peaks or even just one as in the case of the electric piano in figure \ref{fig:pianoFreq}, the result could be used to completely change peak picker as HPS has issues with signals without harmonics.
+
 % Problems with FFT, might move this to real-time
 \subsection{Problems with the FFT}
 One problem with the FFT that  \todo{source: Gotsopoulos} addresses is the size of the frequency bins. This is also noted for the STFT, limiting how short the STFT can be for achieving sufficient frequency resolution \todo{Evans, Benjamin Peter, PhD}. The FFT doesn't find precise frequencies, it finds bins of frequencies with the size $S/N$ where S is the sampling rate and N is the FFT buffer size. As frequency grows exponentially (doubles every octave), higher notes are spaced further apart. This means that for lower notes, the frequency bins need to be significantly smaller as shown in figure \ref{fig:fftBinSizeChart}. Base singers may need to go very low, around F2 (87Hz) and in order to avoid notes in this range to fall into the same bin, the window size needs to be very small.  
@@ -97,15 +130,15 @@ One problem with the FFT that  \todo{source: Gotsopoulos} addresses is the size 
     \caption{As the FFT window shrinks, different notes may fall into the same bin. Bars represent the bin sizes for various window sizes at 48kHz sampling rate and dashed lines show semitone intervals (the exact note values are irrelevant). For notes in the 4th octave, the window size can be smaller, but in the 2nd octave even 8192 samples is not enough to discern all pairs of semitones because the bins are larger than those semitone differences.\label{fig:fftBinSizeChart}}
 \end{figure}
 
-Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go this low. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 <=> x = 48000/4 = 12000$ 12000 samples would be enough to discern the lowest notes. 
+Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go this low. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 <=> x = 48000/4 = 12000$, 12000 samples would be enough to discern the lowest notes. 
 
-This introduces another problem, which has implications for real-time pitch detection which is that collecting 12000 samples at 48kHz takes 0.25s, which arguably is not real-time anymore. As the bin size is $B = S/W$ means that $W = S/B$ and the latency (time taken to fill the FFT window) $L = W/S = \frac{S/B}{S} = 1/B$, the bin size and latency are inversely proportional, both can not be minimized. For a bin size of 4, it will necessarily take 0.25s to collect the FFT samples. This follows that naively transforming audio makes real-time pitch detection for base singers impossible, the detection latency will inherently always be too long.
+This introduces another problem, which has implications for real-time pitch detection which is that collecting 12000 samples at 48kHz takes 0.25 seconds, which arguably is not real-time anymore. As the bin size is $B = S/W$ means that $W = S/B$ and the latency (time taken to fill the FFT window) $L = W/S = \frac{S/B}{S} = 1/B$, the bin size and latency are inversely proportional, both can not be minimized. For a bin size of 4, it will necessarily take 0.25s to collect the FFT samples. This follows that naively transforming audio makes real-time pitch detection for base singers impossible because the detection latency will inherently always be too long with sufficiently fine frequency resolution.
 
 % Narrowing the problem
 \subsection{Real-time pitch detection}
 One challenge with real-time pitch detection that emerged from the problem with the size of frequency bins was that for detecting lower base notes, the window size needed to be around 12000. However collecting 12000 samples at 48kHz takes 0.25s, which arguably is not real-time anymore. It takes 0.33s if for any reason the window size needs to be 16384. If the window size is made smaller, the resulting FFT will have larger bins than what is necessary for detecting lower frequencies. 
 \subsubsection{Zero-padding}
-A popular approach to increasing frequency resolutions is to pad the end of the signal with zeros. Zero-padding makes the signal longer and while it necessararily introduces frequency components, the peaks remain intact. This allows a larger FFT window that, while increasing computational complexity, allows for better frequency resolution as per the previous equations. At 48kHz, 16000 samples are enough to achieve a 3Hz frequency bin. If out of these 16000, 10000 are zeros and 6000 legitimate datapoints, the FFT window can be "filled" in a mere 125ms which is a more acceptable latency for real-time detection. Figure \ref{fig:zeropadSpectrum} shows how zero-padding affects the spectrum.
+A popular approach to increasing frequency resolutions is to pad the end of the signal with zeros. Zero-padding makes the signal longer and while it necessarily introduces frequency components, the peaks remain intact. This allows a larger FFT window that, while increasing computational complexity, allows for better frequency resolution as per the previous equations. At 48kHz, 16000 samples are enough to achieve a 3Hz frequency bin. If out of these 16000, 10000 are zeros and 6000 legitimate datapoints, the FFT window can be "filled" in a mere 125ms which is a more acceptable latency for real-time detection. Figure \ref{fig:zeropadSpectrum} shows how zero-padding affects the spectrum.
 
 \begin{figure}[ht]
     \centering
@@ -120,7 +153,7 @@ As the bin size is the ratio of the sampling rate to number of samples, $B = S/N
 %https://newt.phys.unsw.edu.au/jw/notes.html
 As already established, western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4 (440Hz) as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
 $$f(i) = 2^{i/12}*440$$
-For example the -2-th semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th MIDI number the following function can be used.
+For example the -2nd semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th MIDI number the following function can be used.
 $$f(i) = 2^{\frac{i-69}{12}}*440$$
 To find a MIDI number based on frequency, the function can be rewritten as a function of $f$.
 $$M(f) = 12*\log_2(f/440)+69$$

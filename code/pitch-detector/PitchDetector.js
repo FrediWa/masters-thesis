@@ -1,7 +1,6 @@
 import { Recorder } from "./Recorder.js";
 import { BridgeNode } from "./nodes/BridgeNode.js";
-import { FFTJS } from "./fftjs.js"
-import { hps, postProcess, getNoteName } from "./analysis.js"
+import { hps, postProcess, getNoteName, getSpectrum } from "./analysis.js"
 import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
@@ -18,7 +17,6 @@ export class PitchDetector {
       this.time = 0;
       this.noteGraph = null;
 
-      this.FFT = new FFTJS(FFT_WINDOW_SIZE);
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
 
@@ -32,7 +30,7 @@ export class PitchDetector {
     async setupAudioGraph() {
       await this.setupProcessors();
 
-      
+      // Create all necessary nodes.
       this.nodes.elementSource = this.audioContext.createMediaElementSource(
         document.getElementById("media-element-source")
       );
@@ -45,7 +43,9 @@ export class PitchDetector {
         this.bridgeCallback.bind(this),
       );
       //---snippet-end-A
-
+      
+      // Connect neccessary nodes. The source node is created and connected in the play method.
+      // this.nodes.elementSource.connect(this.audioContext.destination);
       this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
       this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
 
@@ -96,6 +96,7 @@ export class PitchDetector {
     analyze(data) {
       if(this.timer == 0) 
         this.timer = performance.now();
+
       // Copy buffer chunk to fft input vector.
       for (let i = 0; i < RENDER_QUANTUM_SIZE; i++) {
         this.fftInputBuffer[i + this.fftBufferIteratorOffset] = data[i];
@@ -104,22 +105,15 @@ export class PitchDetector {
       
       // Perform all the analysis once enough samples.
       if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
-        console.log("perform analysis");
-
-        const square = (x) => x*x;
-
+        
         // Run the fourier transform and compute spectrum data.
-        const transform  = this.FFT.createComplexArray();
-        this.FFT.realTransform(transform, this.fftInputBuffer);
-        const spectrum = new Float32Array(16384);
-        for (let i = 0; i < 16384; i++) {
-          spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
-        }
+        const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
 
         console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
-        visualize("fftCanvas", spectrum, [0, 2000]);
+        visualize("fftCanvas", spectrum, [40, 2000]);
+        // This is mostly for debugging.
         let largest = 0;
         let largestIndex = 0;
         const binSize = this.audioContext.sampleRate / FFT_WINDOW_SIZE;
@@ -130,7 +124,8 @@ export class PitchDetector {
                 largestIndex = i;
             }
         }
-       console.log("FFT largest", largestIndex, largestIndex*binSize); 
+        console.log("FFT largest", largestIndex, largestIndex*binSize); 
+        // Until like here.
         const peak = hps(spectrum, 4);
         visualize("hpsCanvas",  peak, [40, 2000]);
 
