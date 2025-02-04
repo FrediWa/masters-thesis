@@ -47,8 +47,9 @@ export class PitchDetector {
       // Connect neccessary nodes. The source node is created and connected in the play method.
       // this.nodes.elementSource.connect(this.audioContext.destination);
       this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
+      //---snippet-start-B
       this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
-
+      //---snippet-end-B
       // const oscillator = this.audioContext.createOscillator();
 
       // oscillator.frequency.setValueAtTime(330, this.audioContext.currentTime); // value in hertz

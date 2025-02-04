@@ -31,6 +31,11 @@ As the fourier transform and any peak picking algorithm of choice works in the f
 
 The proposed architecture offers flexibility without being overly complicated. The audio graph may be used to change the input from a microphone to a recording for validation/testing. It would also be possible to apply a real-time time-domain low-pass filter between the input node and the bridge node which would allow downsampling and thus smaller FFT windows if computational power is a constraint. 
 
+\subsection{Implementing the pitch detector}
+With a plan for the application, the next step is to implement it. The implementation, based on the arhictecture can be be roughly divided into 4 parts: recording or otherwise taking an input, passing data between the threads, accumulating and performing analysis.
+\subsubsection{Audio input}
+As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by Finlands svenska manssångarförbund (FSM), an alliance of finland-swedish men's choirs were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node.
+\lstinputlisting[style=javascript]{../snippets/PitchDetector-B.js}
 \subsubsection{Worklet nodes}
 Audio worklet nodes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode.
 
@@ -44,8 +49,6 @@ As the purpose isn't to actually process anything in the audio context, but rath
 
 The only thing left to do is to instantiate a BridgeNode. What connects to it may be a microphone, an audiofile, a gain node, a channel splitter, or anything else that may be useful for the pitch detection.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-A.js}
-
-\subsection{Implementing the pitch detector}
 
 \subsubsection{Audio processors}
 
