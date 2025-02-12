@@ -10,7 +10,11 @@ def extract_snippet(file_path):
 
     snippets = [] 
     with open(file_path, 'r') as file:
-        content = file.read()
+        try:
+            content = file.read()
+        except Exception as e:
+            print(f"Error in {file_path}")
+            print(e)
         snippets = re.findall(pattern, content, re.DOTALL)
 
         # Snippet might not exist.
@@ -20,18 +24,16 @@ def extract_snippet(file_path):
         # Fix capture groups.
         snippet_key_pairs = [(x[2], x[1]) for x in snippets]
         processed_snippets = []
-
         for snippet_key_pair in snippet_key_pairs:
-            snippet = snippet_key_pair[0]
-            key = snippet_key_pair[1]
+                snippet = snippet_key_pair[0]
+                key = snippet_key_pair[1]
 
-            # De-indent lines as the snippet may be indented.
-            indent_spaces = len(re.findall(r' +', snippet)[0])
-            pattern = r'^ {0,%d}' % indent_spaces
-            snippet = re.sub(pattern, '', snippet, flags=re.MULTILINE)
-            # snippet = snippet.strip()
-            processed_snippets.append((snippet, key))
-
+                # De-indent lines as the snippet may be indented.
+                indent_spaces = len(re.findall(r' +', snippet)[0])
+                pattern = r'^ {0,%d}' % indent_spaces
+                snippet = re.sub(pattern, '', snippet, flags=re.MULTILINE)
+                # snippet = snippet.strip()
+                processed_snippets.append((snippet, key))
         return processed_snippets
     
 

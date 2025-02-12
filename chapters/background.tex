@@ -131,9 +131,9 @@ The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$
 \subsubsection{Time complexity}
 Time complexity refers to the asymptotic performance of an algorithm. Even though it in many cases correlates with real performance, it's ultimately theoretical and only considers the highest order term, because it's the biggest contributor when the input size grows towards infinity. For example, consider an algorithm for multiplying 2 numbers. One such algorithm is taught in elementary school and multiplies every digit with every other digit, shifting one step for every iterations for multiplying by a power of 10 then adding all numbers together to get the final result. This algorithm takes $N^2+N$ steps but as N grows larger and larger, the $N^2$ term will contribute the most, so we say that the algorithm has a complexity of $O(N^2)$, called Big-O. For multiplying two 1000 digit long integers, the multiplication will take a million operations and the summation will take 1000. Increasing the input size with 1 digit adds only 1 more addition, but it adds 1001 more multiplication steps.
 
-Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n \log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic \todo{Does this need source?}. An improvement from $O(n^2)$ to $O(n \log n)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n \log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees around a 12800x speedup.
+Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n \log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic \todo{Does this need source?}. An improvement from $O(n^2)$ to $O(n \log n)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n \log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees a speedup of this magnitude.
 
-This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but essentially, the FFT is considered by some  to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
+This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but essentially, the FFT is considered by some to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
 
 \subsubsection{Brief history of the FFT} \todo{this whole section is bad, I'll either fix it or remove it later}
 The history of the FFT is long and cloudy with multiple scientists working on a similar problem between 1800-2000. Cooley and Tukey introduced their algorithm in 1965 and at the time it was regarded as a completely new and revolutionizing algorithm. Based on the papers [A] and [B], the FFT and similar numerical methods were developed in two chains. One of them was started with Euler and Lagrange which Gauss based his work on. Runge's work is based on ????????? Gauss and was the basis for a lot of other development. The other chain, which seemingly does not link to Gauss is where Cooley-Tukey exists. They tributed I.J. Good in their paper even though their algorithm was pretty different from the Good one, which is now commonly called the Prime Factor Algorithm and sometimes Good-Thomas. 
@@ -162,9 +162,9 @@ It was later discovered that Cooley-Tukey works almost exactly as the algorithm 
 % Where does Carlini fit into the picture?
 
 \subsubsection{FFT Algorithm}
-As previously mentioned, FFT is simply put any algorithm that computes the DFT fast. One of the easier to understand but still demonstrates the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split in two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array. On the way back, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity to perform multiple operations at once. \todo{this could be reworked?}
+As previously mentioned, FFT is simply put any algorithm that computes the DFT "fast". One of the easier to understand while still demonstrating the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split into two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array until it performs FFTs on arrays of length 1. On the way back up, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity and values that it has already computed to perform multiple operations at once. 
 
-To derive the Radix-2 FFT, the DFT is split into two sums, one for the even indices and one for the odd 
+The following mathematical derivation of the Radix-2 FFT is adapted from \cite{Rozman2019}. It starts with splitting the DFT into two sums, one for the even indices and one for the odd 
 $$X_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}+ \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n+1}$$
 where $T_k$ is the so called twiddle factor $e^{-\frac{2\pi ik}{N}}$. A common twiddle factor is factored out of the odd sum and the even and odd sums are denoted as $E_k$ and $O_k$ respectively. 
 
@@ -223,7 +223,7 @@ end if
 \end{lstlisting}
 Putting everything together and adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
 
-\lstinputlisting[style=fortran]{../snippets/fft-A.f90}
+\lstinputlisting[style=fortran, label={code:fortran-fft}]{../snippets/fft-A.f90}
 
 % Source of proof: https://www.phys.uconn.edu/~rozman/Courses/m3511_19s/downloads/radix2fft.pdf
 \todo{Add the source for the proof/derivation. I don't know where in text to put the citation, nor do I know how to cite this since it seems to be slides from a course.}
@@ -232,19 +232,33 @@ This algorithm assumes the input is a power of 2 but the implementation does not
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{./images/fft.jpg}
-    \caption{Diagram of an FFT with 8 elements. The process starts with splitting down the input vector to the recursive base case $N=1$. After that the values are combined using the core computations of the Radix-2 FFT. The right-most column in the graph is the output transform of the left-most column.\label{fig:FFT-Alg}}
+    \includegraphics[width=\textwidth]{./images/fft.png}
+    \caption{Diagram of a 4-point FFT. The process starts with splitting down the input vector to the recursive base case $N=1$. After that the values are combined using the core computations of the FFT.\label{fig:FFT-Alg}}
 \end{figure}
 
-% Todo: Add an explanation for the time complexity given the derived formula. The same rozman proof contains that as well
+\subsubsection{Time Complexity of Radix-2 FFT}
+The FFT is ubiquitous and the algorithm has been explored in depth. Literature explaining and deriving the algorithm exists and following one to implement the algorithm in code is almost trivial. It's easy to overlook and the ingenuity of the algorithm be fooled by the simplicity of it when seeing it written down. Where the $O(n\log n)$ complexity comes from might not be entirely clear even when seeing the algorithm written out in code because even though the divide-and-conquer method splits into two, multiple computations are done within each function call. 
+
+When taking an 4-point FFT, as shown in figure \ref{fig:FFT-Alg} the last combination step forming definitely needs 4 computations. One can also observe that each of the 2-point FFT (which is a subproblem of the 4-Point FFT) takes 2 computations. All in all it takes 8 computations to compute the 4-point FFT. As the FFT is a recursive algorithm, the 8-point FFT takes 8 computations for the last combination step in addition to the 4+4 steps for each of the sub-FFTs. The total amount of computations for a FFT of size N is 
+$$T(N) = 2*T(N/2) + N$$
+where N is assumed to be a power of 2 for simplicity. This recursive definition can be expanded
+until we get the recursive base case T(1). Since N is halved for every step, it takes precisely $\log_2 N$ expansions to reach the base case. Expanding the definition a few times (assuming N is sufficiently large)
+$$T(N) = 2*(2*T(N/4) + N/2) + N = 4*(T(N/4) + N) + N$$
+$$= 4*((2*T(N/8)+N/4) + N) + N = 8*T(N/8) + N + N + N$$
+$$= 8*(2*T(N/16) + N/8) + N + N + N = 16*T(N/16) + N + N + N + N$$
+reveals the pattern $T(N) = 2^k*T(\frac{N}{2^k}) + kN$, where $k$ is the number of times the recursion is expanded to reach the base case. As $k =\log_2(N)$ the formula becomes $T(N) = 2^k*T(\frac{N}{2^{\log_2(N)}}) + kN$ which equals $T(N) = 2^k*T(\frac{N}{N}) + kN = 2^k * T(1) + kN$. As the 1-Point FFT performs no computations, $T(1) = 0$ and the final formula for the total amount of computations for the N-point FFT is $N \log_2(N)$. In the context of Big-O, it only matters that the algorithm is logarithmic, the base won't matter in the same way that constants and linear scalars are dropped, which gives the well known O(NlogN).
 
 \subsubsection{Inverse FFT}
-The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in a very similar matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. This means that the IFFT is the FFT algorithm with $\omega = \frac{1}{n}e^{\frac{i2\pi kn}{N}}$ In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. At the time of writing, popular Python library Numpy utilizes the same \_raw\_fft method to compute both FFT and IFFT. \todo{does this need source?} 
+The inverse of the FFT can be derived using the DFT matrix previously shown. It can be shown that inverting the DFT matrix results in an otherwise identical matrix, but with all exponents of the twiddle factor negated and with a normalization scaling. This means that the IFFT is the FFT algorithm with $\omega = \frac{1}{n}e^{\frac{i2\pi kn}{N}}$ or in other words, the IFFT is the FFT with a negated twiddle factor. In \cite{Reducible2020} it is shown that the IFFT algorithm can reuse the FFT logic, with a single line changed. 
 
-%https://github.com/numpy/numpy/blob/main/numpy/fft/_pocketfft.py
-\subsubsection{Notable FFT implementations}
-\textbf{Fastest Fourier Transform in the west}, more known by it's acronym FFTW, is a ...
-\textbf{PocketFFT}, used by Numpy
+The Fortran code from earlier contained a inverse factor that was left unexplained. Below is an example of a simple abstraction for calling the forward FFT and inverse FFT but utilizing the same core r2fft function.
+
+\lstinputlisting[style=fortran]{../snippets/fft-B.f90}
+Both the FFT and inverse FFT are using the same core Radix-2 implementation from earlier, but the inverse is computed with a negated twiddle factor based on the second argument. In the inverse FFT case, an additional normalization is also applied after the FFT computations are finalized.
+
+This can be tested by first forward transforming a set of data points and then inverse transforming the transform and note that $x = ifft(fft(x))$ holds up to floating-point precision. When comparing $a$ and $b = ifft(fft(a))$, all values where within $\epsilon = 1*10^{-30}$ when using quadruple-precision floating point variables and data structures.
+
+Fortran is one language that has native complex arithmetic making it a very conveniant language to implement complex number related algorithms in. In a language like C or JavaScript without such functionality, one way is to take the complex conjugate of the input, which is effectively equivalent to negating the twiddle factor. Per Euler's formula $e^{-ix} = \cos(-x) + i\sin(-x)$ and since cosine is an even function, meaning $\cos(-x) = \cos(x)$ and sine is an odd function, meaning $\sin(-x) = -\sin(x)$ means that $e^{-ix} = \cos(x) - i\sin(x)$ which is the complex conjugate of $\cos(x) + i\sin(x)$. 
 
 
 

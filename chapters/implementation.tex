@@ -55,7 +55,14 @@ The only thing left to do is to instantiate a BridgeNode. What connects to it ma
 \subsection{Post processing}
 
 \subsubsection{MIDI number to semitone name}
-The MIDI number is conveniant because it's a simple integer and a standard. However, for most people, the semitone name means more than the MIDI number. To convert the MIDI number to a semitone, two formulae can be derived using known MIDI numbers and their corresponding notenames. As the semitones repeat every octave and an octave consists of 12 semitones, the index that will be used to find the semitone is computed with modulo 12. The octave number is computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. 
+A fomula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript as shown in the following snippet.
+\begin{lstlisting}[style=javascript]
+    const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
+\end{lstlisting}
+
+The MIDI number is conveniant because it's a semitone, a simple integer and a standard, meaning it is easier to use for computation and analysis. However, for most people, the MIDI number means very little and anyone who has any background in music is already familiar with letters and numbers as common notation. To convert the MIDI number to a note, two functions can be derived using known MIDI numbers and their corresponding notenames. The typical way to label a musical pitch is with a scientific pitch notation where a pitch is assigned a number and a letter, the number representing the octave and the letter representing the note within the octave. This is what is familiar to people with a background in music and it would be desired format for a note at the presentation layer.
+
+As the note repeat every octave and an octave consists of 12 semitones, the index that will be used to find the note within an octave is computed with modulo 12 plus some constant offset. The octave number is the largest multiple of 12 strictly less than the number, which means it can be computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. The MIDI numbers however do align with the semitones as we start from "C" as C0 is the 12th MIDI number which is congruent to 0 mod 12 meaning the constant offset is 0.
 \begin{lstlisting}[style=javascript]
 function getSemitoneName(midiNumber) {
     const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
@@ -66,7 +73,7 @@ function getSemitoneName(midiNumber) {
     return "" + letter + octaveNumber; 
 }
 \end{lstlisting}
-
+A minor note about the code above, for a generic pitch detector, the symbols in the SEMITONES array would be fine but it is theoretically not correct for any key.  For a proper application, it should be a variable to match the key of a piece which a person is singing/practicing. For example for the E-flat minor key, the SEMITONES would still start on C, but the second element should be "Db" (b for flat) as the E-flat minor scale contains a D-flat instead of a C-sharp. At logic level, these are represented by the exact same MIDI number class, which is all the MIDI numbers 1 above a multiple of 12, but at the presentation layer, it makes a difference for someone able to read sheet music would most likely react to the mismatch in notation.
 
 \subsection{Integrating with VSS}
 VSS is an initialism that will be used to refer to the host application that can compare the pitch detector result to the notes of a piece or song. 

@@ -1,11 +1,11 @@
 The purpose of this work is to study a short-time Fourier transform for its viability as a pitch detector. The FFT for transforming a waveform into the frequency-domain has been introduced and this chapter will focus on the properties of sound, introduce some musical terminology and how the FFT can be used to detecting pitches from a time-domain signal
 
 \subsection{Basics of sound}
-Sound physically is pressure propagation through a medium, a vibration which some things can produce and some things can pick up. The word sound can be used to describe both the propagation itself, but also the phenomenom we feel when our ears react to the propagation. Headphones, strings of a guitar and vocal chords (together with the lungs) are some of the things that can produce sound and microphones and membranes in ears are things that can pick up sound. The propagation will have a certain strength at some point in the medium it travels through, which can be measured. This allows us to model the pressure propagation, or the sound as a function of time. At time $t$ the pressure at some point can be denoted as $f(t)$. This function over time can also be called a signal.
+Sound physically is pressure propagation through a medium, a vibration which some things can produce and some things can pick up. The word sound can be used to describe both the propagation itself, but also the phenomenom we feel when our ears react to the propagation. Headphones, strings of a guitar and vocal chords (together with the lungs) are some of the things that can produce sound and microphones and membranes in ears are things that can pick up sound. The propagation will have a certain strength at some point in the medium it travels through, which can be measured. This allows us to model sound as pressure over time. At time $t$ the pressure at some point can be denoted as $f(t)$. This function over time can also be called a signal.
 
 % source: https://api.pageplace.de/preview/DT0400.9781292055152_A24617782/preview-9781292055152_A24617782.pdf The Science of Sound - Rossing, Moore, Wheeler
 
-One of the simplest ways to generate a sound is connecting a speaker to a device that generates an analog current in the shape of a wave. The current moves an electromagnet which moves a membrane at the same frequency as the generator. This membrane displaces air at some rate which ears pick up as sound. A 440Hz wave, a signal that oscillates 440 times per second that is, will produce a sound wave of 440Hz \todo{this might not need a source}. An ear picks up this signal as what we call an A4 note. Interestingly, the purity of the signal makes it sound harsh and it is noise in the signal that gives warmth and beauty to the note. This can be observed in figure \ref{fig:pianoWave} where the signal (sound made by an electric piano) largely matches a pure A4 (440Hz sinusoid) but not quite. The "warmth and beauty" is formally called timbre and it allows us to distinguish an A4 on a piano from an A4 on a guitar even though both are A4 sounds.
+One of the simplest ways to generate a sound is connecting a speaker to a device that generates an analog current in the shape of a wave. The current moves an electromagnet which moves a membrane at the same frequency as the generator causing the pressure difference around the membrane. This membrane displaces air at some rate which ears pick up as sound. For example, if the generator produces a 440Hz signal, the speaker's membrane will displace air at the same 440Hz. This displacement is propagated over air and is sensed by our ear as a pitch we call A4. Interestingly, the purity of the signal makes it sound harsh and it is noise in the signal that gives warmth and beauty to the note. This can be observed in figure \ref{fig:pianoWave} where the signal (sound made by an electric piano) largely matches a pure A4 (440Hz sinusoid) but not quite. The "warmth and beauty" is formally called timbre and it allows us to distinguish an A4 on a piano from an A4 on a guitar even though both are A4 sounds.
 
 %https://eprints.hud.ac.uk/id/eprint/17816/1/Final_Thesis_-_November_2012.pdf why is this here?
 
@@ -25,23 +25,38 @@ The characteristics of the sound being played becomes even more evident when it'
 
 The spectrum also reveals that the particular electric piano that was used to create the sound lacks harmonic content. This is not the case for  
 
-\subsubsection{Music 101} 
-Music terminology can be hard to define without circular definitions. There's also quite a bit of overlap with the same word meaning different things depending on context. We can start with defining the octave which is the difference between two sounds where one sound has twice the frequency of the other and is the largest interval in western music. If a sound oscillates at 440Hz, the sounds corresponding to 220Hz or 880Hz are an octave away.
+\subsection{Music 101} 
+Music terminology can be hard to define without circular definitions. There's also quite a bit of overlap with the same word meaning different things depending on context. A possible starting point would be defining the octave which is the difference between two sounds where one sound has twice the frequency of the other and is the largest interval in western music. If a sound oscillates at 440Hz, the sounds corresponding to 220Hz or 880Hz are an octave away.
 
-Semitone is typically defined as the smallest interval in western music and is 1/12th of an octave. Semitone is sometimes also used to talk about, not the interval, but the sounds that bound the interval. This non-interval semitone is sometimes also called a pitch and sometimes note.
 
-In western music, tuning typically starts from A4, which is defined in this system to have a frequency of 440Hz, and every other note is derived from there. A3 (an octave lower) will be 220Hz and A5 will be 880Hz. The frequency for the other pitches can be approximated with equal temperament tuning, meaning that all semitones are equally spaced within octaves. This means that the frequency of any one pitch is exactly $2^{1/12}$ times the frequency of the previous one. Sounds are given identifiers as a letter-number pair based on the octave they are in and their placement within the octave. 
+\subsubsection{Octaves}
+The name octave comes from the fact that it contains 7 distinct basenotes (the 8th forming the octave). This is called a heptatonic scale and when it sounds "nice" it's called a diatonic scale (formally, it requires a certain structure of intervals). Diatonic scales include the familiar major (happy) and minor (sad) scales. The history and reasoning for the heptatonic scales in western music theory is not relevant for the work, but the point is that it's not the only taxonomy for notes. 
 
-The octave contains 12 semitones, but it contains 7 basenotes (the 8th forming the octave). This is called a heptatonic scale and when it sounds "nice" it's called a diatonic scale (formally, it requires a certain structure of intervals). Diatonic scales include the familiar major (happy) and minor (sad) scales. The history and reasoning for the heptatonic sca  les in western music theory is not relevant for the work, but the point is that it's not the only taxonomy for notes. 
+Because the diatonic scales require a certain structure of intervals, the octave needs to be divided further into what is called semitones. Semitone is typically defined as the smallest interval in western music and is typically 1/12th of an octave. Semitone is sometimes also used to talk about, not the interval, but the sounds that bound the interval. This non-interval semitone is sometimes also called a pitch and sometimes note.
 
-The major and minor scales are built up of 7 out of the 12 semitones
+\subsubsection{Notes and note names}
+Whle octave is used to describe an interval of 2 notes, we can define a first, second third etc. octave if we start from somewhere. A common way to label musical pitches is to use a letter to represent the note name and a number to indicate which octave it belongs to. This system is called Scientific Pitch Notation (SPN) and is used in Western music notation." It starts, not on an A, but on a C and depending on the convention used ends in either a B or an H. Figure \ref{fig:noteScale} shows the octave bounds and how notes are ordered within the octave.
 
-\subsubsection{MIDI numbers}
-As will be apparent later, it's conveniant to have the ability to index sounds. Of course, sounds can be easily compared based on their pitch (or their names, though also based on pitch). But indexing is impossible because the range of values depends on the instrument and in absolute terms, there is no lowest sound.  
-Musical Instrument Digital Interface (MIDI) is a technical standard for protocols, connectors and interfaces relating to music and among other things, numbers corresponding to notes and frequencies. For instance, the first sound on a piano, A0, has the MIDI number 21. Note that A0 is always MIDI number 21, the issue is about which sound should in general be considered the "first". With MIDI numbering it's easy, it will be MIDI number 0. 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/noteScale.png}
+    \caption{Notes of an octave. Base notes are marked with purple. \label{fig:noteScale}}
+\end{figure}
+
+For example, the note which has twice the frequency of A4 forms an octave with A4. As the frequency is doubled, the other note is one octave higher than A4 so it is given the name A5. If the frequency is halved, it is named A3. 
+
+In western music, tuning typically starts from A4, which is defined in this system to have a frequency of 440Hz, and every other note is derived from there. Tuning in this context essentially means finding the frequencies of the other notes so that everything sounds "right" (to avoid getting into unnecessary amount of music theory). A3, an octave lower than A4, will be half of 440Hz or 220Hz and A5, an octave higher, will be double of 440Hz or 880Hz. The frequency for the other pitches can be approximated with equal temperament tuning, meaning that all semitones are equally spaced within octaves. This means that the frequency of any one pitch is exactly $2^{1/12}$ times the frequency of the previous one. Sounds are given identifiers as a letter-number pair based on the octave they are in and their placement within the octave. 
+
+\subsubsection{Flats and sharps}
+Flats and sharps are augmented notes. Sharps are denoted with a $\#$ symbol and flats with a $\flat$ symbol. Both flats and sharps are one semitone above the augmented note meaning there is quite a bit of overlap. For instance, a D$\#$4 has the exact same pitch as a E$\flat$4. The key difference between D$\#$4 and E$\flat$4 is context. It should be obvious, even to a person with no musical training, that when "playing in D-sharp", there should be a D-sharp and not an E-flat even though they are effectively the same note. In some situations there is also the concept of a "double sharp" and "double flat".    
 
 \subsubsection{Terminology for readers}
-The base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. In this work, the term "note" will be used to describe the 12 distinct sounds within the octave because for the pitch detector, discerning the base notes and the sharps and flats isn't necessary. Pitch will be used to describe the measurement/perception of how low or high a sound is. 
+The base notes will be defined according to German/European music theory as \[C, D, E, F, G, A, H\] and B being $H\flat$. In this work, the term "note" will be used to describe the 12 distinct sounds within the octave because for the pitch detector, discerning the base notes and the sharps and flats isn't necessary. Pitch will be used to describe the measurement/perception of how low or high a sound is.
+
+\subsubsection{MIDI numbers}
+For humans, it is easy to use the SPN labels for notes. C4 is a simple pair of a letter and a number and gives users just enough information to know what it refers to. Computers on the other hand are different and instead have it much harder to analyze, say, "A4" even compared to the pure frequencies. However the frequency value is often unnecessary because we usually only care about a discrete set of frequencies corresponding to notes, not all possible real valued frequencies. 
+Musical Instrument Digital Interface (MIDI) is a technical standard for protocols, connectors and interfaces relating to music and provides among other things, simple integers for labeling notes. For instance, the first sound on a piano, A0, has the MIDI number 21. 
+
 
 % \subsubsection{Pitch perception}
 % Even though we can clearly define any one pitch to be some frequency, human ears are more complex. 
@@ -56,7 +71,7 @@ From a computational perspective, a possible definition is that pitch detection 
 The fundamental frequency is typically the lowest frequency of a signal, but in some cases we can hear a fundamental frequency that isn't actually a part of the signal, a phenomenon appropriately called the missing fundamental. \todo{source: Gotsopoulos}. An example of this would be telephones, that could not record below 300Hz. Male voices would still sound male, even though their fundemental frequency of around 150Hz was completely missing \todo{Mather 2006}.
 
 \subsubsection{The missing fundamental}
-The missing fundamental is in a sense an audiotory illusion. It's a result of the constructive interference of harmonics that causes peaks with a period that is the greatest common divisor of the angular frequencies of the harmonics. 
+The missing fundamental is in a sense an audiotory illusion. It's a result of the constructive interference of harmonics that causes peaks with a period that is the greatest common divisor of the angular frequencies of the harmonics. This is shown in figure \ref{fig:missingfund} where the sum of several waves produce a wave with a prominently 110Hz oscillation. Even though the lowest frequency component is 220Hz, the prominent 110Hz oscillation is what we feel and hear.
 
 \begin{figure}[ht]
     \centering
@@ -68,7 +83,7 @@ Pipe organs use this to their advantage. Creating extremely low sounds requires 
 % 0:56; https://www.youtube.com/watch?v=Sn07AMCfaAI&t=1169s
 
 \subsection{Pitch detection methods}
-Pitch detection methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/ML methods. Ine comming time-domain method, zero-crossing rate, is a method in which frequencies are extracted by keeping track of the rate at which the signal crosses the y-axis. This has shown to be effective for certain applications but falls short in other tasks \todo{Source???}. Another is autocorrelation, in which the signal is compared to itself with a different phase. 
+Pitch detection methods typically fall into one of 3 categories: time-domain, frequency-domain and statistical/machine learning methods. Some common time-domain methids include zero-crossing rate and autocorrelation. Zero-crossing rate, is a method in which frequencies are extracted by keeping track of the rate at which the signal crosses the y-axis. This has shown to be effective for certain applications but falls short in other tasks \todo{Source???}. Another is autocorrelation, in which the signal is compared to itself with a different phase. 
 
 This thesis will focus on the frequency-domain approaches, where a fourier transform is used to create a representation of the sound that is easier to analyze and process.
 
@@ -99,7 +114,7 @@ The Fourier transform is used to get the spectrum data, which can be used to plo
 % HPS
 \subsubsection{Harmonic Product Spectrum}
 Harmonic Product Spectrum (HPS) is an algorithm that almost does the intuitive approach. 
-$$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal X downsampled by r. Simply put, the HPS iteratively multiplies downsampled version of a signal. Downsampling the frequency-domain effectively compresses the frequency-axis by the downsampling rate which means that previously integer multiplies of some value $kN$ are put in the same bins as $N$. When all the downsampled frequency-domain signals are multiplied together, correlated frequencies, or harmonics, form a very sharp peak \cite{McLeod2008}. This peak can be picked out with a max function.
+$$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal $X$ downsampled by $r$. Simply put, the HPS iteratively multiplies downsampled version of a signal. Downsampling the frequency-domain effectively compresses the frequency-axis by the downsampling rate which means that previously integer multiplies of some value $kN$ are put in the same bins as $N$. When all the downsampled frequency-domain signals are multiplied together, correlated frequencies, or harmonics, form a very sharp peak \cite{McLeod2008}. This peak can be picked out with a max function.
 
 \begin{figure}[ht]
     \centering
@@ -108,12 +123,13 @@ $$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal X downsampled by r. Sim
 \end{figure}
 
 HPS is a good algorithm because it's simple and easy to compute making it suitable for real-time analysis. It also has the ability to 
+
 One problem with the HPS is that it does not perform well in the case of lacking harmonics \cite{McLeod2008}. This likely won't be a problem because human voices should be rich in harmonic content. According to \cite{Smyth2019}, the HPS is also prone to getting octaves wrong, but that did not seem to be the case when testing preliminarily with guitar, piano and a voice.
 
 % CFAR
 \subsubsection{Constant False Alarm Rate}
 % https://www.youtube.com/watch?v=BEg29UuZk6c
-Constant False Alarm Rate (CFAR) is an algorithm that gives a dynamic threshold. It works by looking at some amount of reference cells that are beyond some gap around the target cell. For example for cells 5, 6, 7, 8, 9, 10, 11, 12, 13 the threshold given a gap size of 2 and reference cell count of 2 and the target is 9, the reference cells are 5, 6, 12 and 13. 7, 8, 10 and 11 are gap cells. The reference cells are then averaged (but other statistical methods can be used) and a bias may be applied. If the value of cell 9 is above the computed threshold, it's considered a target and noise if below.
+Constant False Alarm Rate (CFAR) is an algorithm that gives a dynamic threshold. It works by looking at some amount of reference cells that are beyond some gap around the target cell. For example for cells 5, 6, 7, 8, 9, 10, 11, 12, 13 the threshold given a gap size of 2 and reference cell count of 2 and the target is 9, the reference cells are 5, 6, 12 and 13. 7, 8, 10 and 11 are gap cells. The reference cells are then averaged (but other statistical methods can be used) and a bias may be applied. If the value of cell 9 is above the computed threshold, it's considered a target and noise if below. CFAR is typically used in conjuction with radar technology, but could just as well be used to discern the partials in a spectrum. 
 
 \begin{figure}[ht]
     \centering
@@ -123,11 +139,11 @@ Constant False Alarm Rate (CFAR) is an algorithm that gives a dynamic threshold.
 
 To effectively use CFAR, the parameters must be carefully chosen. If the bias is too low, invalid targets may be considered targets and vice versa if the bias is too high. The gap and reference cells can be farly flexible but not too large as smaller harmonics may be considered noise compared to greater harmonics. The lowest pitch we want to estimate is around 50Hz and if we assume monophonic singing, the spectrum should mostly contain integer multiples of the fundemental frequency which means that no peaks should ever be closer than 50Hz. With 4Hz bins, we can freely chose up to 12 gap and reference cells and not have a harmonic interfere with the CFAR computations of another. 
 
-As CFAR only finds the peaks, one problem with using it alone as a fundemental frequency estimator is that the peaks usually, for one reason or another, are not exact frequencies and thus the harmonics are not integer multiples of the fundemental. This leads to a problem called the Approximate Greatest Common Divisor (AGCD) and sometimes Approximate Common Divisor Problem. Given a sequence of numbers, 109, 222, 437, it can be easy to intuitively see that all numbers are very close to a multiple of 110 but finding this analytically seems to be a pretty difficult problem and one out of scope for this work, especially since HPS is already proven to work fairly well. CFAR could however be used to give a rough number for peaks, which may be used to dynamically adjust the amount of iterations the HPS uses. If CFAR finds very few peaks or even just one as in the case of the electric piano in figure \ref{fig:pianoFreq}, the result could be used to completely change peak picker as HPS has issues with signals without harmonics.
+As CFAR only finds the peaks, one problem with using it alone as a fundemental frequency estimator is that additional post processing is necessary. Since HPS already works well for peak picking, it is chosen as the primary algorithm for the fundamental frequency estimatotr. CFAR could however be used to give a rough number for peaks, which may be used to dynamically adjust the amount of iterations the HPS uses. If CFAR finds very few peaks or even just one as in the case of the electric piano in figure \ref{fig:pianoFreq}, the result could be used to completely change peak picker as HPS has issues with signals without harmonics.
 
 % Problems with FFT, might move this to real-time
 \subsection{Problems with the FFT}
-One problem with the FFT that \todo{source: Gotsopoulos} addresses is the size of the frequency bins. This is also noted for the STFT, limiting how short the STFT can be for achieving sufficient frequency resolution \cite{Evans2012}. The FFT doesn't find precise frequencies, it finds bins of frequencies with the size $S/N$ where S is the sampling rate and N is the FFT buffer size. As frequency grows exponentially (doubles every octave), higher notes are spaced further apart. This means that for lower notes, the frequency bins need to be significantly smaller as shown in figure \ref{fig:fftBinSizeChart}. Base singers may need to go very low, around E2 (87Hz) and in order to avoid notes in this range to fall into the same bin, the window size needs to be very small.  
+One problem with the FFT that \cite{Gotsopoulos} addresses is the size of the frequency bins. This is also noted for the STFT, limiting how short the STFT can be for achieving sufficient frequency resolution \cite{Evans2012}. The FFT doesn't find precise frequencies, it finds bins of frequencies with the size $S/N$ where $S$ is the sampling rate and $N$ is the FFT buffer size. As frequency grows exponentially (doubles every octave), higher notes are spaced further apart. This means that for lower notes, the frequency bins need to be significantly smaller as shown in figure \ref{fig:fftBinSizeChart}. Base singers may need to go very low, around E2 (87Hz) and in order to avoid notes in this range to fall into the same bin, the window size needs to be very small.  
 
 \begin{figure}[ht]
     \centering
@@ -135,7 +151,7 @@ One problem with the FFT that \todo{source: Gotsopoulos} addresses is the size o
     \caption{As the FFT window shrinks, different notes may fall into the same bin. Bars represent the bin sizes for various window sizes at 48kHz sampling rate and dashed lines show semitone intervals (the exact note values are irrelevant). For notes in the 4th octave, the window size can be smaller, but in the 2nd octave even 8192 samples is not enough to discern all pairs of semitones because the bins are larger than those semitone differences.\label{fig:fftBinSizeChart}}
 \end{figure}
 
-Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go much lower than E2. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 <=> x = 48000/4 = 12000$, 12000 samples would be enough to discern the lowest notes. 
+Base singers typically go as low as E2 and the difference between E2 and F2 is barely 5Hz which is smaller than the frequency bin of 8192 samples at 48kHz. They do not necessarily fall into the same bin but it would be safer to compute the FFT with a 16384 window size. This halves the frequency bin size and definitely accomodates differences even an octave lower. This introduces a significant amount of increased computation and is quite unnecessary as base singers do not realistically go much lower than E2. If the FFT implementation allows (many implementations require a power of 2), the window size should lie somewhere between 8192 and 16384 to lessen computations. For a 4Hz bin, $48000/x = 4 \iff x = 48000/4 = 12000$, 12000 samples would be enough to discern the lowest notes. 
 
 This introduces another problem, which has implications for real-time pitch detection which is that collecting 12000 samples at 48kHz takes 0.25 seconds, which arguably is not real-time anymore. As the bin size is $B = S/W$ means that $W = S/B$ and the latency (time taken to fill the FFT window) $L = W/S = \frac{S/B}{S} = 1/B$, the bin size and latency are inversely proportional, both can not be minimized. For a bin size of 4, it will necessarily take 0.25s to collect the FFT samples. This follows that naively transforming audio makes real-time pitch detection for base singers impossible because the detection latency will inherently always be too long with sufficiently fine frequency resolution.
 
@@ -163,7 +179,7 @@ The sampling theoren clearly states what we can and can not do with the signal b
 
 \subsection{Finding nearest note}
 %https://newt.phys.unsw.edu.au/jw/notes.html
-As already established, western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4 (440Hz) as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
+Western tuning is done in equal temperaments, meaning the octave is evenly divided in 12. Using A4 (440Hz) as a reference, one can calculate every semitone's frequency with a signed index from A4 using the following function. 
 $$f(i) = 2^{i/12}*440$$
 For example the -2nd semitone using the formula is approximately G4 which indeed is 2 semitones under A4. To avoid negative indices, they can be shifted by some number. A4 is assigned the MIDI number 69 so this will be the number the scale gets shifted by. So to find the frequency of the i-th MIDI number the following function can be used.
 $$f(i) = 2^{\frac{i-69}{12}}*440$$

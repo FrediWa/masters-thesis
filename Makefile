@@ -2,7 +2,7 @@
 EXAMPLES_DIR = ./code/examples
 PD_SOURCE_DIR = ./code/pitch-detector
 SOURCE_DIRS = $(EXAMPLES_DIR) $(PD_SOURCE_DIR)
-ALL_SOURCE_FILES = $(foreach dir,$(SOURCE_DIRS),$(shell find $(dir) -type f))
+ALL_SOURCE_FILES = $(foreach dir,$(SOURCE_DIRS),$(shell find $(dir) -type f -not -name "*.o"))
 
 SNIPPET_GENERATOR_SCRIPT = ./generateSnippets.py
 
