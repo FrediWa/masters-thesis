@@ -5,7 +5,7 @@ The application that implements the proposed pitch detection system will take th
 As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers controls over audio processing functionality on browsers, by getting access to user audio devices, adding effects and more. 
 The Web Audio API operates in a AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories; input or source nodes, modifier nodes and output nodes. The nodes are then connected to each other to form the graph. 
 
-The graph operates by passing blocks of data (called render quanta) between nodes, where one render quantum consists of frames of samples, where one frame contains one sample for every audio channel, at least according to the W3C Audio API 1.1 specifications. Render quantum seems to be a term reserved for the low level processing of the data passing between nodes, and in reality the audio samples are contiguous for each channel. The important thing to realize here is that the blocks of data, which will be called render quanta for a lack of naming at API level, are 128 in length.
+The graph operates by passing blocks of data (called render quanta) between nodes, where one render quantum consists of frames of samples, where one frame contains one sample for every audio channel, at least according to the W3C Audio API 1.1 specifications. Render quantum seems to be a term reserved for the low level processing of the data passing between nodes, and in reality are (at least on tested browsers) not an array of frames with a sample per channel but rather a set of channels with contiguous samples. Regardless of the internal memory layout of the blocks, the important thing to note is that the blocks of data, which will be called render quanta for a lack of naming at API level, are 128 samples per channel in length.
 
 %https://www.w3.org/TR/webaudio/#rendering-loop
 
@@ -19,9 +19,9 @@ The modifier nodes are the nodes that are neither sources nor destinations, they
 The available modifiers unfortunately do not help with the development of the pitch detector, so a lot of the processing would be done with Worklet nodes, a node that allows custom functionality. With this in mind, the simplest way is to not use the Audio API audio graph, but to just take the output from the microphone and in the simplest possible way turn it into data to be processed using regular procedural programming. The AnalyserNode has fourier transform capabilities but there does not seem to be a way to zero-pad it, which is integral to achieving both real-time processing and enough frequency resolution for base singers. 
 
 \subsection{Pitch detector architecture}
-The identified steps of the pitch detector at the highest level are recording, zero-padding, FFT, peak picking and some post processing. It's a simple pipeline of collecting enough samples for the FFT from a microphone and then running analysis on the spectrum data. The only problem at this stage is converting the stream from the microphone to something that can be processed. There seems to be mainly two ways to go about implementing this kind of conversion. One way is to feed the stream from the microphone into a recorder and decoding the binary data that becomes available with time. The other is to build a custom audio processor that handles the processing, whatever that may be. 
+The identified steps of the pitch detector at the highest level are recording, zero-padding, FFT, peak picking and some post processing. It's a simple pipeline of collecting enough samples for the FFT from a microphone and then running analysis on the spectrum data. The only problem at this stage is converting the stream from the microphone to something that can be processed. There seems to be mainly two ways to go about implementing this kind of conversion. One way is to feed the stream from the microphone into a recorder and decoding the binary data that becomes available with time. The other is to handle the raw audio data on the audio rendering thread by building a custom audio processor that handles the processing, whatever that may be. 
 
-As the fourier transform and any peak picking algorithm of choice works in the frequency-domain, using the audio graph doesn't make much sense. The only thing the audio graph would be responsible for would be moving the render quanta between processors, but this is a bit like using a chainsaw to slice bread. Figure \ref{fig:pdArch} shows the proposed architecture which uses a bridge node to send the raw audio data from the audio rendering thread to the main thread. For every render quanta processed the data is passed through the node-processor port from the processor to the node in the main thread where it's passed from the node to a callback function. This callback function may then be used to accumulate the render quanta start analysis.
+As the fourier transform and any peak picking algorithm of choice works in the frequency-domain, using the audio graph doesn't make much sense. The only thing the audio graph would be responsible for would be moving the render quanta between processors, but this is a bit like using a chainsaw to slice bread. Figure \ref{fig:pdArch} shows the proposed architecture which uses a bridge node to send the raw audio data from the audio rendering thread to the main thread. For every render quanta processed the data is passed through the node-processor port from the processor to the node in the main thread where it's passed from the node to a callback function. This callback function may then be used to accumulate the render quanta and start analysis.
 
 \begin{figure}[ht]
     \centering
@@ -33,26 +33,57 @@ The proposed architecture offers flexibility without being overly complicated. T
 
 \subsection{Implementing the pitch detector}
 With a plan for the application, the next step is to implement it. The implementation, based on the arhictecture can be be roughly divided into 4 parts: recording or otherwise taking an input, passing data between the threads, accumulating and performing analysis.
+
 \subsubsection{Audio input}
 As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by Finlands svenska manssångarförbund (FSM), an alliance of finland-swedish men's choirs were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-B.js}
+
 \subsubsection{Worklet nodes}
-Audio worklet nodes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode.
+Audio worklet nodes are a method of implementing custom audio modifier and sources (a white noise generator for example). In this work, an AudioWorklet node will be used to implement the BridgeNode. Worklet nodes involve two parts: the node which is used in the audio graph, and the processor which is responsible for the behavior in the audio rendering thread. These are linked together.
 
 The code snippet below shows how the BridgeNode is implemented.
 \lstinputlisting[style=javascript]{../snippets/BridgeNode-A.js}
 The bridge node extends or inherits the AudioWorklet node class and methods are added. When the node receives data on its port, it just forwards it to a handler. The handler could do further processing on the data but for the moment only forwards it to the callback function in the pitch detector. The pitch detector callback function is the one responsible for accumulating samples, zero-padding etc.
 
-As the BridgeNode doesn't override or specify anything new, it's really only a thin wrapper for an AudioWorkletNode which is evident by the constructor calling the super constructor, which invokes the parent class constructor. The bridge node is an AudioWorkletNode that uses a BridgeProcessor which also must be created. 
+As the BridgeNode doesn't override or specify anything new, it's really only a thin wrapper for an AudioWorkletNode which is evident by the constructor calling the super constructor, which invokes the parent class constructor. This just allows the user to create a BridgeNode as a opposed to a generic WorkletNode with a custom processor, which is arguably unnecessary but can make the code nicer to read. The processor which is implicitly passed to the BridgeNode via the super constructor must be created as well.
 \lstinputlisting[style=javascript]{../snippets/BridgeProcessor-A.js}
-As the purpose isn't to actually process anything in the audio context, but rather to utilize the flexibility of the audio graph and have processing done elsewhere, the processor simply sends everything it receives over the port to the corresponding node. 
+As the purpose isn't to actually process anything on the audio thread, but rather to utilize the flexibility of the audio graph and have processing done elsewhere, the processor simply sends everything it receives over the port to its node. 
 
 The only thing left to do is to instantiate a BridgeNode. What connects to it may be a microphone, an audiofile, a gain node, a channel splitter, or anything else that may be useful for the pitch detection.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-A.js}
 
-\subsubsection{Audio processors}
+\subsection{Collecting samples}
+The bridge node's sole purpose is to move audio data between the audio rendering thread and the main thread. To do this, the node periodically triggers a callback function which contains one render quantum as an argument. The user can be define their own callback function.
+\lstinputlisting[style=javascript]{../snippets/PitchDetector-C.js}
+This also just forwards the render quantum to an analyze function to keep the code organized. In the analyze function is where accumulation happens and where analysis starts. For accumulating the samples, a ring buffer is used. When the function receives a render quantum, it first copies all the samples to a buffer with an offset. The write offset is then incremented by the render quantum size, a constant of 128.
+\begin{lstlisting}[style=javascript]
+// Copy buffer chunk to fft input vector.
+for (let i = 0; i < RENDER_QUANTUM_SIZE; i++) {
+    this.fftInputBuffer[i + this.fftBufferIteratorOffset] = data[i];
+}
+this.fftBufferIteratorOffset += RENDER_QUANTUM_SIZE;
+
+// Perform all the analysis once enough samples.
+if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
+ // Analysis code...
+ this.fftBufferIteratorOffset = 0;
+}
+\end{lstlisting}
+When enough samples have been accumulated, a threshold which can be tuned, the analysis starts and the buffer iterator offset is reset. After the offset is reset, the new render quanta start to overrite old render quanta. Because the entire buffer is read at once, this is all the functionality we need for the accumulation. 
+
+\subsection{Finding the fundemental frequency}
+When enough samples have been collected (set to 6000 while development and testing), the next step is to forward transform the signal into the frequency domain. The following function is called which runs a 16384-point FFT using a library called "fft.js" by GitHub user indutny which claims to be "The fastest JS Radix-4/Radix-2 FFT implementation". The function is also responsible for creating the spectrum by calculating the magnitude of each complex data point using the pythagorean theorem. 
+\begin{lstlisting}[style=javascript]
+    const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
+\end{lstlisting}
+The signal is implicitly zero-padded because the input array is instantiated with 0's and only a portion of them are assigned a value, precisely the first 6016 values, 6016 being the smallest multiple of the render quantum size (128) greater than the target sample size.
+
+The spectrum is then passed on to a function which computes the HPS of the spectrum. The HPS algorithm is ported to JavaScript and looks like the following. 
+\lstinputlisting[style=javascript]{../snippets/analysis-A.js}
+The array is instatiated, not as 0's, but as 1's for the multiplicative nature of the HPS.  
 
 \subsection{Post processing}
+Post processing here refers to everything that is done after the fundemental frequency has been found
 
 \subsubsection{MIDI number to semitone name}
 A fomula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript as shown in the following snippet.

@@ -139,10 +139,11 @@ export class PitchDetector {
     }
   }
 
+    //---snippet-start-C
     bridgeCallback(data) {
-      console.log("callback");
       this.analyze(data);
     }
+    //---snippet-end-C
 }
 
 const detector = new PitchDetector();

@@ -1,20 +1,20 @@
 import visualize from "./visualize.js";
 import { FFTJS } from "./fftjs.js";
 
+//---snippet-start-A
 function hps(array, maxHarmonics) {
     const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
     harmonicProductSpectrum.fill(1); // Multiplicative identity for HPS. 
 
     for (let harmonic = maxHarmonics; harmonic >= 2; harmonic--) {
-
-        for(let i = 0; i < harmonicProductSpectrum.length; i++) {
+        for (let i = 0; i < harmonicProductSpectrum.length; i++) {
             harmonicProductSpectrum[i] *= array[i*harmonic];
         }
     }
     
     return harmonicProductSpectrum; 
 }
-
+//---snippet-end-A
 function postProcess(array, binSize) {
     /*
     Conclusion:
@@ -42,6 +42,7 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     const FFT = new FFTJS(fftWindowSize);
 
     console.time("fft")
+    console.log("fft input", dataBuffer)
     const transform  = FFT.createComplexArray();
     FFT.realTransform(transform, dataBuffer);
     
