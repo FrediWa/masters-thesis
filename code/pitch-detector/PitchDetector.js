@@ -16,6 +16,8 @@ export class PitchDetector {
       this.timer = 0;
       this.time = 0;
       this.noteGraph = null;
+      this.tempoInterval = null;
+      this.accumulatedNotes = [];
 
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
@@ -69,9 +71,16 @@ export class PitchDetector {
     }
 
     async start() {
+      
       if (this.recording)
         return;
       this.recording = true;
+      
+      const BPM = 120;
+      this.tempoInterval = setInterval(() => {
+        console.log("Beat")
+        this.accumulatedNotes.push(document.getElementById("midi-number").innerHTML);
+      }, 30000/BPM);
       
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
@@ -88,10 +97,16 @@ export class PitchDetector {
       if (!this.recording)
         return;
       this.recording = false;
+      
+      
+      if (this.tempoInterval != null)
+        clearInterval(this.tempoInterval);
 
       this.audioContext.suspend();
 
       Recorder.stopRecording(this);
+      console.log(this.accumulatedNotes);
+      this.accumulatedNotes = [];
     }
 
     analyze(data) {
@@ -110,10 +125,10 @@ export class PitchDetector {
         // Run the fourier transform and compute spectrum data.
         const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
 
-        console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
+        // console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
-        visualize("fftCanvas", spectrum, [40, 2000]);
+        visualize("fftCanvas", spectrum, [40, 2000], SAMPLE_RATE/FFT_WINDOW_SIZE);
         // This is mostly for debugging.
         let largest = 0;
         let largestIndex = 0;
@@ -125,15 +140,16 @@ export class PitchDetector {
                 largestIndex = i;
             }
         }
-        console.log("FFT largest", largestIndex, largestIndex*binSize); 
+        // console.log("FFT largest", largestIndex, largestIndex*binSize); 
         // Until like here.
-        const peak = hps(spectrum, 4);
-        visualize("hpsCanvas",  peak, [40, 2000]);
-
+        const peak = hps(spectrum, 5);
+        visualize("hpsCanvas",  peak, [40, 300], SAMPLE_RATE/FFT_WINDOW_SIZE);
+        
         const [midiNumber, frequency] = postProcess(peak, binSize);
-        console.log(midiNumber, frequency);
+        // console.log(midiNumber, frequency);
         const noteName = getNoteName(midiNumber);
         document.getElementById("note-name").innerHTML = noteName;
+        document.getElementById("midi-number").innerHTML = midiNumber;
 
         this.fftBufferIteratorOffset = 0;
     }

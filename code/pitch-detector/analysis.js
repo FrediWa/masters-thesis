@@ -6,7 +6,7 @@ function hps(array, maxHarmonics) {
     const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
     harmonicProductSpectrum.fill(1); // Multiplicative identity for HPS. 
 
-    for (let harmonic = maxHarmonics; harmonic >= 2; harmonic--) {
+    for (let harmonic = maxHarmonics; harmonic >= 1; harmonic--) {
         for (let i = 0; i < harmonicProductSpectrum.length; i++) {
             harmonicProductSpectrum[i] *= array[i*harmonic];
         }
@@ -31,7 +31,7 @@ function postProcess(array, binSize) {
             largestIndex = i;
         }
     }
-    console.log("PP", largest, largestIndex);
+    // console.log("PP", largest, largestIndex);
     const frequency = largestIndex * binSize;
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
     return [midiNumber, frequency];
@@ -41,8 +41,8 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     const square = (x) => x*x;
     const FFT = new FFTJS(fftWindowSize);
 
-    console.time("fft")
-    console.log("fft input", dataBuffer)
+    // console.time("fft")
+    // console.log("fft input", dataBuffer)
     const transform  = FFT.createComplexArray();
     FFT.realTransform(transform, dataBuffer);
     
@@ -52,13 +52,14 @@ function getSpectrum(dataBuffer, fftWindowSize) {
         spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
     }
 
-    console.timeEnd("fft");
+    // console.timeEnd("fft");
 
     return spectrum;
 }
 
 function getNoteName(midiNumber) {
-    const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
+    // const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
+    const SEMITONES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "B", "H"]
     const letter = SEMITONES[midiNumber % 12];
     const octaveNumber = parseInt(midiNumber /12) -1;
 

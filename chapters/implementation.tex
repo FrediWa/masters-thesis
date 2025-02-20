@@ -35,7 +35,7 @@ The proposed architecture offers flexibility without being overly complicated. T
 With a plan for the application, the next step is to implement it. The implementation, based on the arhictecture can be be roughly divided into 4 parts: recording or otherwise taking an input, passing data between the threads, accumulating and performing analysis.
 
 \subsubsection{Audio input}
-As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by Finlands svenska manssångarförbund (FSM), an alliance of finland-swedish men's choirs were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node.
+As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by FSM were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-B.js}
 
 \subsubsection{Worklet nodes}
@@ -69,7 +69,7 @@ if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
  this.fftBufferIteratorOffset = 0;
 }
 \end{lstlisting}
-When enough samples have been accumulated, a threshold which can be tuned, the analysis starts and the buffer iterator offset is reset. After the offset is reset, the new render quanta start to overrite old render quanta. Because the entire buffer is read at once, this is all the functionality we need for the accumulation. 
+When enough samples have been accumulated, a threshold which can be tuned, the analysis starts and the buffer iterator offset is reset. After the offset is reset, the new render quanta start to overrite old render quanta. Because the entire buffer is read at once, this is all the functionality from a ring buffer we need for the accumulation. 
 
 \subsection{Finding the fundemental frequency}
 When enough samples have been collected (set to 6000 while development and testing), the next step is to forward transform the signal into the frequency domain. The following function is called which runs a 16384-point FFT using a library called "fft.js" by GitHub user indutny which claims to be "The fastest JS Radix-4/Radix-2 FFT implementation". The function is also responsible for creating the spectrum by calculating the magnitude of each complex data point using the pythagorean theorem. 
@@ -83,7 +83,7 @@ The spectrum is then passed on to a function which computes the HPS of the spect
 The array is instatiated, not as 0's, but as 1's for the multiplicative nature of the HPS.  
 
 \subsection{Post processing}
-Post processing here refers to everything that is done after the fundemental frequency has been found
+Post processing here refers to everything that is done after the fundemental frequency has been found. It is strictly not necessary for pitch detection, but may help in simplifying analysis relating to the fundental frequency like scoring the accuracy of the user's singing. Post processing also helps the user understand better what they may be doing wrong as pure frequencies mean very little to humans. 
 
 \subsubsection{MIDI number to semitone name}
 A fomula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript as shown in the following snippet.
@@ -104,7 +104,7 @@ function getSemitoneName(midiNumber) {
     return "" + letter + octaveNumber; 
 }
 \end{lstlisting}
-A minor note about the code above, for a generic pitch detector, the symbols in the SEMITONES array would be fine but it is theoretically not correct for any key.  For a proper application, it should be a variable to match the key of a piece which a person is singing/practicing. For example for the E-flat minor key, the SEMITONES would still start on C, but the second element should be "Db" (b for flat) as the E-flat minor scale contains a D-flat instead of a C-sharp. At logic level, these are represented by the exact same MIDI number class, which is all the MIDI numbers 1 above a multiple of 12, but at the presentation layer, it makes a difference for someone able to read sheet music would most likely react to the mismatch in notation.
+A minor note about the code above, for a generic pitch detector, the symbols in the SEMITONES array would be fine but it is theoretically not correct for every key. For a proper application, it should be a variable to match the key of a piece which a person is singing/practicing. For example for the E-flat minor key, the SEMITONES would still start on C, but the second element should be "Db" (b for flat) as the E-flat minor scale contains a D-flat instead of a C-sharp. At logic level, these are represented by the exact same MIDI number class, which is all the MIDI numbers 1 above a multiple of 12, but at the presentation layer, it makes a difference for someone able to read sheet music would most likely react to the mismatch in notation.
 
 \subsection{Integrating with VSS}
 VSS is an initialism that will be used to refer to the host application that can compare the pitch detector result to the notes of a piece or song. 
