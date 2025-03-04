@@ -1,6 +1,20 @@
 import visualize from "./visualize.js";
 import { FFTJS } from "./fftjs.js";
 
+
+//---snippet-start-B
+function spectralFlatness(signal) {
+    console.log(signal)
+    const N = signal.length;
+    const logSum = signal.reduce((acc, value) => acc + Math.log(value + 0.01), 0);
+    const sum = signal.reduce((acc, value) => acc + value, 0);
+    const geometricMean = Math.exp(logSum/N);
+    const arithmeticMean = sum/N;
+    console.log(logSum, sum, geometricMean, arithmeticMean);
+    return geometricMean/arithmeticMean;
+}
+//---snippet-end-B
+
 //---snippet-start-A
 function hps(array, maxHarmonics) {
     const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
@@ -57,6 +71,27 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     return spectrum;
 }
 
+function isValidNote(checkFlatness, flatnessCriteria, checkOutlier, midiNumber) {
+    let isValid = true;
+
+    if (checkFlatness) {
+        console.log("checking flatness");
+        if (!flatnessCriteria) {
+            isValid = false;
+        }
+    }
+    
+    if (checkOutlier) {
+        console.log("checking outliers");
+        const C2 = 36, C6 = 84;
+        if (midiNumber < C2 || midiNumber > C6) {
+            isValid = false;
+        }
+    }
+
+    return isValid;
+}
+
 function getNoteName(midiNumber) {
     // const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
     const SEMITONES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "B", "H"]
@@ -66,4 +101,4 @@ function getNoteName(midiNumber) {
     return "" + letter + octaveNumber;
 }
 
-export { hps, postProcess, getSpectrum, getNoteName }
+export { hps, postProcess, getSpectrum, getNoteName, spectralFlatness, isValidNote }

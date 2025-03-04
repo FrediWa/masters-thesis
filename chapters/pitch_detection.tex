@@ -124,7 +124,11 @@ $$Y = \prod_{r=2}^R X_r$$ where $X_r$ denotes the signal $X$ downsampled by $r$.
 
 HPS is a good algorithm because it's simple and easy to compute making it suitable for real-time analysis. It also has the ability to 
 
-One problem with the HPS is that it does not perform well in the case of lacking harmonics \cite{McLeod2008}. This likely won't be a problem because human voices should be rich in harmonic content. According to \cite{Smyth2019}, the HPS is also prone to getting octaves wrong, but that did not seem to be the case when testing preliminarily with guitar, piano and a voice.
+The biggest problem with the HPS is that it does not perform well in the case of lacking harmonics \cite{McLeod2008}. This likely won't be a problem because human voices should be rich in harmonic content. In the more extreme case where noise is dominating, the system would still compute the HPS and one largest peak would form somewhere, resulting in garbage data. A possible way to mitigate this is to check the spectral flatness (sometimes called tonality) of the signal and ignore the results if over a certain threshold. Spectral flatness is usually defined as the ratio of the geometric mean and arithmetic mean of the power spectrum. This will be revisited in a later chapter.
+
+% !!!!!! ------------------------- Actually, this seems to happen sometimes, look into it.
+\todo{The following is not entirely right, do something about it}
+According to \cite{Smyth2019}, the HPS is also prone to getting octaves wrong, but that did not seem to be the case when testing preliminarily with guitar, piano and a voice.
 
 % CFAR
 \subsubsection{Constant False Alarm Rate}

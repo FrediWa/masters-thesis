@@ -1,6 +1,6 @@
 import { Recorder } from "./Recorder.js";
 import { BridgeNode } from "./nodes/BridgeNode.js";
-import { hps, postProcess, getNoteName, getSpectrum } from "./analysis.js"
+import { hps, postProcess, getNoteName, getSpectrum, spectralFlatness, isValidNote} from "./analysis.js"
 import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
@@ -18,6 +18,9 @@ export class PitchDetector {
       this.noteGraph = null;
       this.tempoInterval = null;
       this.accumulatedNotes = [];
+      this.currentDetectedNote = null;
+      this.checkFlatness = true;
+      this.checkOutliers = true;
 
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
@@ -79,7 +82,7 @@ export class PitchDetector {
       const BPM = 120;
       this.tempoInterval = setInterval(() => {
         console.log("Beat")
-        this.accumulatedNotes.push(document.getElementById("midi-number").innerHTML);
+        this.accumulatedNotes.push(this.currentDetectedNote);
       }, 30000/BPM);
       
       await this.audioContext.resume();
@@ -103,6 +106,7 @@ export class PitchDetector {
         clearInterval(this.tempoInterval);
 
       this.audioContext.suspend();
+      this.currentDetectedNote = null;
 
       Recorder.stopRecording(this);
       console.log(this.accumulatedNotes);
@@ -142,14 +146,29 @@ export class PitchDetector {
         }
         // console.log("FFT largest", largestIndex, largestIndex*binSize); 
         // Until like here.
+        const flatness = spectralFlatness(spectrum);
+        document.querySelector("#spectral-flatness").innerHTML = flatness;
+        
         const peak = hps(spectrum, 5);
         visualize("hpsCanvas",  peak, [40, 300], SAMPLE_RATE/FFT_WINDOW_SIZE);
         
         const [midiNumber, frequency] = postProcess(peak, binSize);
+
+        // Update note only if not flat to avoid garbage from HPS.
+        if (flatness < 0.6 || !this.checkFlatness) {
+        }
+
+        const flatnessCriteria = flatness < 0.6;
+
+        if (isValidNote(this.checkFlatness, flatnessCriteria, this.checkOutliers, midiNumber)) {
+          this.currentDetectedNote = midiNumber
+        }
+
+
         // console.log(midiNumber, frequency);
-        const noteName = getNoteName(midiNumber);
+        const noteName = getNoteName(this.currentDetectedNote);
         document.getElementById("note-name").innerHTML = noteName;
-        document.getElementById("midi-number").innerHTML = midiNumber;
+        document.getElementById("midi-number").innerHTML = this.currentDetectedNote;
 
         this.fftBufferIteratorOffset = 0;
     }
