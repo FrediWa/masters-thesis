@@ -1,6 +1,13 @@
 import { Recorder } from "./Recorder.js";
 import { BridgeNode } from "./nodes/BridgeNode.js";
-import { hps, postProcess, getNoteName, getSpectrum, spectralFlatness, isValidNote} from "./analysis.js"
+import { hps, 
+  postProcess, 
+  getNoteName, 
+  getSpectrum, 
+  spectralFlatness, 
+  isValidNote, 
+  drawResults, 
+  exponentialMovingAverage} from "./analysis.js"
 import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
@@ -48,6 +55,9 @@ export class PitchDetector {
         this.bridgeCallback.bind(this),
       );
       //---snippet-end-A
+
+     
+
       
       // Connect neccessary nodes. The source node is created and connected in the play method.
       // this.nodes.elementSource.connect(this.audioContext.destination);
@@ -55,17 +65,17 @@ export class PitchDetector {
       //---snippet-start-B
       this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
       //---snippet-end-B
-      // const oscillator = this.audioContext.createOscillator();
 
-      // oscillator.frequency.setValueAtTime(330, this.audioContext.currentTime); // value in hertz
-      // oscillator.connect(this.audioContext.destination);
-      // oscillator.connect(this.nodes.bridge);
-      // oscillator.start();
     }
     
     setupDOM() {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
+
+        document.querySelector("#media-element-source").addEventListener("ended", 
+          () => drawResults("results-canvas", this.accumulatedNotes)
+        )
+
     }
       
     async setup() {
@@ -78,22 +88,27 @@ export class PitchDetector {
       if (this.recording)
         return;
       this.recording = true;
+
+      this.accumulatedNotes = [];
       
+      // console.log("Beat")
+      //---snippet-start-D
       const BPM = 120;
       this.tempoInterval = setInterval(() => {
-        console.log("Beat")
         this.accumulatedNotes.push(this.currentDetectedNote);
-      }, 30000/BPM);
-      
+      }, 60*1000/(BPM*2));
+      //---snippet-end-D
+
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
+
+
       this.nodes.elementSource.connect(this.nodes.channelSplitter);
 
-      const mediaElement = document.getElementById("media-element-source");
+      const mediaElement = document.querySelector("#media-element-source");
       mediaElement.currentTime = 0;
       mediaElement.play();
-      mediaElement.loop = true;
     }
     
     stop() {
@@ -110,7 +125,11 @@ export class PitchDetector {
 
       Recorder.stopRecording(this);
       console.log(this.accumulatedNotes);
-      this.accumulatedNotes = [];
+
+      const mediaElement = document.querySelector("#media-element-source");
+      // Stop by playing at the end.
+      mediaElement.currentTime = mediaElement.duration; // Seek to the end
+      mediaElement.play();
     }
 
     analyze(data) {
@@ -132,7 +151,7 @@ export class PitchDetector {
         // console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
-        visualize("fftCanvas", spectrum, [40, 2000], SAMPLE_RATE/FFT_WINDOW_SIZE);
+        visualize("fftCanvas", spectrum, [0, 2500], SAMPLE_RATE/FFT_WINDOW_SIZE);
         // This is mostly for debugging.
         let largest = 0;
         let largestIndex = 0;
@@ -147,10 +166,11 @@ export class PitchDetector {
         // console.log("FFT largest", largestIndex, largestIndex*binSize); 
         // Until like here.
         const flatness = spectralFlatness(spectrum);
-        document.querySelector("#spectral-flatness").innerHTML = flatness;
         
-        const peak = hps(spectrum, 5);
-        visualize("hpsCanvas",  peak, [40, 300], SAMPLE_RATE/FFT_WINDOW_SIZE);
+        const peak = hps(spectrum, 4);
+        const hpsFlatness = spectralFlatness(peak);
+        document.querySelector("#spectral-flatness").innerHTML = hpsFlatness;
+        visualize("hpsCanvas",  peak, [0, 2500], SAMPLE_RATE/FFT_WINDOW_SIZE);
         
         const [midiNumber, frequency] = postProcess(peak, binSize);
 
@@ -159,14 +179,15 @@ export class PitchDetector {
         }
 
         const flatnessCriteria = flatness < 0.6;
+        const hpsFlatnessCriteria = hpsFlatness < 0.6;
 
-        if (isValidNote(this.checkFlatness, flatnessCriteria, this.checkOutliers, midiNumber)) {
-          this.currentDetectedNote = midiNumber
+        if (isValidNote(this.checkFlatness, flatnessCriteria, hpsFlatnessCriteria, this.checkOutliers, midiNumber)) {
+          this.currentDetectedNote = midiNumber;
         }
 
-
         // console.log(midiNumber, frequency);
-        const noteName = getNoteName(this.currentDetectedNote);
+        const AflatScale = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "B", "H"]
+        const noteName = getNoteName(this.currentDetectedNote, AflatScale);
         document.getElementById("note-name").innerHTML = noteName;
         document.getElementById("midi-number").innerHTML = this.currentDetectedNote;
 
@@ -182,4 +203,3 @@ export class PitchDetector {
 }
 
 const detector = new PitchDetector();
-

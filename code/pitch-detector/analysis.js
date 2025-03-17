@@ -4,15 +4,15 @@ import { FFTJS } from "./fftjs.js";
 
 //---snippet-start-B
 function spectralFlatness(signal) {
-    console.log(signal)
     const N = signal.length;
     const logSum = signal.reduce((acc, value) => acc + Math.log(value + 0.01), 0);
     const sum = signal.reduce((acc, value) => acc + value, 0);
     const geometricMean = Math.exp(logSum/N);
     const arithmeticMean = sum/N;
-    console.log(logSum, sum, geometricMean, arithmeticMean);
+
     return geometricMean/arithmeticMean;
 }
+
 //---snippet-end-B
 
 //---snippet-start-A
@@ -71,12 +71,19 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     return spectrum;
 }
 
-function isValidNote(checkFlatness, flatnessCriteria, checkOutlier, midiNumber) {
+function isValidNote(checkFlatness, flatnessCriteria, hpsFlatnessCriteria, checkOutlier, midiNumber) {
     let isValid = true;
 
     if (checkFlatness) {
         console.log("checking flatness");
         if (!flatnessCriteria) {
+            isValid = false;
+        }
+    }
+
+    if (checkFlatness) {
+        console.log("checking hps flatness");
+        if (!hpsFlatnessCriteria) {
             isValid = false;
         }
     }
@@ -92,13 +99,82 @@ function isValidNote(checkFlatness, flatnessCriteria, checkOutlier, midiNumber) 
     return isValid;
 }
 
-function getNoteName(midiNumber) {
-    // const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
-    const SEMITONES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "B", "H"]
-    const letter = SEMITONES[midiNumber % 12];
+function drawResults(canvasID, data) {
+    data = data.filter(e => e != null);
+    console.log("draw", data);
+    const canvas = document.getElementById(canvasID);
+    const ctx = canvas.getContext("2d");
+    
+    const width = canvas.width;
+    const height = canvas.height;
+    const barWidth = width / data.length;
+    
+    // Normalize data.
+    const maxVal = Math.max(...data);
+    const minVal = Math.min(...data);
+
+    console.log(minVal);
+
+    const range = maxVal - minVal || Number.MIN_VALUE; // Avoid division by zero
+    
+    // Visualize.
+    data.forEach((value, index) => {
+        const intensity = ((value - minVal) / range) * 100;
+        console.log(value, intensity);
+        // ctx.fillStyle = `hsl(0 0% 100%)`;
+        ctx.fillStyle = `hsl(0 0% ${intensity}%)`;
+        console.log("fill", ctx.fillStyle);
+        ctx.fillRect(index * barWidth, 0, barWidth, height);
+    });
+}
+
+
+// const SEMITONES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "B", "H"]
+
+//---snippet-start-C
+function getNoteName(midiNumber, scale) {
+    const letter = scale[midiNumber % 12];
     const octaveNumber = parseInt(midiNumber /12) -1;
 
     return "" + letter + octaveNumber;
 }
+//---snippet-end-C
 
-export { hps, postProcess, getSpectrum, getNoteName, spectralFlatness, isValidNote }
+function exponentialMovingAverage(data, alpha) {
+    if (data.length === 0) return [];
+    
+    let emaArray = [];
+    let prevEMA = data[0]; // Initialize with the first data point
+    
+    for (let i = 0; i < data.length; i++) {
+        prevEMA = alpha * data[i] + (1 - alpha) * prevEMA;
+        emaArray.push(prevEMA);
+    }
+    
+    return emaArray;
+}
+
+function enchancePeaks(signal, alpha = 1.5) {
+    const enhanced = new Array(signal.length).fill(0);
+    const gapCellCount = 2;
+    const refCellCount = 5;
+    for (let i = 0; i < signal.length; i++) {
+        // Define local reference window (excluding the target cell)
+        let start = Math.max(0, i - windowSize);
+        let end = Math.min(signal.length, i + windowSize);
+        
+        let refCells = signal.slice(start, end).filter((_, idx) => idx !== i - start);
+
+        // Compute mean noise level
+        let noiseLevel = refCells.length > 0 
+            ? refCells.reduce((sum, val) => sum + val, 0) / refCells.length 
+            : 0;
+
+        // Apply CFAR thresholding (boost if above noise level)
+        enhanced[i] = signal[i] > alpha * noiseLevel ? signal[i] * alpha : signal[i];
+    }
+
+    return enhanced;
+}
+
+export { hps, postProcess, getSpectrum, getNoteName, spectralFlatness, isValidNote, drawResults, exponentialMovingAverage}
