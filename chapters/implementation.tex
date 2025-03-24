@@ -116,6 +116,20 @@ The semitones were previously defined, but those were only the semitones for cer
 \end{lstlisting}
 
 \subsection{Current detected note and sampling}
-The system continuously performs the FFT, checks for analysis criteria, HPS and post processing and is completely independant from the pace of the reference. This means that the output of the system is a stream as well. The proposed solution is to sample this stream and a pace that matches the reference. As the stream itself is not interesting but rather just the one note at a certain point in time, that number is stored as a single integer. This integer is called currentDetectedNote. For example, Finlandia's \textit{allegro} was first assumed to be around 120BPM and then timed to be close to this. The shortest notes in Finlandia are 8th notes which means that the system should sample frequently enough to catch 8th notes. As beats are implied to be quarter notes, 8th note (half the length of a quarter) should be sampled at 240BPM. A minute is 60000 milliseconds so the sampling interval should be $\frac{60000}{(8/4)*120} = 250ms$. The values for these computations are once again hardcoded. Notes faster than 64th notes are very uncommon so $\frac{60000}{(64/4)*120} = 31.25ms$ would most likely be sufficient and the tempo can be inferred from the source. The snippet below shows how JavaScript is used to set up an interval that samples the continuously changing integer which represents the current detected note.
+The system continuously performs the FFT, checks for analysis criteria, HPS and post processing and is completely independant from the pace of the reference. This means that the output of the system is essentially a stream as well. The proposed solution is outlined in figure \ref{fig:samplerArch} where the output stream is fed into a sampler to get a discrete sequence of notes. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{./images/samplerArch.png}
+    \caption{Diagram of how a sampler interfaces with the system\label{fig:samplerArch}}
+\end{figure}
+
+An optional metronome could be added by triggering a click from the sampler. The click should not be triggered on every sample as multiple samples would likely be taken on every beat. 
+
+The sampler subsystem is realized by continuously updating a single value in the pitch detector context and that value is checked by a function that is called periodically. For example, Finlandia's \textit{allegro} was first assumed to be around 120BPM and then timed to be close to this. The shortest notes in Finlandia are 8th notes which means that the system should sample frequently enough to catch 8th notes (if sampling happened on 4th notes, the system could only check the first of a pair of 8th notes). As beats are implied to be quarter notes, 8th note (half the length of a quarter) should be sampled at 240BPM. A minute is 60000 milliseconds so the sampling interval should at the very least be $\frac{60000}{(8/4)*120} = 250ms$. This is the slowest pace at which Finlandia must be sampled without losing information.
+
+Note that 250ms is not a latency that is added to t he latency of the pitch detector. Assuming the timing is set up correctly between the metronome and the sampler, the sampler would catch the note the user is singing and give feedback instantly, it just wouldn't give anymore feedback for another 250ms. This is likely fine because if the user can hit a note, they can likely also hold it for 250ms. Sampling faster would likely just give redundant feedback, however, this could be explored further. 
+
+The values for these computations are once again hardcoded. Notes faster than 32th notes are not very common, so $\f(T) = frac{60000}{(32/4)*T} = \frac{7500}{T} ms/beat$, where $T$ is the tempo in beats per minute, would most likely be sufficient for any scenario and the tempo can be inferred from the source. The snippet below shows how JavaScript is used to set up an interval that samples the continuously changing integer which represents the current detected note.
 
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-D.js}

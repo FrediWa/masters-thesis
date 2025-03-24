@@ -17,8 +17,8 @@ The Fourier Transform is a operation that finds components that may be used to b
 \end{figure}
 
 Even though the the FT is an incredibly powerful function, its formula is compact. 
-$$\hat{f}(\zeta) = \int_{-\infty}^{\infty} f(t)e^{-i2\pi\zeta t} dt$$
-The variable $\zeta$ is used here to emphasize that the output is complex. It's also worth noting at this point that "transform" refers both to the act of transforming the function between domains but sometimes also the output values are called the transform.
+$$\hat{f}(x) = \int_{-\infty}^{\infty} f(t)e^{-i2\pi x t} dt$$
+It's worth noting at this point that "transform" refers both to the act of transforming the function between domains but sometimes also the output values are called the transform. The time-domain to frequency-domain transform is sometimes called the forward transform to emphasize the direction of the transform as the inverse (frequency-domain to time-domain) is also called a transform.
 
 % High level description of the Fourier transform.
 \subsubsection{The big idea}
@@ -31,7 +31,7 @@ The idea behind the Fourier transform is that when some signal/function is multi
 \]
 
 % ---- Check the following statement with Antti: ----
-The interval $[0, 2\pi]$ is only correct if $m, n \in \mathbb{Z}$. For the reals and rationals, the interval needs to be sufficiently large. The simplest way is to just integrate from $-\infty$ to $\infty$ like the formula wants us to and the respective integral will converge to either $0$ or $\pi$. Figure \ref{fig:transformIdea} shows how integer valued $m$ and $n$ work together or against eachother. \todo'{I agree, it's weird, I'm just not sure what to do with it}
+The interval $[0, 2\pi]$ is only correct if $m, n \in \mathbb{Z}$. For the reals and rationals, the interval needs to be sufficiently large. The simplest way is to just integrate from $-\infty$ to $\infty$ like the formula wants us to and the respective integral will converge to either $0$ or $\pi$. Figure \ref{fig:transformIdea} shows how integer valued $m$ and $n$ work together or against eachother. \todo{I agree, it's weird, I'm just not sure what to do with it}
 
 \begin{figure}[ht]
     \centering
@@ -133,7 +133,7 @@ Time complexity refers to the asymptotic performance of an algorithm. Even thoug
 
 Perhaps the most popular algorithms, the Cooley-Tukey FFT, has an algorithmic complexity of $O(n \log n)$, a significant speed up over $O(n^2)$ \cite{Randhawa2018} \cite{HeidemanEtAl1984}. Once in Big-O, the base of the logarithm does not matter, the only thing that matters is that it is logarithmic \todo{Does this need source?}. An improvement from $O(n^2)$ to $O(n \log n)$ means that even with a mere 1000 samples, the speed up, purely in terms of time complexity, is around 100x. In a paper by James Cooley, he examplified a computation with the Fourier transform of a dataset of 512000 data points which he claims would see an around 12800x speedup with the FFT \cite{Cooley1987}. 512000 data points would take on the order of 262 billion operations to complete with an $O(n^2)$ algorithm, which with a modern personal computer can take minutes to complete. An $O(n \log n)$ algorithm takes a relatively measly 9.7 million operations and runs in milliseconds. This is akin to measuring the execution time of Quick sort to Bubble sort for an array of size 512000 which indeed sees a speedup of this magnitude.
 
-This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident after the chapter on the applications of Fourier methods, but essentially, the FFT is considered by some to be one of the most important algorithms in history due to being able to perform important (every-day) heavy computations instantenously. 
+This speedup in execution time and theoretical time complexity improvement demonstrates the power of the FFT. Why this improvement is so important will hopefully be evident later, but essentially, the FFT is considered by some to be one of the most important algorithm in history due to being able to perform important (every-day) heavy computations instantenously. 
 
 \subsubsection{Brief history of the FFT} \todo{this whole section is bad, I'll either fix it or remove it later}
 The history of the FFT is long and cloudy with multiple scientists working on a similar problem between 1800-2000. Cooley and Tukey introduced their algorithm in 1965 and at the time it was regarded as a completely new and revolutionizing algorithm. Based on the papers [A] and [B], the FFT and similar numerical methods were developed in two chains. One of them was started with Euler and Lagrange which Gauss based his work on. Runge's work is based on ????????? Gauss and was the basis for a lot of other development. The other chain, which seemingly does not link to Gauss is where Cooley-Tukey exists. They tributed I.J. Good in their paper even though their algorithm was pretty different from the Good one, which is now commonly called the Prime Factor Algorithm and sometimes Good-Thomas. 

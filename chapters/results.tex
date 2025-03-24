@@ -1,4 +1,4 @@
-As with many modern software projects, this system was not built with a waterfall methodology. The presentation of the results here are largely divided into two phases; problems idenfied during development and the results after the system was concluded to be a minimum viable product. 
+As with many modern software projects, this system was not built with a waterfall methodology. This means that a lot of testing was done in parallel with development and minor problems have been mitigated. The results presented here is the state of the project when development halted, when the project is a minimum viable product with the biggest issues fixed.
 
 \subsection{Method of testing}
 Finlands-svenska manssångarförbundet (FSM) has kindly provided recordings of each of the parts of a TTBB choir's rendition of Finlandia. The notes for these were not provided but sheet music of the same rendition were found online and manually verified to be correct. As a reminder, the system simply "listens" to the input stream and then just notes what the current detected note in time is. A separate time-keeper was added, which samples the detected note at regular intervals. As long as the sample frequency is small enough, no information is lost. However, as it was discussed, a performance of a piece is seldom an exact isntance of the definition (sheet music), especially in terms of tempo. Certain sections may be dragged out for example, for whatever reason. Dynamic time warping (DTW) was proposed as a solution to comparing the performance and the definition for its ability to focus parallels between substructures rather than absolute similarity.
@@ -12,6 +12,8 @@ For Finlandia, sampling at 8th notes is sufficient, because it does not contain 
 \end{figure}
 
 Figure \ref{fig:sheetEncoding} is the same as the top part of figure \ref{fig:performance-sheet}. The bottom part of that was a manually cleaned up version of the pitch detector's first effort, purely for demonstration purposes, which was why more elaboration was not done at that time. DTW is only used to compare the recordings provided by FSM for a more proper test. In the real-time pitch detector, each note is directly tested as time goes on.
+
+
 
 \subsection{Problems with HPS}
 
