@@ -17,10 +17,10 @@ function spectralFlatness(signal) {
 
 //---snippet-start-A
 function hps(array, maxHarmonics) {
-    const harmonicProductSpectrum = new Float32Array(array.length/(maxHarmonics + 2));
+    const harmonicProductSpectrum = new Float32Array(array.length/maxHarmonics);
     harmonicProductSpectrum.fill(1); // Multiplicative identity for HPS. 
 
-    for (let harmonic = maxHarmonics; harmonic >= 1; harmonic--) {
+    for (let harmonic = 1; harmonic <= maxHarmonics; harmonic++) {
         for (let i = 0; i < harmonicProductSpectrum.length; i++) {
             harmonicProductSpectrum[i] *= array[i*harmonic];
         }
@@ -100,8 +100,9 @@ function isValidNote(checkFlatness, flatnessCriteria, hpsFlatnessCriteria, check
 }
 
 function drawResults(canvasID, data) {
+    console.log(data);
     data = data.filter(e => e != null);
-    console.log("draw", data);
+    // console.log("draw", data);
     const canvas = document.getElementById(canvasID);
     const ctx = canvas.getContext("2d");
     
@@ -123,7 +124,7 @@ function drawResults(canvasID, data) {
         console.log(value, intensity);
         // ctx.fillStyle = `hsl(0 0% 100%)`;
         ctx.fillStyle = `hsl(0 0% ${intensity}%)`;
-        console.log("fill", ctx.fillStyle);
+        // console.log("fill", ctx.fillStyle);
         ctx.fillRect(index * barWidth, 0, barWidth, height);
     });
 }

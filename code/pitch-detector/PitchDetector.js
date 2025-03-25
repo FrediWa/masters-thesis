@@ -27,7 +27,8 @@ export class PitchDetector {
       this.accumulatedNotes = [];
       this.currentDetectedNote = null;
       this.checkFlatness = true;
-      this.checkOutliers = true;
+      this.checkOutliers = true
+      this.hpsIterations = 4;
 
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
@@ -167,7 +168,7 @@ export class PitchDetector {
         // Until like here.
         const flatness = spectralFlatness(spectrum);
         
-        const peak = hps(spectrum, 4);
+        const peak = hps(spectrum, this.hpsIterations);
         const hpsFlatness = spectralFlatness(peak);
         document.querySelector("#spectral-flatness").innerHTML = hpsFlatness;
         visualize("hpsCanvas",  peak, [0, 2500], SAMPLE_RATE/FFT_WINDOW_SIZE);
