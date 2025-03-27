@@ -28,7 +28,7 @@ export class PitchDetector {
       this.currentDetectedNote = null;
       this.checkFlatness = true;
       this.checkOutliers = true
-      this.hpsIterations = 4;
+      this.hpsIterations = 6;
 
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
