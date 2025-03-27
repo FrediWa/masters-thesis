@@ -1,0 +1,89 @@
+2 C4
+2 B3
+2 C4
+
+6 Dess3
+2 C4
+
+2 B3
+2 C4
+3 Ass3
+1 B3
+
+2 B3
+8 C4
+
+
+2 C4
+2 B3
+2 C4
+
+6 Dess3
+2 C4
+
+2 B3
+2 C4
+3 Ass3
+1 B3
+
+10 C4
+
+2 Ess4
+2 Ess4
+2 Ess4
+
+6 F4
+2 C4
+
+2 C4
+2 Ess4
+3 Ess4
+1 B3
+
+2 B3
+8 Dess4
+
+
+2 Dess4
+2 C4
+2 B3
+
+6 C4
+2 Ass3
+
+2 Ass3 
+4 B3
+2 C4
+
+10 C4
+
+
+2 Ess4
+2 Ess4
+2 Ess4
+
+6 F4
+2 C4
+
+2 C4
+2 Ess4
+3 Ess4
+1 B3
+
+2 B3
+8 Dess4
+
+2 Dess4
+2 C4
+2 B3
+
+6 C4
+2 Ass
+
+2 Ass3
+5 B3
+1 Ass3
+
+10 Ass3
+
+
