@@ -12,7 +12,7 @@ import visualize from "./visualize.js";
 
 const RENDER_QUANTUM_SIZE = 128;
 const FFT_WINDOW_SIZE = 16384;
-const SAMPLE_RATE = 44100;
+const SAMPLE_RATE = 48000;
 const FFT_TARGET_SAMPLE_SIZE = 6000;
 export class PitchDetector {
 
@@ -44,11 +44,11 @@ export class PitchDetector {
       await this.setupProcessors();
 
       // Create all necessary nodes.
-      this.nodes.elementSource = this.audioContext.createMediaElementSource(
-        document.getElementById("media-element-source")
-      );
+      // this.nodes.elementSource = this.audioContext.createMediaElementSource(
+      //   document.getElementById("media-element-source")
+      // );
 
-      this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
+      // this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
 
       //---snippet-start-A
       this.nodes.bridge = new BridgeNode(
@@ -62,9 +62,9 @@ export class PitchDetector {
       
       // Connect neccessary nodes. The source node is created and connected in the play method.
       // this.nodes.elementSource.connect(this.audioContext.destination);
-      this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
+      // this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
       //---snippet-start-B
-      this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
+      // this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
       //---snippet-end-B
 
     }
@@ -73,9 +73,9 @@ export class PitchDetector {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
 
-        document.querySelector("#media-element-source").addEventListener("ended", 
-          () => drawResults("results-canvas", this.accumulatedNotes)
-        )
+        // document.querySelector("#media-element-source").addEventListener("ended", 
+        //   () => drawResults("results-canvas", this.accumulatedNotes)
+        // )
 
     }
       
@@ -90,6 +90,7 @@ export class PitchDetector {
         return;
       this.recording = true;
 
+      Recorder.startRecording(this);
       this.accumulatedNotes = [];
       
       // console.log("Beat")
@@ -103,13 +104,14 @@ export class PitchDetector {
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
+      this.microphoneNode.connect(this.nodes.bridge);
+      this.microphoneNode.connect(this.audioContext.destination);
 
+      // this.nodes.elementSource.connect(this.nodes.channelSplitter);
 
-      this.nodes.elementSource.connect(this.nodes.channelSplitter);
-
-      const mediaElement = document.querySelector("#media-element-source");
-      mediaElement.currentTime = 0;
-      mediaElement.play();
+      // const mediaElement = document.querySelector("#media-element-source");
+      // mediaElement.currentTime = 0;
+      // mediaElement.play();
     }
     
     stop() {
@@ -129,8 +131,8 @@ export class PitchDetector {
 
       const mediaElement = document.querySelector("#media-element-source");
       // Stop by playing at the end.
-      mediaElement.currentTime = mediaElement.duration; // Seek to the end
-      mediaElement.play();
+      // mediaElement.currentTime = mediaElement.duration; // Seek to the end
+      // mediaElement.play();
     }
 
     analyze(data) {
@@ -149,7 +151,7 @@ export class PitchDetector {
         // Run the fourier transform and compute spectrum data.
         const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
 
-        // console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
+        console.log("Time taken for accumulation, zeropad and FFT:", performance.now()-this.timer, "ms");
         this.timer = 0;
 
         visualize("fftCanvas", spectrum, [0, 2500], SAMPLE_RATE/FFT_WINDOW_SIZE);

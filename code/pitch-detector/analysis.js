@@ -55,7 +55,7 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     const square = (x) => x*x;
     const FFT = new FFTJS(fftWindowSize);
 
-    // console.time("fft")
+    console.time("fft")
     // console.log("fft input", dataBuffer)
     const transform  = FFT.createComplexArray();
     FFT.realTransform(transform, dataBuffer);
@@ -66,7 +66,7 @@ function getSpectrum(dataBuffer, fftWindowSize) {
         spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
     }
 
-    // console.timeEnd("fft");
+    console.timeEnd("fft");
 
     return spectrum;
 }
@@ -75,21 +75,21 @@ function isValidNote(checkFlatness, flatnessCriteria, hpsFlatnessCriteria, check
     let isValid = true;
 
     if (checkFlatness) {
-        console.log("checking flatness");
+        // console.log("checking flatness");
         if (!flatnessCriteria) {
             isValid = false;
         }
     }
 
     if (checkFlatness) {
-        console.log("checking hps flatness");
+        // console.log("checking hps flatness");
         if (!hpsFlatnessCriteria) {
             isValid = false;
         }
     }
     
     if (checkOutlier) {
-        console.log("checking outliers");
+        // console.log("checking outliers");
         const C2 = 36, C6 = 84;
         if (midiNumber < C2 || midiNumber > C6) {
             isValid = false;
