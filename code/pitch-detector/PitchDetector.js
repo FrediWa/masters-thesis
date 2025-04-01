@@ -104,9 +104,6 @@ export class PitchDetector {
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
-      this.microphoneNode.connect(this.nodes.bridge);
-      this.microphoneNode.connect(this.audioContext.destination);
-
       // this.nodes.elementSource.connect(this.nodes.channelSplitter);
 
       // const mediaElement = document.querySelector("#media-element-source");
@@ -147,7 +144,8 @@ export class PitchDetector {
       
       // Perform all the analysis once enough samples.
       if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
-        
+        const processingTime = performance.now();
+
         // Run the fourier transform and compute spectrum data.
         const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
 
@@ -195,6 +193,7 @@ export class PitchDetector {
         document.getElementById("midi-number").innerHTML = this.currentDetectedNote;
 
         this.fftBufferIteratorOffset = 0;
+        console.log("Post processing time: ", performance.now() - processingTime);
     }
   }
 
