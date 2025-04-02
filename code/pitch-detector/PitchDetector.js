@@ -44,11 +44,11 @@ export class PitchDetector {
       await this.setupProcessors();
 
       // Create all necessary nodes.
-      // this.nodes.elementSource = this.audioContext.createMediaElementSource(
-      //   document.getElementById("media-element-source")
-      // );
+      this.nodes.elementSource = this.audioContext.createMediaElementSource(
+        document.getElementById("media-element-source")
+      );
 
-      // this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
+      this.nodes.channelSplitter = this.audioContext.createChannelSplitter(2);
 
       //---snippet-start-A
       this.nodes.bridge = new BridgeNode(
@@ -61,10 +61,10 @@ export class PitchDetector {
 
       
       // Connect neccessary nodes. The source node is created and connected in the play method.
-      // this.nodes.elementSource.connect(this.audioContext.destination);
+      this.nodes.elementSource.connect(this.audioContext.destination);
       // this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
       //---snippet-start-B
-      // this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
+      this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
       //---snippet-end-B
 
     }
@@ -73,9 +73,9 @@ export class PitchDetector {
         document.querySelector("#pd-start-btn").addEventListener("click", this.start.bind(this));
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
 
-        // document.querySelector("#media-element-source").addEventListener("ended", 
-        //   () => drawResults("results-canvas", this.accumulatedNotes)
-        // )
+        document.querySelector("#media-element-source").addEventListener("ended", 
+          () => drawResults("results-canvas", this.accumulatedNotes)
+        )
 
     }
       
@@ -104,11 +104,11 @@ export class PitchDetector {
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
-      // this.nodes.elementSource.connect(this.nodes.channelSplitter);
+      this.nodes.elementSource.connect(this.nodes.bridge);
 
-      // const mediaElement = document.querySelector("#media-element-source");
-      // mediaElement.currentTime = 0;
-      // mediaElement.play();
+      const mediaElement = document.querySelector("#media-element-source");
+      mediaElement.currentTime = 0;
+      mediaElement.play();
     }
     
     stop() {
@@ -128,8 +128,8 @@ export class PitchDetector {
 
       const mediaElement = document.querySelector("#media-element-source");
       // Stop by playing at the end.
-      // mediaElement.currentTime = mediaElement.duration; // Seek to the end
-      // mediaElement.play();
+      mediaElement.currentTime = mediaElement.duration; // Seek to the end
+      mediaElement.play();
     }
 
     analyze(data) {
@@ -164,7 +164,7 @@ export class PitchDetector {
                 largestIndex = i;
             }
         }
-        // console.log("FFT largest", largestIndex, largestIndex*binSize); 
+
         // Until like here.
         const flatness = spectralFlatness(spectrum);
         
@@ -186,7 +186,6 @@ export class PitchDetector {
           this.currentDetectedNote = midiNumber;
         }
 
-        // console.log(midiNumber, frequency);
         const AflatScale = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "B", "H"]
         const noteName = getNoteName(this.currentDetectedNote, AflatScale);
         document.getElementById("note-name").innerHTML = noteName;

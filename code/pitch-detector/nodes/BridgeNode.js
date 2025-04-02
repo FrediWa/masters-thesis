@@ -12,7 +12,7 @@ export class BridgeNode extends AudioWorkletNode{
     }
 
     handlePortData(data) {
-        // this.callback(data);
+        this.callback(data);
     }
 }
 //---snippet-end-A
