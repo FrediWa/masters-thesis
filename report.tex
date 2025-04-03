@@ -43,12 +43,21 @@
 \renewcommand{\cftsubsecfont}{\fontfamily{comfortaa}\selectfont}
 \renewcommand{\cftsubsubsecfont}{\fontfamily{comfortaa}\selectfont}
 \renewcommand{\contentsname}{\fontfamily{comfortaa}\selectfont Table of Contents}
+
+% Hide page numbering until body.
+\pagenumbering{gobble}
+
 \input{chapters/cover}
+
 \input{chapters/abstract}
 
 % ToC
 \setcounter{tocdepth}{2}
 \tableofcontents    
+\newpage 
+
+% Re-enable page numbering.
+\pagenumbering{arabic}
 
 % Introduction
 \section{Introduction}

@@ -1,5 +1,6 @@
-\subsection{Application plan}
-The application that implements the proposed pitch detection system will take the form of a graphical web based application. The web is chosen for portability and ease of use. The end user, be it an individual wanting to learn to sing or a choir testing candidates, can use any mobile device with a microphone, be it a laptop, tablet or smartphone, and without installing anything test the accuracy of their singing or tune their guitar.
+The pitch detector will be made for usage on the web. The web is chosen for portability and ease of use. The end user, be it an individual wanting to learn to sing or a choir testing candidates, can use any mobile device with a microphone, be it a laptop, tablet or smartphone, and without installing anything test the accuracy of their singing or tune their guitar.
+
+The implementation focuses on the pitch detection, but 
 
 \subsection{Web Audio API}
 As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers control over audio processing functionality on browsers, by providing access to user audio devices, adding effects and more. 
@@ -35,7 +36,7 @@ The proposed architecture offers flexibility without being overly complicated. T
 With a plan for the application, the next step is to implement it. The implementation, based on the architecture can be be roughly divided into 4 parts: recording or otherwise taking an input, passing data between the threads, accumulating and performing analysis.
 
 \subsubsection{Audio input}
-As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by FSM were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node.
+As the application is to utilize the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by FSM were used using a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node, and connect the channel with the discrete part to the bridge.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-B.js}
 
 \subsubsection{Worklet nodes}
@@ -69,34 +70,45 @@ if (this.fftBufferIteratorOffset >= FFT_TARGET_SAMPLE_SIZE) {
  this.fftBufferIteratorOffset = 0;
 }
 \end{lstlisting}
-When enough samples have been accumulated, a threshold which can be tuned, the analysis starts and the buffer iterator offset is reset. After the offset is reset, the new render quanta start to overwrite old render quanta. Because the entire buffer is read at once, this is all the functionality from a ring buffer we need for the accumulation. 
+When enough samples have been accumulated, a threshold which can be tuned, the analysis starts and the buffer iterator offset is reset. After the offset is reset, the new render quanta start overwriting old render quanta. In a limited sense, this functions as a ring buffer Because the entire buffer is read at once, this is provides all the ring buffer functionality needed for the accumulation. 
 
-\subsection{Finding the fundemental frequency}
-When enough samples have been collected (set to 6000 while development and testing), the next step is to forward transform the signal into the frequency domain. The following function is called which runs a 16384-point FFT using a library called "fft.js" by GitHub user indutny which claims to be "The fastest JS Radix-4/Radix-2 FFT implementation". The function is also responsible for creating the spectrum by calculating the magnitude of each complex data point using the pythagorean theorem. 
+\subsection{Finding the fundamental frequency}
+When enough samples have been collected (set to 6000 while development and testing), the next step is to forward transform the signal into the frequency domain. The following function is called which runs a 16384-point FFT using a library called "fft.js" by GitHub user indutny which claims to be “The fastest JS Radix-4/Radix-2 FFT implementation”. The function is also responsible for creating the spectrum by calculating the magnitude of each complex data point using the pythagorean theorem. 
+
+\lstinputlisting[style=javascript]{../snippets/analysis-D.js}
+
+The output of fft.js is a single array with alternating magnitudes and phases, which is why the frequency-magnitude computations may look odd. The function is called from the main analysis method.
+
 \begin{lstlisting}[style=javascript]
     const spectrum = getSpectrum(this.fftInputBuffer, FFT_WINDOW_SIZE);
 \end{lstlisting}
+
 The signal is implicitly zero-padded because the input array is instantiated with 0's and only a portion of them are assigned a value, precisely the first 6016 values, 6016 being the smallest multiple of the render quantum size (128) greater than the target sample size.
 
 The spectrum is then passed on to a function which computes the HPS of the spectrum. The HPS algorithm is ported to JavaScript and looks like the following. 
+
 \lstinputlisting[style=javascript]{../snippets/analysis-A.js}
-The array is instatiated, not as 0's, but as 1's for the multiplicative nature of the HPS. This can be thought of as the identity array, which means that it may be multiplied by the same loop as the other iterations, instead of first copying over the initial array before the HPS loop.
+
+The array is instantiated, not as 0's, but as 1's for the multiplicative nature of the HPS. This can be thought of as the identity array, which means that the act of copying the initial array may be done by the same loop as the other iterations with a downsampling factor of 1, or in other words, no downsampling.
 
 \subsubsection{Checking the spectrum flatness}
 While developing the system, it was revealed that the input waveform is not always very tonic and this gives a spectrum that has more noise than peaks. This seems to largely happen for two reasons. The first is the time between certain notes, when the singer either just pauses or takes a breath, resulting in complete noise. The second is that when a note is sustained and decays, it eventually loses its tonality also resulting in noise. To prevent this, the application simply ignores the incoming data until the data is something that can be worked with. 
 
 In code, the spectral flatness is first computed with a fairly typical method, the ratio of the geometric mean and the arithmetic mean as shown in the snippet below.
+
 \lstinputlisting[style=javascript]{../snippets/analysis-B.js}
-If this value is under $0.6$ (a value found empirically), the spectrum is deemed good and is given to the HPS. If the value is greater, the spectrum is ignored. The effect is that a note is assumed to continue until another clear note is received by the system. This mitigates the problems of noise due to silence or decay because the system just holds on to the last proper note it got. Assuming the detected note is sampled often enough and the user keeps tempo, the resulting performance time series will not deviate significantly from the reference time series.
+
+If this value is under $0.6$ (a value found empirically), the spectrum is deemed good and is given to the HPS. If the value is greater, the spectrum is ignored. The effect is that a note is assumed to continue until another clear note is received by the system. This mitigates the problems of noise due to silence or decay because the system just holds on to the last proper note it got. 
 
 \subsubsection{Checking outliers}
 The presence of obvious outliers were also revealed in early testing while developing. There were times, when the pitch detector would for brief periods get MIDI numbers of 32 and 80, which are lower than the lowest male bass singers and higher than the highest female singers. These are filtered out and in the same way as with non-flat spectra, by just ignoring the note. 
 
 \subsection{Post processing}
-Post processing here refers to everything that is done after the fundemental frequency is found. Checking for flatness and the outliers could be considered post processing methods, but they are done as earlier in the pipeline because it would be unnecessary to compute the HPS on a bad spectrum. Post processing is strictly not necessary for pitch detection, but may help in simplifying analysis relating to the fundental frequency like scoring the accuracy of the user's singing. Post processing also helps the user understand better what they may be doing wrong as pure frequencies mean very little to humans. 
+Post processing here refers to everything that is done after the fundamental frequency is found. Checking for flatness and the outliers could be considered post processing methods, but they are done as earlier in the pipeline because it would be unnecessary to compute the HPS on a bad spectrum. Post processing is strictly not necessary for pitch detection, but may help in simplifying analysis relating to the fundamental frequency like scoring the accuracy of the user's singing. Post processing also helps the user understand better what they may be doing wrong as pure frequencies mean very little to humans. 
 
 \subsubsection{MIDI number to semitone name}
-A fomula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript, as shown in the following snippet.
+A formula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript, as shown in the following snippet.
+
 \begin{lstlisting}[style=javascript]
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
 \end{lstlisting}
@@ -106,6 +118,7 @@ The MIDI number is convenient, because it is a semitone, a simple integer and a 
 The typical way to label a musical pitch is with SPN, where a number and a letter represents the octave and position within the octave. This is familiar to people with a background in music and it would be the desired format for a note at the presentation layer.
 
 As the notes repeat every octave and an octave consists of 12 semitones, the index that will be used to find the note within an octave is congruent to the MIDI number modulo 12. The octave number is the largest multiple of 12 strictly less than the number, which means it can be computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. The MIDI numbers, however, do align with the semitones as we start from C as C0 is the 12th MIDI number which is congruent to 0 mod 12 meaning the constant offset is 0.
+
 \lstinputlisting[style=javascript]{../snippets/analysis-C.js}
 
 The semitones were previously defined, but those were only the semitones for certain diatonic scales. Most of the semitones will be identical across scales, but the sharps and flats must be adjusted to present the sung note's name appropriately. For example, for the E-flat minor key, the SEMITONES would still start on C and would contain a D and an E, but the second element should be Db (b for flat) as the E-flat minor scale contains a D-flat instead of a C-sharp. At logic level, these are represented by the exact same MIDI number class, which is all the MIDI numbers 1 above a multiple of 12, but at the presentation layer, it makes a difference for someone able to read sheet music who would most likely react to the mismatch in notation. The reference material Finlandia is played in A-minor so the semitones for the A-minor key are hard coded in the application for testing purposes but parameterized for the note name function. In a proper application, the key could be inferred from the source (for example musicXML) and then the appropriate semitones array is applied.
@@ -116,7 +129,7 @@ The semitones were previously defined, but those were only the semitones for cer
 \end{lstlisting}
 
 \subsection{Current detected note and sampling}
-The system continuously performs the FFT, checks for analysis criteria, HPS and post processing and is completely independant from the pace of the reference. This means that the output of the system is essentially a stream as well. The proposed solution is outlined in figure \ref{fig:samplerArch} where the output stream is fed into a sampler to get a discrete sequence of notes. 
+The system continuously performs the FFT, checks for analysis criteria, HPS and post processing and is completely independent from the pace of the reference. This means that the output of the system is essentially a stream as well. The proposed solution is outlined in figure \ref{fig:samplerArch} where the output stream is fed into a sampler to get a discrete sequence of notes. 
 
 \begin{figure}[ht]
     \centering
@@ -126,10 +139,11 @@ The system continuously performs the FFT, checks for analysis criteria, HPS and 
 
 An optional metronome could be added by triggering a click from the sampler. The click should not be triggered on every sample as multiple samples would likely be taken on every beat. 
 
-The sampler subsystem is realized by continuously updating a single value in the pitch detector context and that value is checked by a function that is called periodically. For example, Finlandia's \textit{allegro} was first assumed to be around 120BPM and then timed to be close to this. The shortest notes in Finlandia are 8th notes which means that the system should sample frequently enough to catch 8th notes (if sampling happened on 4th notes, the system could only check the first of a pair of 8th notes). As beats are implied to be quarter notes, 8th note (half the length of a quarter) should be sampled at 240BPM. A minute is 60000 milliseconds so the sampling interval should at the very least be $\frac{60000}{(8/4)*120} = 250ms$. This is the slowest pace at which Finlandia must be sampled without losing information.
+The sampler subsystem is realized by continuously updating a single value in the pitch detector context and that value is checked by a function that is called periodically. For example, Finlandia's \textit{allegro} was first assumed to be around 120BPM and then timed to be close to this. The shortest notes in Finlandia are 8th notes which means that the system should sample frequently enough to catch 8th notes (if sampling happened on 4th notes, the system could only check the first of a pair of 8th notes). A minute is 60000 milliseconds so the sampling interval should at the very least be $\frac{60000}{(8/4)*120} = 250ms$. This is the slowest pace at which Finlandia must be sampled without losing information.
 
 Note that 250ms is not a latency that is added to the latency of the pitch detector. Assuming the timing is set up correctly between the metronome and the sampler, the sampler would catch the note the user is singing and give feedback instantly, it just wouldn't give anymore feedback for another 250ms. This is likely acceptable because if the user can hit a note, they can likely also hold it for 250ms. Sampling faster would likely just give redundant feedback, however, this could be explored further. 
 
-The values for these computations are once again hardcoded. Notes faster than 32th notes are not very common, so $f(T) = \frac{60000}{(32/4)*T} = \frac{7500}{T} ms/beat$, where $T$ is the tempo in beats per minute, would most likely be sufficient for any scenario and the tempo can be inferred from the source. The snippet below shows how JavaScript is used to set up an interval that samples the continuously changing integer which represents the current detected note. The period of the beat is simply $\frac{60000}{T}$ which is 8 times slower than the sampling period. One approach to creating the metronome would be to trigger a audible (or visual) cue on every 8th sample taken.  
+The values for these computations are once again hardcoded. The snippet below shows how JavaScript is used to set up an interval that samples the continuously changing integer which represents the current detected note. The period of the beat is simply $\frac{60000}{T}$ which is 8 times slower than the sampling period. One approach to creating the metronome would be to  trigger a audible (or visual) cue on every 8th sample taken.  
 
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-D.js}
+
