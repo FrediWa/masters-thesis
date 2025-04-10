@@ -63,6 +63,7 @@ function getSpectrum(dataBuffer, fftWindowSize) {
     const spectrum = new Float32Array(fftWindowSize);
     for (let i = 0; i < 16384; i++) {
         spectrum[i] = Math.sqrt(square(transform[2*i])+square(transform[2*i+1]))
+        // spectrum[i] = (spectrum[i] > 10) ? 10 : spectrum[i]
     }
 
     return spectrum;

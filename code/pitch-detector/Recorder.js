@@ -2,19 +2,19 @@
 export class Recorder {
 
     static async startRecording(detector) {
-        // const stream = await navigator.mediaDevices.getUserMedia({audio: {
-        //     channelCount: detector.audioContext.channelCount, 
-        //     sampleRate: detector.audioContext.sampleRate,
-        //     fauxField: 123,
-        // }})
+        const stream = await navigator.mediaDevices.getUserMedia({audio: {
+            channelCount: detector.audioContext.channelCount, 
+            sampleRate: detector.audioContext.sampleRate,
+        }})
         
         // console.log(detector)
         // console.log('AudioContext sample rate:', detector.audioContext.sampleRate);
         // const audioTrack = stream.getAudioTracks()[0];
         // const settings = audioTrack.getSettings();  
 
-        // detector.microphoneStream = stream;
-        // detector.microphoneNode = detector.audioContext.createMediaStreamSource(stream);
+        detector.microphoneStream = stream;
+        detector.nodes.microphoneNode = detector.audioContext.createMediaStreamSource(stream);
+        console.log("node created");
         // console.log('Number of channels:', detector.microphoneNode.channelCount);
         // console.log(detector.microphoneNode);
 

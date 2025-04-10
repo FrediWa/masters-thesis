@@ -28,7 +28,7 @@ export class PitchDetector {
       this.currentDetectedNote = null;
       this.checkFlatness = true;
       this.checkOutliers = true
-      this.hpsIterations = 6;
+      this.hpsIterations = 5;
 
       this.fftInputBuffer = new Float32Array(FFT_WINDOW_SIZE);
       this.fftBufferIteratorOffset = 0;
@@ -61,8 +61,8 @@ export class PitchDetector {
 
       
       // Connect neccessary nodes. The source node is created and connected in the play method.
-      this.nodes.elementSource.connect(this.audioContext.destination);
-      // this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
+      this.nodes.elementSource.connect(this.nodes.channelSplitter);
+      this.nodes.channelSplitter.connect(this.audioContext.destination, 0);
       //---snippet-start-B
       this.nodes.channelSplitter.connect(this.nodes.bridge, 0);
       //---snippet-end-B
@@ -74,7 +74,15 @@ export class PitchDetector {
         document.querySelector("#pd-stop-btn").addEventListener("click", this.stop.bind(this));
 
         document.querySelector("#media-element-source").addEventListener("ended", 
-          () => drawResults("results-canvas", this.accumulatedNotes)
+          () => {
+            drawResults("results-canvas", this.accumulatedNotes);
+            let str = "["
+            this.accumulatedNotes.forEach((e) => {
+              if(e != null)
+                str += (e + ",");
+            })
+            console.log(str.substring(0, str.length-1)+"]");
+          }
         )
 
     }
@@ -90,8 +98,9 @@ export class PitchDetector {
         return;
       this.recording = true;
 
-      Recorder.startRecording(this);
+      await Recorder.startRecording(this);
       this.accumulatedNotes = [];
+      console.log("after start");
       
       // console.log("Beat")
       //---snippet-start-D
@@ -104,7 +113,9 @@ export class PitchDetector {
       await this.audioContext.resume();
       this.fftBufferIteratorOffset = 0;
 
-      this.nodes.elementSource.connect(this.nodes.bridge);
+
+      this.nodes.microphoneNode.connect(this.nodes.bridge);
+      // this.nodes.elementSource.connect(this.nodes.bridge);
 
       const mediaElement = document.querySelector("#media-element-source");
       mediaElement.currentTime = 0;
@@ -167,6 +178,7 @@ export class PitchDetector {
 
         // Until like here.
         const flatness = spectralFlatness(spectrum);
+        console.log("spectrum", spectrum, Math.max(...spectrum));
         
         const peak = hps(spectrum, this.hpsIterations);
         const hpsFlatness = spectralFlatness(peak);

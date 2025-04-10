@@ -57,7 +57,7 @@ export default function visualize(canvasID, data, range=[0, 16384], binSize) {
         // console.log("bin", index, ":", data[index]);
         const x = i * xStep;
 
-        ctx.fillRect(x, canvas.height, xStep, -dataInRange[i] / maxValue * canvas.height * 0.9);
+        ctx.fillRect(x, canvas.height, xStep, -dataInRange[i] / maxValue * canvas.height * 0.6);
     }
 
 

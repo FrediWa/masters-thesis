@@ -1,7 +1,7 @@
 As with many modern software projects, this system was not built with a waterfall methodology. This means that a lot of testing was done in parallel with development and minor problems have been mitigated. The results presented here is the state of the project when development halted, when the project is a minimum viable product with the biggest issues fixed.
 
 \subsection{Method of testing}
-Finlands-svenska manssångarförbundet (FSM) has kindly provided recordings of each of the parts of a TTBB choir's rendition of Finlandia. The notes for these were not provided but sheet music of the same rendition was found online and manually verified to be correct. As a reminder, the system simply \textit{listens} to the input stream and then just notes what the current detected note in time is. A separate time-keeper was added, which samples the detected note at regular intervals. As long as the sample frequency is small enough, no information is lost. However, as was discussed, a performance of a piece is seldom an exact instance of the definition (sheet music), especially in terms of tempo. Certain sections may be dragged out, for example, for whatever reason. Dynamic time warping (DTW) was proposed as a solution to comparing the performance and the reference for its ability to focus on parallels between substructures rather than absolute similarity.
+Finlands-svenska manssångarförbundet (FSM) has kindly provided recordings of each of the parts of a TTBB choir's rendition of Finlandia. The notes for these were not provided, but sheet music of the same rendition was found online and manually verified to be correct. As a reminder, the system simply \textit{listens} to the input stream and then just notes what the current detected note in time is. A separate time-keeper was added, which samples the detected note at regular intervals. As long as the sample frequency is small enough, no information is lost. However, as was discussed, a performance of a piece is seldom an exact instance of the definition (sheet music), especially in terms of tempo. Certain sections may be dragged out, for example, for whatever reason. Dynamic time warping (DTW) was proposed as a solution to comparing the performance and the reference for its ability to focus on parallels between substructures rather than absolute similarity.
 
 For Finlandia, sampling at 8th notes is sufficient, because it does not contain shorter notes than that. As the current goal is just to check that a detected note is correct, the system needs to know what note it should expect at that moment in time. This means that the sheet music can be transcribed to a sequence of 8th notes or represented as a time series where each data point is a MIDI number equally spaced in time. Quarter notes become two 8th notes, half notes become four 8th notes and so on. Figure \ref{fig:sheetEncoding} visualizes the time series using color for amplitude.
 
@@ -49,7 +49,7 @@ Computing the average DTW error of the parts reveals that 5 iterations has the l
 \subsubsection{Octave errors}
 After outlier and flat spectra filtering, the most common type of error happens when HPS folds the spectrum in a way where multiple peaks remain. Assuming a monophonic singing, these remaining peaks are still harmonics. The system naively selects the greatest peak from these which results may result in note being in the wrong octave. For the tenors the system would go consistently lower and higher for the basses. The problem likely lies in the number of HPS iterations as based on the diagrams, it can be observed that 4 iteration HPS performs very well in certain parts and 6 iterations performs well in others. This strongly suggests that the best approach would be to have some sort of Dynamic HPS that can adjust the number of iterations depending on the number of peaks. One approach could be the do 4 iterations by default after which more are done depending on the number of remaining peaks. CFAR would be a strong candidate for this approach.
 
-Figure \ref{fig:hpsOctaveErrors} is created by computing the remainder of the MIDI numbers modulo 12 to get octave indifferent notes. It clearly shows that most of the errors in the results regardless of HPS iterations are due to octave errors. In effect, it highlights the parts where the detector got the note wrong. This analysis is done to highlight the presence of octave errors and it does not imply that the system could automatically correct octave errors by comparing notes mod 12, as this could lead to false positives if the user sung an octave wrong, which is important.
+Figure \ref{fig:hpsOctaveErrors} is created by computing the remainder of the MIDI numbers modulo 12 to get octave indifferent notes. It clearly shows that most of the errors in the results regardless of HPS iterations are due to octave errors. In effect, it highlights the parts where the detector got the note wrong. This analysis is done to highlight the presence of octave errors, and it does not imply that the system could automatically correct octave errors by comparing notes mod 12, as this could lead to false positives if the user sung an octave wrong, which is important.
 
 \begin{figure}[ht]
     \centering
@@ -58,8 +58,10 @@ Figure \ref{fig:hpsOctaveErrors} is created by computing the remainder of the MI
 \end{figure}
 
 
-\subsection{Qualitative evaluation of responsivness}S
-\subsection{Pitch detector accuracy}
+\subsection{Qualitative evaluation of responsiveness}
+The system does not feel sluggish. 
+
+\subsection{Envelope-stage-specific accuracy}
 
 
 
