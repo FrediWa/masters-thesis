@@ -1,9 +1,9 @@
-\subsection{Inledning}
+\subsection*{Inledning}
 En person med absolut gehör kan stämma en gitarr med att helt enkelt lysna på dess ljud och vrida på stämskruven tills ljudet låter rätt. En person som inte har absolut gehör måste lysna på en referens, t.ex. en stämgaffel, och jämföra ljuden. Hen hör om gitarren är lägre eller högre och kan justera ljudet i rätt riktning tills gitarren och referensen är samma. Båda fallen är exempel på tonhöjdsidentifiering. Detta är något datorer kan hjälpa med och därmed har man studerat och kommit fram till flera olika metoder. Tonhöjd har en stark anknytning till oskillations frekvensen på en ljudsignal. Vissa metoder fokuserar direkt på signalen medan andra omvandlar signalen till något som är lättare att jobba med.
 
 Detta arbete fokuserar på Fourier transformen och and signalbehandlings metoder som krävs för tonhöjdsidentifiering. Systemet ska fungera i realtid och snurra i webbläsarmiljö så att det lätt kan integreras i webbapplikationer.
 
-\subsection{Fourier analys}
+\subsection*{Fourier analys}
 Joseph Fourier jobbade en differentialekvation och tänkte att det skulle vara lättare att integera och derivera funktioner om de vore sinus eller cosinus vågot. Han började utforska tanken att representera funktioner som sinus och cosinus vågor och till slut utvecklade handet vi kallar i dag för Fourier serier. En generisk Fourier serie (på intervallet $[0, 2\pi]$ ser ut på följande vis
 
 $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$
@@ -29,7 +29,7 @@ och den diskreta inverstransformen
 $$ x_n = \frac{1}{N}\sum_{k=0}^{N-1} X(k)e^{\frac{i2\pi kn}{N}}$$
 
 När man gör beräkningar med en dator används ofta en algoritm som kallas för Fast Fourier transform. Den kallas snabb för att den producerar samma resultat men  gör det mer effektivt. Effektivitet är så hög att den verkligen är snabbare, speciellt för stora data mängder. FFT algoritmen noteras vara ca 12800 gånger snabbare än DFT algoritmen för 512 000 data punkter.  
-\subsection{Tonhöjdsidentifiering}
+\subsection*{Tonhöjdsidentifiering}
 Tonhöjdsidentifiering handlar om att räkna ut vilken tonhöjd en uppspelad not är. Metoder går in i en av tre kategorier; tids-domän, frekvens-domän och statiskta/maskininlärnings metoder. En populär tids-domän metod är autocorrelation där signalen jämförs med en förskjuten version av sig själv. 
 
 Ljud är en tryckskillnad i ett medium och modelleras ofta som en våg. T.ex. en högtalare som spelar A4 trycker ut luft med en frekvens på 440Hz. En ren 440Hz signal kommer dock att låta hemsk och rå. Ett vackert ljud så som ett A4 på ett riktigt instrument innehåller mycket annat än bara 440Hz. Detta kallas klangfärg eller timbre.
@@ -41,7 +41,7 @@ För tonhöjdsdetektering i frekvens domänet börjar man med att omvandla signa
 För processering av frekvens domänet finns det även flera algoritmer. Harmonic Product Spectrum (HPS) och Constant False Alarm Rate (CFAR) diskuteras. HPS nersamplar frekvens domänetoch multiplicerar iterationerna ihop vilket skapar ett nyt frekvens domän där harmonier förstärker den största gemensamma delaren. Denna algoritm är bra för den hittar missing fundamental om den saknas. HPS däremot fungerar väldigt dåligt om det finns få harmonier och kan i sådana fall ge fel svar. CFAR är en algoritm som hittar toppar i frekvens domänet med att skapa dynamisk tröskel med hjälp av att applicera statistiska metoder signalen. Om en punkt är ovanför tröskeln är den antagligen inte brus. HPS fungerar bättre för ändamålet men CFAR kunde hjälpa med att implementera en dynamisk HPS där iterationer ökas eller minskas beroende på hur många toppar CFAR har hittat. 
 
 Tonhöjdsdetektorn ska snurra i realtid. Vad en acceptabel latens är kontextuellt. För renderering är det 33ms för att uppnå 30FPS. För realtids följning på en bäställning är en uppdatering per timme kanske tillräckligt. Eftersom syftet är att användaren ska få feedback direkt är latensen mest beroende på användarens egen reaktions tid. Att minimera latensen är svårt eftersom Fourier transformens frekvens resolution är inverst proportionell till mängden data punkter som samlas. Man kan kringå detta med \textit{zero-padding} där man skapar artificiella datapunkter som inte har en inverkan på signalen. 
-\subsection{Implementering}
+\subsection*{Implementering}
 Tonhöjdsdetektorn implementeras för webben och därmed används Web Audio APIn mycket. Denna ger åtkom till användarens mikrofon och andra redskap som kan användas för audio processering. Om man får rå data från mikrofonen kan man enkelt processera det med bibliotek så som FFT.js. Hur man får rå data från mikrofonen är dock inte enkelt. 
 
 En lösning till detta är att använda sig av Web Audio APIns audio graf. Med denna kan man bygga upp en kontroll graf där noder skickar data till varandra. Noderna har olika roller; käll noder, modifierar noder och destinations noder. Käll noden för detta ändamål är en mikrofon nod och inga destinations noder används. Inga av de existerande modifierar noderna kan användas för tonhöjdsdetektorn. En AnalyserNode kör Fourier transformen, men denna kan man inte zero-padda, vilket måste göras för att få tillräcklig frekvens resolution i realtid. 
@@ -49,9 +49,9 @@ En lösning till detta är att använda sig av Web Audio APIns audio graf. Med d
 Lösningen är att bygga en egen nod med hjälp av WorkletNodes. Tanken är att man bygger en nod som helt enkelt samlar rå data och ger det över till en normal JavaScript funktion. Detta ger även flexibilitet att använda grafen vilket gör det enkelt att validera och testa. För att testa systemet mot en ljudfil gäller det bara att byta ut mikrofon noden mot en audio fil nod.  
 
 Den implementerade tonhöjdsdetektorn är en pipeline där audio grafen samlar data, skickar det vidare till an analys funktion som kör FFT, HPS, en del post processering och till sist presenterar användaren med en not. Allt detta händer på ca 120ms. 
-\subsection{Resultat}
+\subsection*{Resultat}
 Tonhöjdsdetektorn testas med hjälp av ljudfiler som Finlands-svenska mansångarförbundet harförsett. Tonhöjdsdetektorn analyserar alla fyra stämmor av Finlandia och jämförs med notbladet. 
 
 Resultaten indikerar problem i HPS. Det vanligaste är att tonhöjdsdetektorn ger resultat som är fel med en oktav. Olika mängder iterationer för HPS testades även och slutsatsen är att en dynamisk HPS vore bra då fyra iterationer presterar bäst i vissa fall och 6 iterations bäst i andra fall. 
 
-\subsection{Slutsats}
+\subsection*{Slutsats}
