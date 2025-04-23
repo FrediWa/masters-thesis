@@ -2,24 +2,24 @@
 In the beginning of the 1800s, Joseph Fourier was working on a physics problem called the heat equation, a certain partial differential equation. He had the idea of expressing the original function as a sum of sine and cosine functions as these would integrate and differentiate easily, making the differential equation easier to solve. He eventually developed and introduced the idea of Fourier series, a way of expressing a function as a sum of trigonometric functions \cite{Bounchaleun2019}.
 
 % Fourier Series
-\subsection{Fourier Series} 
+\subsection{Fourier series} 
 If a function has a period of $2\pi$, the Fourier series takes the form $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$ and states that a function can be represented by an infinite number of sine and cosine waves with different magnitudes and coefficients, plus some constant term. To compute the coefficients, the following formulae are used
 $$a_0 = \frac{1}{\pi}\int_0^{2\pi} f(t)dt$$
 $$a_m = \frac{1}{\pi}\int_0^{2\pi} f(t) sin(mt)dt$$
-$$n_m = \frac{1}{\pi}\int_0^{2\pi} f(t) cos(mt)$$
+$$b_m = \frac{1}{\pi}\int_0^{2\pi} f(t) cos(mt)$$
 
 which may be derived using the properties of a few integrals of trigonometric functions.
 
-A sawtooth wave is perhaps the easiest to demonstrate the computations on, as it is simply $f(t) = t$ over the interval. The constant term is $\frac{1}{\pi}\int_0^{2\pi} t dt = 2\pi$. The first $a_m$ term is the result of $\frac{1}{\pi}\int_0^{2pi} t sin(1t)dt = -2$, which may be done using integration by parts. The subsequent $a_m$ sine terms repeat the exact same step with different values of $m$. For this function, all cosine terms are 0, since $f(t)=tcos(t)$ is an odd function. The fourier series for this kind of sawtooth wave is thus
-$$\pi + -2sin(t) -1sin(2t)-\frac{2}{3}sin(3t) - \frac{1}{2}sin(4t) ...$$
+A sawtooth wave is perhaps the easiest to demonstrate the computations on, as it is simply $f(t) = t$ over the interval. The constant term is $\frac{1}{\pi}\int_0^{2\pi} t dt = 2\pi$. The first $a_m$ term is the result of $\frac{1}{\pi}\int_0^{2pi} t sin(1t)dt = -2$, which may be done using integration by parts. The subsequent $a_m$ sine terms repeat the exact same step with different values of $m$. For this function, all cosine terms are 0, since $f(t)=tcos(t)$ is an odd function with respect to the midpoint of the interval. Thus, the Fourier series for this kind of sawtooth wave is
+$$\pi -2sin(t) -1sin(2t)-\frac{2}{3}sin(3t) - \frac{1}{2}sin(4t) ...$$
 
-This approach, in a general sense, can be used to find the coefficients for other functions.
+This approach, in a general sense, can be used to find the coefficients for other periodic functions.
  
 % \cite{SimonXu2015}
 
 % Fourier Transform
-\subsection{Fourier Transform} 
-The Fourier Transform is an operation that takes a function in time domain (a signal as a function of time, like a sound) and outputs a function in frequency domain, a kind of description for which kinds of sinusoids make up the original signal. Figure \ref{fig:transform} shows a signal and its corresponding frequency-domain representation. The right diagram is a frequency-magnitude plot where the x-coordinate represents frequency and the y-coordinate represents the magnitude of the complex output of the transform. The peaks in the frequency domain shows that the signal is composed of the sinusoids $10sin(2\pi * 50t)$, $2sin(2\pi * 150t)$, $5sin(2\pi * 300t)$ and a significant amount of noise. In other words, the signal contains frequency components of 50Hz, 150Hz and 300Hz. 
+\subsection{Fourier transform} 
+The Fourier transform is an operation that takes a function in time domain (a signal as a function of time, like a sound) and outputs a function in frequency domain, a kind of description for which kinds of sinusoids make up the original signal. Figure \ref{fig:transform} shows a signal and its corresponding frequency-domain representation. The right diagram is a frequency-magnitude plot where the t-coordinate represents frequency and the y-coordinate represents the magnitude of the complex output of the transform. The peaks in the frequency domain shows that the signal is composed of the sinusoids $10sin(2\pi * 50t)$, $2sin(2\pi * 150t)$, $5sin(2\pi * 300t)$ and a significant amount of noise. In other words, the signal contains frequency components of 50Hz, 150Hz and 300Hz. 
 
 \begin{figure}[ht]
     \centering
@@ -45,7 +45,7 @@ $$\int_0^{2\pi} sin(mx)cos(nx)dx = 0$$
 
 If $n = m $, $sin(nx), n\in\mathbb{Z}$ will interfere with $sin(mx), m\in\mathbb{Z}$, and integrating over the interval yields $\pi$. If $n \neq m$, integrating over the interval gives 0. When the signals are independent, when the definite integral equals 0, they are said to be orthogonal. When they are non-orthogonal, they correlate. 
 
-Intuitively, the Fourier transform is a function that checks correlation between another signal and all sinusoids. For example, transforming the signal $sin(440t)$, yields a 0 for every sinusoid, except $sin(440t)$, which means that $sin(440t)$ is part of the original signal.
+Intuitively, the Fourier transform is a function that checks correlation between a signal and all sinusoids. For example, transforming the signal $sin(440t)$, yields a 0 for every sinusoid, except $sin(440t)$, which means that $sin(440t)$ is part of the original signal.
 
 \begin{figure}[ht]
     \centering
@@ -54,7 +54,7 @@ Intuitively, the Fourier transform is a function that checks correlation between
 \end{figure}
 
 % DFT
-\subsection{Discrete fourier transform} 
+\subsection{Discrete Fourier transform} 
 The Discrete Fourier transform (abbreviated as DFT), as the name implies, is the Fourier transform for discrete signals. Instead of integrating over the entire function domain, we sum the samples from the signal starting from the start of the signal at $t=0$ to some $t=N$. The DFT for a signal $x$ with $N$ points is 
 $$X_k = \sum_{n=0}^{N-1} x_ne^{-\frac{i2\pi kn}{N}}$$
 
@@ -96,7 +96,7 @@ where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principl
 % \todo{but why a matrix when the summation formula is both practical and more compact..? Also, FFT? What's the damn point?}
 
 % Inverse transform
-\subsection{Inverse Transforms}
+\subsection{Inverse transforms}
 The time-domain signal can be used, transmitted and received, but is difficult to work with. The frequency domain, in contrast, is easy to work in, but makes little to no sense in many use cases. A C-major chord in the frequency domain cannot be played, for example. The forward Fourier transform allows the transformation from time to frequency domain, but once any modification (like high frequency filtering) is applied, the signal needs to be transformed back to the time domain to be useful. The operation that does this is appropriately called the inverse Fourier transform, IFT for short or IDFT, for the discrete variant.
 
 The inverse Fourier transform is very similar to the forward Fourier transform:
@@ -121,7 +121,7 @@ To obtain the frequency-magnitude plot, which simply will be referred to as the 
 
 % Nyquist thing here
 
-\subsubsection{Computing DFT with a programming language}
+\subsubsection{Computing the DFT programmatically}
 With the built-in complex data types and extensive mathematical and scientific computing libraries, implementing the DFT in Python is trivial. Leveraging Python's cmath library, the computations can be copied directly and 2 for-loops handles the summation and $X_k$ indexing as shown below.
 
 \lstinputlisting[style=python]{../snippets/dft-A.py}
@@ -147,8 +147,8 @@ The inverse may be used after processing the frequency domain. For demonstration
 \end{figure}
 
 % FFT
-\subsection{Fast fourier transform}
-The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$ amount of numbers to be summed. A fast fourier transform (abbreviated as FFT) is any method that speeds up the computation of the DFT. This means that even if there is one Fourier transform and basically one DFT, there are multiple FFT algorithms. Arguably, very few users of the FFT cares about the implementation, they just expect the functionality of the DFT, but faster. 
+\subsection{Fast Fourier transform}
+The DFT takes $n^2$ operations to perform as there are $n$ outputs $X_k$ and $n$ amount of numbers to be summed. A fast Fourier transform (abbreviated as FFT) is any method that speeds up the computation of the DFT. This means that even if there is one Fourier transform and basically one DFT, there are multiple FFT algorithms. Arguably, very few users of the FFT cares about the implementation, they just expect the functionality of the DFT, but faster. 
 
 \subsubsection{Time complexity}
 Time complexity refers to the asymptotic performance of an algorithm. Even though it often correlates with performance, it is ultimately theoretical and only considers the highest-order term, because it is the greatest contributor when the input size grows towards infinity. For example, consider an algorithm for multiplying 2 numbers. One such algorithm, commonly taught in elementary school, multiplies every digit of one operand with every digit of the other. The result of each multiplication is added to the previous, accounting for carrying, to form a single number. This process results in an array of numbers, each of which is a multiple of a power of 10. The final step of the algorithm is to sum these numbers. The first step takes $N^2$ operations, where $N$ is the length of the operands (assuming they are the same length), and the second step takes $N$ operations. This algorithm, thus, takes $N^2+N$ steps but as N grows larger and larger, the $N^2$ term will contribute the most, so we say that the algorithm has a complexity of $O(N^2)$, which is referred to as \textit{Big-O}. For example, multiplying two 1000-digit integers, the multiplication will take a million operations, and the summation will take 1000. Increasing the input size with 1 digit adds only 1 more addition, but it adds 1001 more multiplication steps.
@@ -183,12 +183,12 @@ This speedup in execution time and theoretical time complexity improvement demon
 % What's the link between Gauss and Runge
 % Where does Carlini fit into the picture?
 
-\subsubsection{FFT Algorithm}
+\subsubsection{The FFT algorithm}
 As previously mentioned, FFT is simply put any algorithm that computes the DFT \textit{fast}. One of the easier to understand while still demonstrating the workings of the algorithm is the Radix-2 FFT. The Radix-2 FFT is easy to understand because it assumes the input size is a power of 2, meaning it's easy to recursively split into two. On a high level, the Radix-2 algorithm starts with splitting the input array into odds and evens. It then calls itself for the odds and evens, recursively splitting the array until it performs FFTs on arrays of length 1. On the way back up, it performs the DFT on smaller units of the original signal, utilizing the symmetry of roots of unity and values that it has already computed to perform multiple operations at once. 
 
 The following mathematical derivation of the Radix-2 FFT is adapted from \cite{Rozman2019}. It starts with splitting the DFT into two sums, one for the even indices and one for the odd 
 $$X_k = \sum^{N/2-1}_{n=0} x_{2n}T^{2n}+ \sum^{N/2-1}_{n=0} x_{2n+1}T^{2n+1}$$
-where $T_k$ is the so called twiddle factor $e^{-\frac{2\pi ik}{N}}$. A common twiddle factor is factored out of the odd sum and the even and odd sums are denoted as $E_k$ and $O_k$ respectively. 
+where $T_k$ is called the twiddle factor $e^{-\frac{2\pi ik}{N}}$. A common twiddle factor is factored out of the odd sum and the even and odd sums are denoted as $E_k$ and $O_k$ respectively. 
 
 $$X_k = E_k + T_kO_k$$
 
@@ -210,7 +210,7 @@ When computing the upper $N/2$ terms, i.e. when $N/2 \leq k < N$, $X_k = E_{k-N/
 
 $$X_k = E_k + T_kO_k$$  
 $$X_{k+N/2} = E_k + T_k^{N/2}O_k$$
-which are the equations for the lower and upper $N/2$ terms. Finally the twiddle factor is rewritten using the following property of complex exponentials
+which are the equations for the lower and upper $N/2$ terms. Finally, the twiddle factor is rewritten using the following property of complex exponentials
 
 $$e^{\frac{-2\pi i(k+N/2)}{N}} = -e^{\frac{-2\pi ik}{N}}$$
 which gives
@@ -225,7 +225,7 @@ $$O_k = \sum^{N/2-1}_{n=0} x_{2n+1}T_k^{2n}$$
 and that the DFT is
 $$X_k = \sum^{N}_{n=0} x_nT^{n}$$
 
-This means that when the element indeces are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform this purely mathematical notation into something that looks more like a complete algorithm, the core computations are implemented with a loop
+This means that when the element indices are adjusted, $E_k$ and $O_k$ are both DFTs essentially. To transform this purely mathematical notation into something that looks more like a complete algorithm, the core computations are implemented with a loop
 
 \begin{lstlisting}
 do k = 0, N/2-1

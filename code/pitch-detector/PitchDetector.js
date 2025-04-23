@@ -139,8 +139,8 @@ export class PitchDetector {
 
       const mediaElement = document.querySelector("#media-element-source");
       // Stop by playing at the end.
-      mediaElement.currentTime = mediaElement.duration; // Seek to the end
-      mediaElement.play();
+      // mediaElement.currentTime = mediaElement.duration; // Seek to the end
+      // mediaElement.play();
     }
 
     analyze(data) {
