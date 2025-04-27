@@ -1,19 +1,19 @@
 The pitch detector will be made for usage on the web. The web is chosen for portability and ease of use. The end user, be it an individual wanting to learn to sing or a choir testing candidates, can use any mobile device with a microphone, be it a laptop, tablet or smartphone, and without installing anything test the accuracy of their singing or tune their guitar.
 
-\subsection{Web Audio API}
-As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers control over audio processing functionality on browsers, by providing access to user audio devices, adding effects and more. 
-The Web Audio API operates in an AudioContext, which can be thought of as an empty control flow graph. The graph is constructed using AudioNodes which fall into one of three categories: input or source nodes, modifier nodes or output nodes. The nodes are then connected to each other to form the graph. 
+\subsection{Designing for the web}
+As the pitch detector is intended to be used in the browser, for portability and ease of use, the Web Audio API will be extensively used. The purpose of the API is to allow developers control over audio processing functionality on browsers, by providing access to user audio devices, adding effects and more.  
 
-The graph operates by passing blocks of data (called render quanta) between nodes, where one render quantum consists of frames of samples, where one frame contains one sample for every audio channel, at least according to the W3C Audio API 1.1 specifications. Render quantum seems to be a term reserved for the low-level processing of the data passing between nodes and, in reality, is (at least on tested browsers) not an array of frames with a sample per channel but rather a set of channels with contiguous samples. Regardless of the internal memory layout of the blocks, important to note is that the stream consists of blocks of data, which will be called render quanta for a lack of naming at API level, and are fixed in size. The render quantum size on Firefox is 128 and has not been tested on other browsers. The pitch detector does however seem to work with this assumption, at least on Google Chrome.
+The Web Audio API operates in an AudioContext, which can be thought of as a control flow graph. The graph consists of AudioNodes, which fall into one of three categories: input or source nodes, modifier nodes or output nodes. The nodes are then connected to each other to form the graph. 
+
+The graph operates by passing blocks of data (called render quanta) between nodes, where one render quantum consists of frames of samples, where one frame contains one sample for every audio channel, at least according to the W3C Audio API 1.1 specifications. Render quantum seems to be a term reserved for the low-level processing of the data passing between nodes and, in reality, is (at least on tested browsers) not an array of frames with a sample per channel but rather a set of channels with contiguous samples. Regardless of the internal memory layout of the blocks, important to note is that the stream consists of blocks of data, which will be called render quanta for a lack of naming at API level, and are fixed in size. The render quantum size on Firefox is 128 and has not been tested on other browsers. 
 
 %https://www.w3.org/TR/webaudio/#rendering-loop
 
-\subsubsection{Sources and destinations}
+\subsubsection{Audio graph nodes}
 The source nodes, as the name implies, are entry points for the audio control graph, they provide signals. Some of these include the OscillatorNode, a node which produces pure sinusoids, and MediaElementAudioSourceNode, which uses the media in an existing HTML audio element. As the purpose of the application is for the user to be able to record their own singing and have it analyzed for pitch correctness, the source in this case will be a MediaStreamAudioSourceNode, which provides a source signal from a MediaStream. The actual source will the method navigator.mediaDevices.getUserMedia\(\) that provides the MediaStream, but this is technically outside the AudioContext so it is not a source node.
 
 The output may be either the user's system's speakers, or another MediaStream. In this case, there will not be an output node because it is simply not needed. The output will be the result of the Fourier analysis.
 
-\subsubsection{Modifiers} 
 The modifier nodes are the nodes that are neither sources nor destinations, they take in the signal from a node, performs some transformation on the signal, and then hands it over to the next node, or nodes, in the graph. Some of these nodes apply effects, like reverb or gain. Others may be used to visualize audio or split audio into separate channels for per-channel modification.
 
 The available modifiers unfortunately do not help with the development of the pitch detector, so a lot of the processing would be done with Worklet nodes, a node that allows custom functionality. With this in mind, the simplest way may be to not use the Audio API audio graph, but to just take the output from the microphone and in the simplest possible way turn it into data to be processed using regular procedural programming. The AnalyserNode has Fourier transform capabilities, but there does not seem to be a way to zero-pad it, which is integral to achieving both real-time processing and enough frequency resolution for base singers. 
@@ -32,13 +32,13 @@ As the Fourier transform and any peak-picking algorithm of choice works in the f
 The proposed architecture offers flexibility without being overly complicated. The audio graph may be used to change the input from a microphone to a recording for validation and testing. It would also be possible to apply a real-time time-domain low-pass filter between the input node and the bridge node, which would allow downsampling and, thus, smaller FFT windows if computational power is a constraint. 
 
 \subsection{Implementing the pitch detector}
-With a plan for the detector, the next step is to implement it. The implementation, based on the architecture can be roughly divided into 4 parts: recording an input, passing data between the threads, accumulating and performing analysis.
+The implementation, based on the architecture can be roughly divided into 4 parts: taking an input, converting the input stream to raw data, accumulating and performing analysis.
 
 \subsubsection{Audio input}
-As the application utilizes the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of more value than my sad attempt at singing, so a series of mp3 files, some of which were provided by FSM were used with a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that the dominant voice is alone on channel and the 3 others are on the other stereo channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node, and connect the channel with the discrete part to the bridge.
+As the application utilizes the audio graph, any one of the source nodes may be used to input data into the pitch detector. For development, a reliable source signal is of great value, so a series of mp3 files (some of which were provided by FSM) were used with a MediaElementAudioSourceNode. The mp3 files provided by FSM were for some reason set up so that there is one dominant part  alone on one channel and the 3 others are on the other channel. This is no problem for the audio node based application, we can simply put a channel splitting node between the source node and the detector bridge node, and connect the channel with the discrete part to the bridge.
 \lstinputlisting[style=javascript]{../snippets/PitchDetector-B.js}
 
-\subsubsection{Worklet nodes}
+\subsubsection{Bridge node}
 Audio worklet nodes are a method of implementing custom audio modifier and sources (for example, a white noise generator). In this work, an AudioWorklet node will be used to implement the BridgeNode. Worklet nodes involve two parts: the node which is used in the audio graph, and the processor which is responsible for the behavior in the audio rendering thread. These are linked together.
 
 The code snippet below shows how the BridgeNode is implemented.
@@ -107,21 +107,21 @@ If this value is under $0.6$ (a value found empirically), the spectrum is deemed
 \subsubsection{Checking outliers}
 The presence of obvious outliers were also revealed in early testing while developing. There were times, when the pitch detector would for brief periods get MIDI numbers of 32 and 80, which are lower than the lowest male bass singers and higher than the highest female singers. These are filtered out in the same way as with non-flat spectra, by just ignoring the note. 
 
-\subsection{Post-processing}
-Post-processing here refers to everything that is done after the fundamental frequency is found. Checking for flatness and the outliers could be considered post-processing methods, but they are done as earlier in the pipeline because it would be unnecessary to compute the HPS on a bad spectrum. Post-processing is strictly not necessary for pitch detection, but may help in simplifying analysis relating to the fundamental frequency, like scoring the accuracy of the user's singing. Post-processing also helps the user understand better what they may be doing wrong as pure frequencies mean very little to humans. 
+\subsection{Post processing}
+Post processing here refers to everything that is done after the fundamental frequency is found. Checking for flatness and the outliers could be considered post-processing methods, but they are done earlier in the pipeline because it would be unnecessary to compute the HPS on an unusable spectrum. Post processing is strictly not necessary for pitch detection, but may help in simplifying analysis relating to the fundamental frequency, like scoring the accuracy of the user's singing. Post processing also helps the user understand better what they may be doing wrong as pure frequencies mean very little to humans. 
 
-\subsubsection{MIDI number to semitone name}
+\subsubsection{Converting frequency to MIDI number and note}
 A formula for the MIDI number was derived in the previous chapter. The derived formula cleanly translates into JavaScript, as shown in the following snippet.
 
 \begin{lstlisting}[style=javascript]
     const midiNumber = Math.round(12*Math.log2(frequency/440) + 69);
 \end{lstlisting}
 
-The MIDI number is convenient, because it is a semitone, a simple integer and a standard, meaning it is easier to use for computation and analysis. However, for most people, the MIDI number means very little and anyone who has any background in music is already familiar with the existing notation. To convert the MIDI number to a note, two functions can be derived using known MIDI numbers and their corresponding note names. 
+The MIDI number is convenient because it captures all necessary information as a simple integer, making it is easier to use for computation and analysis. It is also a standard, meaning other libraries may understand it. However, for most people, the MIDI number means very little and anyone who has any background in music is already familiar with the existing notation. To convert the MIDI number to a note, two functions can be derived using known MIDI numbers and their corresponding note names. 
 
 The typical way to label a musical pitch is with SPN, where a number and a letter represents the octave and position within the octave. This is familiar to people with a background in music, and it would be the desired format for a note at the presentation layer.
 
-As the notes repeat every octave and an octave consists of 12 semitones, the index that will be used to find the note within an octave is congruent to the MIDI number modulo 12. The octave number is the largest multiple of 12 strictly less than the number, which means it can be computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. The MIDI numbers, however, do align with the semitones as we start from C as C0 is the 12th MIDI number (which is congruent to 0 mod 12).
+As the notes repeat every octave and an octave consists of 12 semitones, the index that is used to find the note within an octave is congruent to the MIDI number modulo 12. The octave number is the largest multiple of 12 strictly less than the number, which means it can be computed by rounding down the result of the MIDI number divided by 12. For some reason, the MIDI numbers misalign with the octave numbers, C0 being MIDI 12, the octave is shifted down one more step. The MIDI numbers, however, do align with the semitones as we start from C as C0 is the 12th MIDI number (which is congruent to 0 mod 12).
 
 \lstinputlisting[style=javascript]{../snippets/analysis-C.js}
 

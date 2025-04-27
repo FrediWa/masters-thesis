@@ -1,4 +1,4 @@
-% Fourier Analysis Introduction
+%be  Fourier Analysis Introduction
 In the beginning of the 1800s, Joseph Fourier was working on a physics problem called the heat equation, a certain partial differential equation. He had the idea of expressing the original function as a sum of sine and cosine functions as these would integrate and differentiate easily, making the differential equation easier to solve. He eventually developed and introduced the idea of Fourier series, a method of expressing a function as a sum of trigonometric functions \cite{Bounchaleun2019}.
 
 % Fourier Series
@@ -101,7 +101,7 @@ where $n = N-1$ as the computation are zero-indexed and $\omega$ is the principl
 The time-domain signal can be used, transmitted, and received, but is difficult to to analyze and modify. The frequency domain, in contrast, is easy to analyze and modify, but makes little to no sense in many use cases. For example, a C-major chord in the frequency domain cannot be played. The forward Fourier transform allows the transformation from time to frequency domain, but once any modification (like high frequency filtering) is applied, the signal needs to be transformed back to the time domain to be usable. The operation that does this is appropriately called the inverse Fourier transform, IFT for short or IDFT, for the discrete variant.
 
 The inverse Fourier transform is very similar to the forward Fourier transform:
-$$ f(t) = \frac{1}{\pi}\int_{-\infty}^{\infty} \hat{f}(x)e^{i2\pixt} dx$$
+$$ f(t) = \frac{1}{\pi}\int_{-\infty}^{\infty} \hat{f}(x)e^{i2\pi xt} dx$$
 and the discrete inverse transform is 
 $$ x_n = \frac{1}{N}\sum_{k=0}^{N-1} X(k)e^{\frac{i2\pi kn}{N}}$$
 
