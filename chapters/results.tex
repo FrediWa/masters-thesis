@@ -1,17 +1,17 @@
-As with many modern software projects, this system was not built with a waterfall methodology. This means that a great amount of testing was done in parallel with development and minor problems have been mitigated. The results presented here are from the state of the project when development halted, when the project is a minimum viable product with the biggest issues fixed.
+As with many modern software projects, this system was not built with a waterfall methodology. This means that a great amount of testing was done in parallel with development and minor problems have been mitigated. The results presented here are from the state of the project when development halted when the project is a minimum viable product with the biggest issues fixed.
 
 \subsection{Method of testing}
 Finlands-svenska manssångarförbundet (FSM) has kindly provided recordings of each of the parts of a TTBB choir's rendition of Finlandia. The notes for these were not provided, but sheet music of the same rendition was found online and manually verified to be correct. As a reminder, the system simply \textit{listens} to the input stream and then just notes what the current detected note in time is. A separate timekeeper was added, which samples the detected note at regular intervals. As long as the sample frequency is small enough, no information is lost. However, as was discussed, a performance of a piece is seldom an exact instance of the definition (sheet music), especially in terms of tempo. Certain sections may be dragged out, for example, for whatever reason. Dynamic time warping (DTW) was proposed as a solution to comparing the performance and the reference for its ability to focus on parallels between substructures rather than absolute similarity.
 
-For Finlandia, sampling at 8th notes is sufficient, because it does not contain shorter notes than that. As the current goal is just to check that a detected note is correct, the system needs to know what note it should expect at that moment in time. This means that the sheet music can be transcribed to a sequence of 8th notes or represented as a time series where each data point is a MIDI number equally spaced in time. Quarter notes become two 8th notes, half notes become four 8th notes and so on. Figure \ref{fig:sheetEncoding} visualizes the time series using color for amplitude.
+For Finlandia, sampling at 8th notes is sufficient, because it does not contain shorter notes than that. As the current goal is just to check that a detected note is correct, the system needs to know what note it should expect at that moment in time. This means that the sheet music can be transcribed to a sequence of 8th notes or represented as a time series where each data point is a MIDI number equally spaced in time. Quarter notes become two 8th notes, half notes become four 8th notes, and so on. Figure \ref{fig:sheetEncoding} visualizes the time series using color for amplitude.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/sheetEncoding.png}
-    \caption{Sheet music of Finlandia as a time series, visualized with color for amplitude. To keep data points equally spaced in time, all notes are converted 8th notes. \label{fig:sheetEncoding}}
+    \caption{Sheet music of Finlandia as a time series, visualized with color for amplitude. To keep data points equally spaced in time, all notes are converted to 8th notes. \label{fig:sheetEncoding}}
 \end{figure}
 
-Figure \ref{fig:sheetEncoding} is the same as the top part of Figure \ref{fig:performance-sheet}. The bottom part of that was a manually cleaned up version of the pitch detector's first effort, purely for demonstration purposes. DTW is only used to compare the recordings provided by FSM for a more proper test. In the real-time pitch detector, each note is directly tested as time goes on.
+Figure \ref{fig:sheetEncoding} is the same as the top part of Figure \ref{fig:performance-sheet}. The bottom part of that was a manually cleaned-up version of the pitch detector's first effort, purely for demonstration purposes. DTW is only used to compare the recordings provided by FSM for a more proper test. In the real-time pitch detector, each note is directly tested as time goes on.
 
 \subsection{Analysis of HPS iterations}
 Each part of Finlandia was run through the system with 4, 5 and 6 for the number of HPS iterations. For these tests, the system is filtering out outliers and results of flat spectra. Figure \ref{fig:hpsTenor1} shows the comparison of one part. At a first glance all, versions are largely correct when looking at the substructures of the detected series and comparing them to the substructures of the reference. It is not obvious which time series did the best, but 6 iterations clearly did worst based on the amount of black in the diagram, which indicates a low note. Computing the error using DTW reveals that the error for 4 HPS iterations was 434, 352 for 5 iterations and 591 for 6 iterations. It can be difficult to judge how good or bad a score of 352 is, but it clearly is not optimal.
@@ -19,7 +19,7 @@ Each part of Finlandia was run through the system with 4, 5 and 6 for the number
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/hpsTenor1.png}
-    \caption{Comparison of the First Tenor recordings with different number of HPS iterations. \label{fig:hpsTenor1}}
+    \caption{Comparison of the First Tenor recordings with a different number of HPS iterations. \label{fig:hpsTenor1}}
 \end{figure}
 
 The same analysis can be done for the rest of the parts shown in Figures \ref{fig:hpsTenor2}, \ref{fig:hpsBass1} and \ref{fig:hpsBass2}.
@@ -27,21 +27,21 @@ The same analysis can be done for the rest of the parts shown in Figures \ref{fi
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/hpsTenor2.png}
-    \caption{Comparison of the Second Tenor recordings with different number of HPS iterations. \label{fig:hpsTenor2}}
+    \caption{Comparison of the Second Tenor recordings with a different number of HPS iterations. \label{fig:hpsTenor2}}
 \end{figure}
 
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/hpsBass1.png}
-    \caption{Comparison of the First Bass recordings with different number of HPS iterations. \label{fig:hpsBass1}}
+    \caption{Comparison of the First Bass recordings with a different number of HPS iterations. \label{fig:hpsBass1}}
 \end{figure}
 
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{./images/hpsBass2.png}
-    \caption{Comparison of the Second Bass recordings with different number of HPS iterations. \label{fig:hpsBass2}}
+    \caption{Comparison of the Second Bass recordings with a different number of HPS iterations. \label{fig:hpsBass2}}
 \end{figure}
 
 Computing the average DTW error of the parts reveals that 5 iterations has the lowest error at 264.5. Again, hard to say how bad this score is, but the average for 6 iterations is 657.25 reveals at least that it is a big improvement. The average for 4 iterations is 299.75 which is still around 10\% worse than 5 iterations.
@@ -61,9 +61,9 @@ Figure \ref{fig:hpsOctaveErrors} is created by computing the remainder of the MI
 \subsection{Using the detector as a guitar tuner}
 An attempt to use the pitch detector as a guitar tuner was made. The acoustic guitar was first intentionally detuned and then tuned back using the pitch detector. The results were mixed.
 
-Octave errors were present for the guitar as well, but were not an issue as the guitar is typically tuned so that the highest open string produces an E3 and the lowest E2. Even though the pitch detector presented an E4, a user would most likely be satisfied with this result.
+Octave errors were present for the guitar as well but were not an issue as the guitar is typically tuned so that the highest open string produces an E3 and the lowest E2. Even though the pitch detector presented an E4, a user would most likely be satisfied with this result.
 
-Using the pitch detector as a tuner also showed that the detector responds quickly enough to be considered real time. Plucking the string repeatedly — or hard enough to sustain longer — allows for almost continuous turning of the tuning pegs. This allows for very convenient tuning.
+Using the pitch detector as a tuner also showed that the detector responds quickly enough to be considered real-time. Plucking the string repeatedly — or hard enough to sustain longer — allows for almost continuous turning of the tuning pegs. This allows for very convenient tuning.
 
-The bin size is an issue for guitar tuning. The lowest open strings push the limit of what is possible with the current bin size of 3Hz. This bin size also means that there is a fairly wide range of "correct" pitches. After tuning with the pitch detector, the sound was compared to an online guitar tuner that uses reference pitches instead of pitch detection. The tuned guitar sounded flat and were off by perhaps 1 or 2 Hz. The guitar was once again detuned, but this time so that all open strings were too high. This time the guitar would sound a bit sharp. This implies that the bin sizes are simply too big for precise instrument tuning. That, however, would probably not be a problem for the goal of this particular pitch detector. 
+The bin size is an issue for guitar tuning. The lowest open strings push the limit of what is possible with the current bin size of 3Hz. This bin size also means that there is a fairly wide range of "correct" pitches. After tuning with the pitch detector, the sound was compared to an online guitar tuner that uses reference pitches instead of pitch detection. The tuned guitar sounded flat and was off by perhaps 1 or 2 Hz. The guitar was once again detuned, but this time so that all open strings were too high. This time the guitar would sound a bit sharp. This implies that the bin sizes are simply too big for precise instrument tuning. That, however, would probably not be a problem for the goal of this particular pitch detection system. 
 
