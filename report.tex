@@ -12,10 +12,11 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage[onehalfspacing]{setspace}
-
+\usepackage{etoolbox} % For robust macros
+\usepackage{fontenc}
+\usepackage{titling}
 % Code example styles
 \input{languages} 
-
 
 % \lstset{style=fortran}
 
@@ -24,6 +25,16 @@
 \usepackage[color=red!20]{todonotes}
 
 \newfloat{floatbox}{tb}{abox}[section]
+
+% Macro for adding unnumbered sectons to 
+\newcommand{\addunnumberedtotoc}[1]{%
+  \section*{#1}%
+  \phantomsection%
+  \addtocontents{toc}{\protect\contentsline{section}{#1}{}}
+}
+
+% Style title 
+\renewcommand{\maketitlehooka}{\fontfamily{comfortaa}}
 
 % Possible title: Real-time pitch detection for singers using Short Time Fourier transform.
 
@@ -56,35 +67,48 @@
 \tableofcontents    
 \newpage 
 
+\addcontentsline{toc}{section}{List of abbreviations}
+
+\section*{List of abbreviations}
+\input{abbreviations}
+\newpage
+
 % Re-enable page numbering.
 \pagenumbering{arabic}
 
 % Introduction
 \section{Introduction}
 \input{chapters/introduction} 
-
+\newpage
 \section{Introductory Fourier analysis}
 \input{chapters/background} 
+\newpage
 
 % Body
 
 \section{Pitch detection using the Fourier transform}
 \input{chapters/pitch_detection}
+\newpage
 \section{Implementation}
 \input{chapters/implementation}
+\newpage
 \section{Results}
 \input{chapters/results}
+\newpage
 
 % Conclusions
 \section{Conclusions}
 \input{chapters/conclusions}
+\newpage
 
 % Swedish summary
 \section*{Svensk sammanfattning}
+\addcontentsline{toc}{section}{Svensk sammanfattning}
 \input{chapters/sammanfattning}
 
 % References
 \bibliographystyle{IEEEtran}
+\addcontentsline{toc}{section}{References}
 \bibliography{references}
 
 \end{document}

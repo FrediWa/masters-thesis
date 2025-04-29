@@ -1,9 +1,11 @@
 \subsection*{Inledning}
+\addcontentsline{toc}{subsection}{Inledning}
 En person med absolut gehör kan stämma en gitarr med att helt enkelt lyssna på dess ljud och vrida på stämskruven tills ljudet låter rätt. En person som inte har absolut gehör måste lysna på en referens, t.ex. en stämgaffel, och jämföra ljuden. Hen hör om gitarrens ton är lägre eller högre och kan justera ljudet i rätt riktning tills gitarren och referensen är samma. Båda fallen är exempel på tonhöjdsidentifiering. Detta är något datorer kan hjälpa med och därmed har man studerat och utvecklat flera olika metoder. Tonhöjd har en stark anknytning till oskillationsfrekvensen på en ljudsignal. Vissa metoder fokuserar direkt på signalen medan andra omvandlar signalen till något som är lättare att jobba med.
 
 Detta arbete fokuserar på Fourier transformen och de signalbehandlingsmetoder som krävs för tonhöjdsidentifiering. Systemet ska fungera i realtid och snurra i webbläsarmiljö så att det lätt kan integreras i webbapplikationer.
 
-\subsection*{Fourier analys}
+\subsection*{Fouriernalys}
+\addcontentsline{toc}{subsection}{Fourieranalys}
 Joseph Fourier jobbade på en differentialekvation och tänkte att det skulle vara lättare att integera och derivera funktioner om de vore sinus- eller cosinusvågor. Han började utforska tanken att representera funktioner som sinus och cosinus vågor och till slut utvecklade han det vi kallar i dag för Fourierserier. En generisk Fourier serie (på intervallet $[0, 2\pi]$) ser ut på följande vis
 
 $$f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty}a_ncos(nt)+\sum_{n=1}^{\infty}b_nsin(nt)$$
@@ -29,6 +31,7 @@ $$ x_n = \frac{1}{N}\sum_{k=0}^{N-1} X(k)e^{\frac{i2\pi kn}{N}}$$
 
 När man gör beräkningar med en dator används ofta en algoritm som kallas för Fast Fourier transform (FFT). Den kallas snabb för att den producerar samma resultat men  gör det mer effektivt. Effektiviten är så hög att den verkligen är snabbare, speciellt för stora data mängder. FFT-algoritmen noteras vara ca 12800 gånger snabbare än DFT algoritmen för 512 000 data punkter.  
 \subsection*{Tonhöjdsidentifiering}
+\addcontentsline{toc}{subsection}{Tonhöjdsidentifiering}
 Tonhöjdsidentifiering handlar om att räkna ut vilken tonhöjd en uppspelad not är. Metoder för att identifiera tonhöjd går in i en av tre kategorier; tidsdomän, frekvensdomän och statiskta/maskininlärnings metoder. En populär tids-domän metod är autocorrelation där signalen jämförs med en förskjuten version av sig själv. 
 
 Ljud är en tryckskillnad i ett medium och modelleras ofta som en våg. T.ex. en högtalare som spelar tonen A4 trycker ut luft med en frekvens på 440Hz. En ren 440Hz signal kommer dock att låta rå och otrevlig. Ett vackert ljud så som ett A4 på ett riktigt instrument innehåller mycket annat än bara 440Hz. Detta kallas klangfärg eller timbre.
@@ -42,6 +45,7 @@ För processering av frekvensdomänet finns det flera algoritmer. Harmonic Produ
 Tonhöjdsdetektorn ska fungera i realtid. Vad en acceptabel latens är är kontextuellt. För renderering är det 33ms för att uppnå 30FPS. För realtids paketspårning är en uppdatering per timme kanske tillräckligt. Eftersom syftet är att användaren ska få feedback direkt är latensen mest beroende på användarens egen reaktions tid. Att minimera latensen är svårt eftersom Fouriertransformens frekvensresolution är inverst proportionell till mängden datapunkter som samlas. Man kan kringå detta med en metod som kallas \textit{zero-padding}, där man skapar artificiella datapunkter som inte har en inverkan på signalen. 
 
 \subsection*{Implementering}
+\addcontentsline{toc}{subsection}{Implementering}
 Tonhöjdsdetektorn implementeras för webben och därmed används Web Audio APIn mycket. Denna API ger åtkom till användarens mikrofon och andra redskap som kan användas för audio processering. Om man får rådata från mikrofonen kan man enkelt processera det med bibliotek såsom FFT.js. Hur man får rådata från mikrofonen är dock inte enkelt. 
 
 En lösning till att få rådatat är att använda sig av Web Audio APIns audio graf. Med APIn kan man bygga upp en kontrollgraf där noder skickar data till varandra. Noderna har olika roller; källnoder, modifierarnoder och destinationsnoder. Källnoden för detta ändamål är en nod som får data från en mikrofon och inga destinations noder används eftersom ljudet inte behövar spelas tillbaka till användaren. Inga av de existerande modifierar noderna kan användas för tonhöjdsdetektorn. En AnalyserNode kör Fourier transformen, men denna kan man inte zero-padda, vilket måste göras för att få tillräcklig frekvens resolution i realtid. 
@@ -51,6 +55,7 @@ Lösningen är att bygga en egen nod med hjälp av WorkletNodes. WorkletNodes ti
 Den implementerade tonhöjdsdetektorn är en pipeline där audio grafen samlar data, skickar det vidare till en analysfunktion som kör FFT, HPS, en del post processering och till sist presenterar användaren med en not. Allt detta händer på ca 120ms. 
 
 \subsection*{Resultat}
+\addcontentsline{toc}{subsection}{Resultat}
 Tonhöjdsdetektorn testas med hjälp av ljudfiler som Finlands-svenska mansångarförbundet har försett. Tonhöjdsdetektorn analyserar alla fyra stämmor av Finlandia och resultatet jämförs med notbladet. 
 
 Resultaten indikerar problem i HPS-algoritmen. Det vanligaste är att tonhöjdsdetektorn ger resultat som är fel med en oktav. Olika mängder iterationer för HPS testades även och slutsatsen är att en dynamisk HPS (en variant av HPS där antalet iterationer kan automatiskt justeras på basen av toppar i frekvensdomänet) vore bra då fyra iterationer presterar bäst i vissa fall och 6 iterations bäst i andra fall.
@@ -58,6 +63,7 @@ Resultaten indikerar problem i HPS-algoritmen. Det vanligaste är att tonhöjdsd
 Genom att använda detektorn för att stämma en gitarr kan dess responsivitet även testas. Testet visar att detektorn är tillräckligt responsiv för att användaren ska kunna mer eller mindre kontinuerligt vända stämskruven. Däremot visar det sig att frekvensresolutionen är för hög för att stämma ett instrument precist. 
 
 \subsection*{Slutsats}
+\addcontentsline{toc}{subsection}{Slutsats}
 I detta arbete utforskades Fouriertransformen och metoder för att analysera frekvensdomänet för tonhöjdsidentifiering. Syftet med arbetet var att utveckla en tonhöjdsdetektor som kan användas för att träna sång.
 
 Resultatet av arbetet är en JavaScript klass med stödfunktioner som en användare kunde använda i sin egen applikation. Även om applikationen inte har någon API i detta skede, är den byggd så att det i framtiden ska vara lätt att ändra koden så att användaren inte behöver modifier källkoden för att få den funktionalitet hen vill. 
