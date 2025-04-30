@@ -127,17 +127,17 @@ To obtain the frequency-magnitude plot, which simply will be referred to as the 
 \subsubsection{Computing the DFT programmatically}
 As the Fourier transform relies so heavily on complex arithmetic, the effort to implement it largely depends on the features of the chosen programming language. With built-in complex data types and extensive mathematical and scientific computing libraries, implementing the DFT in Python is trivial. Leveraging Python's cmath library, the computations can be copied directly and 2 for-loops handle the summation and $X_k$ indexing as shown below.
 
-\lstinputlisting[style=python]{../snippets/dft-A.py}
+\lstinputlisting[style=python, caption={DFT implemented in Python}]{../snippets/dft-A.py}
 
 For a more primitive language without complex exponentiation like C, the computations are still fairly straightforward to do due to Euler's formula that expands $e^{ix} = cos(x) + isin(x)$. The components can be separated into two separate data structures and so the imaginary unit can be dropped. A possible C implementation (without using a struct for complex numbers) is shown below. 
 
-\lstinputlisting[style=c]{../snippets/dft-A.c}
+\lstinputlisting[style=c, caption={DFT implemented in C, a language without built-in support for complex arithmetic}]{../snippets/dft-A.c}
 
 \subsubsection{Computing the inverse}
 
 Implementing the IDFT in Python is as trivial as the DFT due to the language's features. The similarity in the formulae is reflected in the code, being the same apart from the normalization and negated exponent. 
 
-\lstinputlisting[style=python]{../snippets/dft-C.py}
+\lstinputlisting[style=python, caption={IFT implemented in in Python}]{../snippets/dft-C.py}
 
 The inverse may be used after processing the frequency domain. For example,  Figure \ref{fig:DFT-IDFT} shows both a signal and the signal after filtering in both the time domain and the frequency domain. The method of filtering out noise was simply to remove values under a threshold in the frequency domain. The IDFT was then used to create a new time-domain signal from the modified frequency domain.
 
@@ -254,7 +254,7 @@ end if
 
 Putting everything together and adding variable declarations and initialization as well as the function declaration, a naive Radix-2 FFT could look like the following
 
-\lstinputlisting[style=fortran, label={code:fortran-fft}]{../snippets/fft-A.f90}
+\lstinputlisting[style=fortran, label={code:fortran-fft}, caption={Complete and working Radix-2 FFT implemented in Fortran}]{../snippets/fft-A.f90}
 
 This implementation assumes the input is a power of 2, but this is not handled anywhere. The program still runs but gives an erroneous answer. The algorithm can be visualized with a block diagram as shown in Figure \ref{fig:FFT-Alg}.
 
@@ -281,7 +281,7 @@ The inverse of the FFT, or IFFT, is nearly identical to the FFT algorithm. Like 
 
 The Fortran code from earlier contained an inverse factor that was left unexplained. Below is an example of a simple abstraction for calling the forward FFT and inverse FFT but utilizing the same core r2fft function.
 
-\lstinputlisting[style=fortran]{../snippets/fft-B.f90}
+\lstinputlisting[style=fortran, caption={Using the FFT algorithm for both forward FFT and inverse FFT}]{../snippets/fft-B.f90}
 
 Both the FFT and inverse FFT utilize the same core Radix-2 implementation from earlier, but the inverse is computed with a negated twiddle factor based on the second argument. In the inverse FFT case, an additional normalization is also applied after the FFT computations are finalized.
 
