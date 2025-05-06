@@ -56,9 +56,9 @@ Den implementerade tonhöjdsdetektorn är en pipeline där audio grafen samlar d
 
 \subsection*{Resultat}
 \addcontentsline{toc}{subsection}{Resultat}
-Tonhöjdsdetektorn testas med hjälp av ljudfiler som Finlands-svenska mansångarförbundet har försett. Tonhöjdsdetektorn analyserar alla fyra stämmor av Finlandia och resultatet jämförs med notbladet. 
+Tonhöjdsdetektorn testas med hjälp av ljudfiler som Finlands-svenska \linebreak mansångarförbundet har försett. Tonhöjdsdetektorn analyserar alla fyra stämmor av Finlandia och resultatet jämförs med notbladet. 
 
-Resultaten indikerar problem i HPS-algoritmen. Det vanligaste är att tonhöjdsdetektorn ger resultat som är fel med en oktav. Olika mängder iterationer för HPS testades även och slutsatsen är att en dynamisk HPS (en variant av HPS där antalet iterationer kan automatiskt justeras på basen av toppar i frekvensdomänet) vore bra då fyra iterationer presterar bäst i vissa fall och 6 iterations bäst i andra fall.
+Resultaten indikerar problem i HPS-algoritmen. Det vanligaste är att \linebreak tonhöjdsdetektorn ger resultat som är fel med en oktav. Olika mängder iterationer för HPS testades även och slutsatsen är att en dynamisk HPS (en variant av HPS där antalet iterationer kan automatiskt justeras på basen av toppar i frekvensdomänet) vore bra då fyra iterationer presterar bäst i vissa fall och 6 iterations bäst i andra fall.
 
 Genom att använda detektorn för att stämma en gitarr kan dess responsivitet även testas. Testet visar att detektorn är tillräckligt responsiv för att användaren ska kunna mer eller mindre kontinuerligt vända stämskruven. Däremot visar det sig att frekvensresolutionen är för hög för att stämma ett instrument precist. 
 
@@ -66,6 +66,6 @@ Genom att använda detektorn för att stämma en gitarr kan dess responsivitet �
 \addcontentsline{toc}{subsection}{Slutsats}
 I detta arbete utforskades Fouriertransformen och metoder för att analysera frekvensdomänet för tonhöjdsidentifiering. Syftet med arbetet var att utveckla en tonhöjdsdetektor som kan användas för att träna sång.
 
-Resultatet av arbetet är en JavaScript klass med stödfunktioner som en användare kunde använda i sin egen applikation. Även om applikationen inte har någon API i detta skede, är den byggd så att det i framtiden ska vara lätt att ändra koden så att användaren inte behöver modifier källkoden för att få den funktionalitet hen vill. 
+Resultatet av arbetet är en JavaScript klass med stödfunktioner som en \linebreak användare kunde använda i sin egen applikation. Även om applikationen inte har någon API i detta skede, är den byggd så att det i framtiden ska vara lätt att ändra koden så att användaren inte behöver modifier källkoden för att få den funktionalitet hen vill. 
 
 Även om tonhöjdsdetektorn ger rätt resultat största delen av tiden är det inte tillräckligt för att användningen av den ska vara pålitlig. Största delen av de fel detektorn gör är oktavfel.
